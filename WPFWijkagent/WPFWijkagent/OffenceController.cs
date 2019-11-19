@@ -10,7 +10,7 @@ namespace WijkagentWPF
     /// </summary>
     public class OffenceController
     {
-        public Offence _offence { get; private set; }
+        public Offence Offence { get; private set; }
 
         public OffenceController()
         {
