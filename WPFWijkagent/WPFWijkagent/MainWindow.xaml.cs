@@ -1,4 +1,4 @@
-﻿using Microsoft.Maps.MapControl.WPF;
+using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +26,7 @@ namespace WPFWijkagent
         {
             InitializeComponent();
 
+            map_Main.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
             SetZoomBoundaryCheck();
         }
 
@@ -36,7 +37,7 @@ namespace WPFWijkagent
 
         public void CheckZoomBoundaries(object sender, MapEventArgs e)
         {
-            int maxZoom = 3; int minZoom = 20;
+            double maxZoom = 3; double minZoom = 20;
             if (sender.Equals(map_Main))
             {
                 if (map_Main.ZoomLevel < maxZoom)
