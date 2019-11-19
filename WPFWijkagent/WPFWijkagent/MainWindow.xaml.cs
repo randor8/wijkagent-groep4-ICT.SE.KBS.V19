@@ -1,4 +1,5 @@
-﻿using System;
+using Microsoft.Maps.MapControl.WPF;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,9 +29,32 @@ namespace WPFWijkagent
         public MainWindow()
         {
             InitializeComponent();
+
+            map_Main.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
+            SetZoomBoundaryCheck();
             _offenceController = new OffenceController();
             FillOffenceList();
             OffenceDialogue = new AddOffenceDialogue(offenceListItems);
+        }
+
+        public void SetZoomBoundaryCheck()
+        {
+            map_Main.ViewChangeOnFrame += CheckZoomBoundaries;
+        }
+
+        public void CheckZoomBoundaries(object sender, MapEventArgs e)
+        {
+            double maxZoom = 3; double minZoom = 20;
+            if (sender.Equals(map_Main))
+            {
+                if (map_Main.ZoomLevel < maxZoom)
+                {
+                    map_Main.ZoomLevel = maxZoom;
+                } else if (map_Main.ZoomLevel > minZoom)
+                {
+                    map_Main.ZoomLevel = minZoom;
+                }
+            }
         }
         /// <summary>
         /// fills the listbox with all of the offences 
