@@ -28,7 +28,7 @@ namespace WijkagentModels
                         Latitude=6.083880m
                     },
                 },
-                new Offence(){
+                new Offence() {
                     ID=3,
                     DateTime= new DateTime().ToLocalTime(),
                     Description = "een delict..",
