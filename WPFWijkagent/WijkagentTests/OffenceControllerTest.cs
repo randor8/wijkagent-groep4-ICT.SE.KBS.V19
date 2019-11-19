@@ -23,8 +23,8 @@ namespace WijkagentTests
             Assert.IsNotNull(offenceController.GetOffences());
         }
 
-        [TestCase("", "")]
-        public void SetOffence_WithFormData_Returns(string description, string category)
+        [TestCase("een beschirjving", "diefstal")]
+        public void SetOffence_WithFormData_DataSet(string description, string category)
         {
             OffenceController offenceController = new OffenceController();
             offenceController.SetOffenceData(description, category, dateTime);
@@ -34,8 +34,8 @@ namespace WijkagentTests
             Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
         }
         
-        [TestCase()]
-        public void SetOffence_WithLocation_Returns()
+        [Test]
+        public void SetOffence_WithLocation_DataSet()
         {
             OffenceController offenceController = new OffenceController();
             offenceController.SetOffenceData(location);
@@ -43,8 +43,8 @@ namespace WijkagentTests
             Assert.AreEqual(offenceController.Offence.LocationID, location);
         }
         
-        [TestCase("", "")]
-        public void SetOffence_WithAllFields_Returns(string description, string category)
+        [TestCase("beschrijving", "categorie")]
+        public void SetOffence_WithAllFields_DataSet(string description, string category)
         {
             OffenceController offenceController = new OffenceController();
             offenceController.SetOffenceData(description, category, dateTime, location);
