@@ -22,7 +22,7 @@ namespace WPFWijkagent
     /// </summary>
     public partial class MainWindow : Window
     {
-        //controlls the offences for this window
+        //controls the offences for this window
         private OffenceController _offenceController { get; set; }
         public MainWindow()
         {
