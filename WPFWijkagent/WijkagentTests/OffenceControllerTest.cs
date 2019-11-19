@@ -29,9 +29,9 @@ namespace WijkagentTests
             OffenceController offenceController = new OffenceController();
             offenceController.SetOffenceData(description, category, dateTime);
 
-            Assert.AreEqual(offenceController._offence.Description, description);
-            Assert.AreEqual(offenceController._offence.Category, category);
-            Assert.AreEqual(offenceController._offence.DateTime, dateTime);
+            Assert.AreEqual(offenceController.Offence.Description, description);
+            Assert.AreEqual(offenceController.Offence.Category, category);
+            Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
         }
         
         [TestCase()]
@@ -40,7 +40,7 @@ namespace WijkagentTests
             OffenceController offenceController = new OffenceController();
             offenceController.SetOffenceData(location);
 
-            Assert.AreEqual(offenceController._offence.LocationID, location);
+            Assert.AreEqual(offenceController.Offence.LocationID, location);
         }
         
         [TestCase("", "")]
@@ -49,10 +49,10 @@ namespace WijkagentTests
             OffenceController offenceController = new OffenceController();
             offenceController.SetOffenceData(description, category, dateTime, location);
 
-            Assert.AreEqual(offenceController._offence.Description, description);
-            Assert.AreEqual(offenceController._offence.Category, category);
-            Assert.AreEqual(offenceController._offence.DateTime, dateTime);
-            Assert.AreEqual(offenceController._offence.LocationID, location);
+            Assert.AreEqual(offenceController.Offence.Description, description);
+            Assert.AreEqual(offenceController.Offence.Category, category);
+            Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
+            Assert.AreEqual(offenceController.Offence.LocationID, location);
         }
 
     }
