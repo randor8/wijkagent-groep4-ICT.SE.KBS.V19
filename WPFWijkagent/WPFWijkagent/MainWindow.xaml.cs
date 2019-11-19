@@ -23,8 +23,7 @@ namespace WPFWijkagent
     {
         public MainWindow()
         {
-            InitializeComponent();
-            
+            InitializeComponent(); 
         }
     }
 }
