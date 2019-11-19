@@ -14,7 +14,7 @@ namespace WijkagentWPF
 
         public OffenceController()
         {
-            _offence = new Offence();
+            Offence = new Offence();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace WijkagentWPF
         /// <param name="dateTime">offence date and time</param>
         public void SetOffenceData(string description, string category, DateTime dateTime)
         {
-            SetOffenceData(description, category, dateTime, _offence.LocationID);
+            SetOffenceData(description, category, dateTime, Offence.LocationID);
         }
 
         /// <summary>
@@ -46,11 +46,11 @@ namespace WijkagentWPF
         /// <param name="location">offence location</param>
         public void SetOffenceData(string description, string category, DateTime dateTime, Location location)
         {
-            _offence.Category = category;
-            _offence.Description = description;
-            _offence.DateTime = dateTime;
+            Offence.Category = category;
+            Offence.Description = description;
+            Offence.DateTime = dateTime;
             //TODO: save the location as a separate object
-            _offence.LocationID = location;
+            Offence.LocationID = location;
         }
 
         /// <summary>
