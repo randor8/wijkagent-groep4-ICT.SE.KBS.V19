@@ -6,7 +6,7 @@ using WijkagentModels;
 namespace WijkagentWPF
 {
     /// <summary>
-    /// controlls the offence(s) for the wpf application
+    /// controls the offence(s) for the wpf application
     /// </summary>
     public class OffenceController
     {
