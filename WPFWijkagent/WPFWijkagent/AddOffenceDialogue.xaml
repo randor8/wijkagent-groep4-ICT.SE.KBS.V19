@@ -11,9 +11,9 @@
         <Label x:Name="Lbl_Catagorie" Content="Categorie" HorizontalAlignment="Left" Margin="28,15,0,0" VerticalAlignment="Top"/>
         <Label x:Name="Lbl_omschrijving" Content="Omschrijving" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
         <Label x:Name="Lbl_datumTijd" Content="Datum/tijd" HorizontalAlignment="Left" Margin="22,109,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Btn_toevoegen" Content="toevoegen" HorizontalAlignment="Left" Margin="256,117,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="Btn_toevoegen" Content="toevoegen" HorizontalAlignment="Left" Margin="256,117,0,0" VerticalAlignment="Top" Click="Btn_toevoegen_Click" Grid.ColumnSpan="2"/>
         <ComboBox x:Name="CB_categorie" HorizontalAlignment="Left" Margin="116,19,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="TxtB_omschrijving" HorizontalAlignment="Left" Margin="116,46,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="201" Height="64"/>
+        <TextBox x:Name="TxtB_omschrijving" HorizontalAlignment="Left" Margin="116,46,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="201" Height="64" Grid.ColumnSpan="2"/>
         <wpfx:DateTimePicker x:Name="DateTimePicker" Height="25" HorizontalAlignment="Left" Margin="116,115,0,0" VerticalAlignment="Top" Width="132" />
     </Grid>
 </Window>

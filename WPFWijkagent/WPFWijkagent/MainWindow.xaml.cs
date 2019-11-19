@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,12 +21,16 @@ namespace WPFWijkagent
     {
         //controls the offences for this window
         private OffenceController _offenceController { get; set; }
+        
+        private AddOffenceDialogue OffenceDialogue { get; set; }
+
+        public List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
         public MainWindow()
         {
             InitializeComponent();
             _offenceController = new OffenceController();
             FillOffenceList();
-
+            OffenceDialogue = new AddOffenceDialogue(offenceListItems);
         }
         /// <summary>
         /// fills the listbox with all of the offences 
@@ -34,7 +39,6 @@ namespace WPFWijkagent
         {
             //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             List<Offence> offences = _offenceController.GetOffences();
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>(); 
             offences.ForEach(of => offenceListItems.Add(new OffenceListItem(of.ID, of.DateTime, of.Description)));
 
             wpf_lb_delicten.ItemsSource = offenceListItems;
@@ -52,8 +56,7 @@ namespace WPFWijkagent
 
         private void Btn_addOffence_Click(object sender, RoutedEventArgs e)
         {
-            AddOffenceDialogue offenceDialogue = new AddOffenceDialogue();
-            offenceDialogue.Show();
+            OffenceDialogue.Show();
         }
     }
 
