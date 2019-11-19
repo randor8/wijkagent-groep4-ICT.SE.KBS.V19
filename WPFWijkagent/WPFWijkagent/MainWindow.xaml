@@ -9,7 +9,7 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid Margin="10,10,10,10">
-            <m:Map Name="map_Main" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15"/>
+            <m:Map Name="map_Main" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15" Margin="0,10,188,0"/>
         </Grid>
         <ListBox x:Name="wpf_lb_delicten" Margin="600,23,0,0" SelectionChanged="wpf_lb_delicten_SelectionChanged"/>
         <Button x:Name="Btn_addOffence" Content="delict toevoegen" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Btn_addOffence_Click"/>

@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using WijkagentModels;
+using WPFWijkagent;
 
 namespace WijkagentWPF
 {
@@ -20,24 +21,17 @@ namespace WijkagentWPF
     public partial class AddOffenceDialogue : Window
     {
         public OffenceCategories categories = new OffenceCategories();
-        private List<OffenceListItem> OffenceList { get; set; }
 
-        //change this to the offences from the offence controller!
-        /*
-        public enum Offence
-        {
-            Moord,
-            Diefstal,
-            Verkrachting,
-            Geweldpleging
-        }
-        */
-        public AddOffenceDialogue(List<OffenceListItem> offences)
+        private List<OffenceListItem> OffenceList { get; set; }
+        private MainWindow Mainwindow { get; set; }
+
+        public AddOffenceDialogue(List<OffenceListItem> offences, MainWindow mainWindow)
         {
             //init windows
             InitializeComponent();
 
             OffenceList = offences;
+            Mainwindow = mainWindow;
 
             //add all enum categories to ComboBox
             InitializeCategories();
@@ -63,13 +57,11 @@ namespace WijkagentWPF
         private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
         {
             int index = OffenceList.Count + 1;
-            OffenceList.Add(new OffenceListItem(index, DateTime.Now, TxtB_omschrijving.Text));
+            DateTime dateTime = DateTimePicker.Value.Value;
+            OffenceList.Add(new OffenceListItem(index, dateTime, TxtB_omschrijving.Text));
+            Mainwindow.wpf_lb_delicten.ItemsSource = OffenceList;
+            Mainwindow.wpf_lb_delicten.Items.Refresh();
             this.Hide();
-
-            foreach(OffenceListItem item in OffenceList)
-            {
-                Console.WriteLine(item.ToString());
-            }
         }
     }
 }
