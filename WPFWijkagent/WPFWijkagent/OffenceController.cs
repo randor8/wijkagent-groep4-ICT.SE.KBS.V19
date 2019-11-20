@@ -35,6 +35,7 @@ namespace WijkagentWPF
         public void SetOffenceData(string description, string category, DateTime dateTime)
         {
             SetOffenceData(description, category, dateTime, Offence.LocationID);
+
         }
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace WijkagentWPF
             Offence.DateTime = dateTime;
             //TODO: save the location as a separate object
             Offence.LocationID = location;
+            Offence.OffenceData.Add(Offence);
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace WijkagentWPF
         /// <returns></returns>
         public List<Offence> GetOffences()
         {
-            return Offence.OffenceData();
+            return Offence.OffenceData;
         }
     }
 }
