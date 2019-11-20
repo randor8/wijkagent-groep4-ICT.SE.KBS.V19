@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WijkagentModels;
 
 namespace WijkagentWPF
 {
@@ -21,6 +22,7 @@ namespace WijkagentWPF
             DateTime = dateTime;
             Description = description;
         }
+
         public int ID { get; set; }
         public DateTime DateTime { get; set; }
         public string Description { get; set; }

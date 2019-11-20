@@ -24,6 +24,7 @@ namespace WijkagentWPF
 
         private OffenceController Controller { get; set; }
 
+        public Location Location { get; set; }
         public AddOffenceDialogue(OffenceController controller)
         {
             //init windows
@@ -55,7 +56,7 @@ namespace WijkagentWPF
         private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
         {
             DateTime dateTime = DateTimePicker.Value.Value;
-            Controller.SetOffenceData(TxtB_omschrijving.Text, CB_categorie.Text, dateTime);
+            Controller.SetOffenceData(TxtB_omschrijving.Text, CB_categorie.Text, dateTime, Location);
             this.Hide();
         }
     }

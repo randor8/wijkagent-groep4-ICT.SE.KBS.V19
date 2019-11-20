@@ -47,12 +47,13 @@ namespace WijkagentWPF
         /// <param name="location">offence location</param>
         public void SetOffenceData(string description, string category, DateTime dateTime, Location location)
         {
-            Offence.Category = category;
-            Offence.Description = description;
-            Offence.DateTime = dateTime;
+            Offence NewOffence = new Offence();
+            NewOffence.Category = category;
+            NewOffence.Description = description;
+            NewOffence.DateTime = dateTime;
+            NewOffence.LocationID = location;
             //TODO: save the location as a separate object
-            Offence.LocationID = location;
-            Offence.OffenceData.Add(Offence);
+            Offence.OffenceData.Add(NewOffence);
         }
 
         /// <summary>
