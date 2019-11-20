@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WijkagentModels;
+using WijkagentWPF;
 
 namespace WPFWijkagent
 {
@@ -21,10 +22,39 @@ namespace WPFWijkagent
     /// </summary>
     public partial class MainWindow : Window
     {
+        //controls the offences for this window
+        private OffenceController _offenceController { get; set; }
         public MainWindow()
         {
             InitializeComponent();
-            
+            _offenceController = new OffenceController();
+            FillOffenceList();
+        }
+        /// <summary>
+        /// fills the listbox with all of the offences 
+        /// </summary>
+        private void FillOffenceList()
+        {
+            //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
+            List<Offence> offences = _offenceController.GetOffences();
+            List<OffenceListItem> offenceListItems = new List<OffenceListItem>(); 
+            offences.ForEach(of => offenceListItems.Add(new OffenceListItem(of.ID, of.DateTime, of.Description)));
+
+            wpf_lb_delicten.ItemsSource = offenceListItems;
+        }
+        /// <summary>
+        /// gets called when a offence in the list is clicked/selected.
+        /// </summary>
+        /// <param name="sender">the publisher</param>
+        /// <param name="e">arguments for retrieving the selected item</param>
+        private void wpf_lb_delicten_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Offence offence = e.AddedItems[0] as Offence;
+            //TODO: place code for selected offence here
         }
     }
+
+
 }
+
+

@@ -7,5 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <ListBox x:Name="wpf_lb_delicten" Margin="600,23,0,0" SelectionChanged="wpf_lb_delicten_SelectionChanged"/>
     </Grid>
 </Window>
