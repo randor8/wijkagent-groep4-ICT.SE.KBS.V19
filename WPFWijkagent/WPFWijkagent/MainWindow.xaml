@@ -3,13 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
         xmlns:local="clr-namespace:WPFWijkagent"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <ListBox x:Name="wpf_lb_delicten" Margin="600,23,0,0" SelectionChanged="wpf_lb_delicten_SelectionChanged"/>
+	<Grid>
         <Rectangle HorizontalAlignment="Center" Height="23" Stroke="Black" VerticalAlignment="Top" Width="800"/>
         <ComboBox x:Name="wpf_cb_categoriesFilter" HorizontalAlignment="Left" Height="23" Margin="295,0,0,0" VerticalAlignment="Top" Width="140" SelectionChanged="wpf_cb_categories_SelectionChanged">
         </ComboBox>
-    </Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="1*" />
+			<ColumnDefinition Width="200" />
+		</Grid.ColumnDefinitions>
+		<Grid Grid.Column="0">
+			<m:Map Name="wpfMapMain" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15"/>
+		</Grid>
+		<ListBox Grid.Column="1" x:Name="wpfLBSelection" SelectionChanged="wpfLBSelection_SelectionChanged"/>
+	</Grid>
 </Window>
