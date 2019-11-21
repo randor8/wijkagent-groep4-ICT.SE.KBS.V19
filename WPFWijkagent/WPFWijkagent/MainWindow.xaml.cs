@@ -38,10 +38,8 @@ namespace WPFWijkagent
         private void FillOffenceList()
         {
             //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
-            List<Offence> offences = _offenceController.GetOffences();
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            /*offences.ForEach(of => offenceListItems.Add(new OffenceListItem(of.ID, of.DateTime, of.Description, of.Category)));*/
-            offenceListItems = ConvertListOffenceToOffenceListItem(offences);
+            offenceListItems = ConvertListOffenceToOffenceListItem(_offenceController.GetOffences());
 
             wpf_lb_delicten.ItemsSource = offenceListItems;
         }
@@ -98,27 +96,9 @@ namespace WPFWijkagent
         /// <param name="e"></param>
         private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
 
-            List<OffenceListItem> offences = ConvertListOffenceToOffenceListItem(_offenceController.GetOffences());
-            if (wpf_cb_categoriesFilter.SelectedItem.ToString() == "Alles tonen")
-            {
-                offenceListItems = offences;
-            } 
-            else
-            {
-                foreach (OffenceListItem OffenceListItem in offences)
-                {
+            wpf_lb_delicten.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences()); 
 
-                    if (OffenceListItem.Category.ToString() == wpf_cb_categoriesFilter.SelectedItem.ToString())
-                    {
-                        offenceListItems.Add(new OffenceListItem(OffenceListItem.ID, OffenceListItem.DateTime, OffenceListItem.Description, OffenceListItem.Category));
-                    }
-
-                }
-            }
-
-            wpf_lb_delicten.ItemsSource = offenceListItems;
         }
     }
 

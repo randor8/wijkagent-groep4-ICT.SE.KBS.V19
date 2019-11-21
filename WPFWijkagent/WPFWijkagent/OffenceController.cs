@@ -53,6 +53,42 @@ namespace WijkagentWPF
             Offence.LocationID = location;
         }
 
+        public List<OffenceListItem> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
+        {
+            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            List<OffenceListItem> convertedOffences = ConvertListOffenceToOffenceListItem(offences);
+            if (categoryFilter == "Alles tonen")
+            {
+                offenceListItems = convertedOffences;
+            }
+            else
+            {
+                foreach (OffenceListItem OffenceListItem in convertedOffences)
+                {
+
+                    if (OffenceListItem.Category.ToString() == categoryFilter)
+                    {
+                        offenceListItems.Add(new OffenceListItem(OffenceListItem.ID, OffenceListItem.DateTime, OffenceListItem.Description, OffenceListItem.Category));
+                    }
+
+                }
+            }
+
+            return offenceListItems;
+        }
+
+        public List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
+        {
+            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            List<OffenceListItem> convertedOffences = ConvertListOffenceToOffenceListItem(offence);
+            foreach (OffenceListItem offenceItem in convertedOffences)
+            {
+                offenceListItems.Add(new OffenceListItem(offenceItem.ID, offenceItem.DateTime, offenceItem.Description, offenceItem.Category));
+            }
+
+            return offenceListItems;
+        }
+
         /// <summary>
         /// gets all the offences from the db
         /// </summary>
