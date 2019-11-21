@@ -49,7 +49,6 @@ namespace WPFWijkagent
         /// </summary>
         private void FillCategoriesCombobox()
         {
-
             wpf_cb_categoriesFilter.Items.Add("Alles tonen");
 
             foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
@@ -96,9 +95,7 @@ namespace WPFWijkagent
         /// <param name="e"></param>
         private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
             wpf_lb_delicten.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences()); 
-
         }
     }
 
