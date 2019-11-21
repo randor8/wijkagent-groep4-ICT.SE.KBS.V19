@@ -22,15 +22,19 @@ namespace WijkagentWPF
     {
         public OffenceCategories categories = new OffenceCategories();
 
-        private OffenceController Controller { get; set; }
+        private OffenceController Controller { get; }
 
         public Location Location { get; set; }
-        public AddOffenceDialogue(OffenceController controller)
+
+        public MainWindow MainWindow { get; }
+
+        public AddOffenceDialogue(OffenceController controller, MainWindow mainWindow)
         {
             //init windows
             InitializeComponent();
 
             Controller = controller;
+            MainWindow = mainWindow;
 
             //add all enum categories to ComboBox
             InitializeCategories();
@@ -56,8 +60,12 @@ namespace WijkagentWPF
         private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
         {
             DateTime dateTime = DateTimePicker.Value.Value;
-            Controller.SetOffenceData(TxtB_omschrijving.Text, CB_categorie.Text, dateTime, Location);
-            this.Hide();
+            if(dateTime < DateTime.Now)
+            {
+                Controller.SetOffenceData(TxtB_omschrijving.Text, CB_categorie.Text, dateTime, Location);
+                this.Close();
+                MainWindow.refreshList();
+            }
         }
     }
 }

@@ -28,7 +28,6 @@ namespace WPFWijkagent
             SetZoomBoundaryCheck();
             _offenceController = new OffenceController();
             FillOffenceList();
-            OffenceDialogue = new AddOffenceDialogue(_offenceController);
             map_Main.MouseLeftButtonDown += AddPin;
         }
 
@@ -71,7 +70,7 @@ namespace WPFWijkagent
         /// <param name="e">arguments for retrieving the selected item</param>
         private void wpf_lb_delicten_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Offence offence = e.AddedItems[0] as Offence;
+            //Offence offence = e.AddedItems[0] as Offence;
             //TODO: place code for selected offence here
         }
 
@@ -94,7 +93,8 @@ namespace WPFWijkagent
 
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
-            if(AddModeActivated == true)
+            OffenceDialogue = new AddOffenceDialogue(_offenceController, this);
+            if (AddModeActivated == true)
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
                 // Disables the default mouse double-click action.
@@ -112,21 +112,26 @@ namespace WPFWijkagent
                 newLocation.Latitude = location.Latitude;
 
                 OffenceDialogue.Location = newLocation;
-                OffenceDialogue.ShowDialog();
-                FillOffenceList();
+                try
+                {
+                    OffenceDialogue.ShowDialog();
+                }
 
-                // The pushpin to add to the map.
-                Pushpin pin = new Pushpin();
-                pin.Location = location;
-                // Adds the pushpin to the map.
-                map_Main.Children.Add(pin);
-                Btn_addOffence.Content = "delict toevoegen";
-                AddModeActivated = false;
+                catch(ArgumentOutOfRangeException)
+                {
+                    MessageBox.Show("Date cannot be in the future!");
+                    OffenceDialogue.Focus();
+                } 
             } 
         }
+
+        public void refreshList()
+        {
+            FillOffenceList();
+            Btn_addOffence.Content = "delict toevoegen";
+            AddModeActivated = false;
+        }
     }
-
-
-}
+ }
 
 
