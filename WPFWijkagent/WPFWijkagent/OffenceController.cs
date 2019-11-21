@@ -23,7 +23,7 @@ namespace WijkagentWPF
         /// <param name="location">the location object to add</param>
         public void SetOffenceData(Location location)
         {
-            SetOffenceData("", "", new DateTime().ToLocalTime(), location);
+            SetOffenceData("", OffenceCategories.categorie1, new DateTime().ToLocalTime(), location);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace WijkagentWPF
         /// <param name="description">offence description</param>
         /// <param name="category">offence Categorie(enum value)</param>
         /// <param name="dateTime">offence date and time</param>
-        public void SetOffenceData(string description, string category, DateTime dateTime)
+        public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime)
         {
             SetOffenceData(description, category, dateTime, Offence.LocationID);
         }
@@ -44,7 +44,7 @@ namespace WijkagentWPF
         /// <param name="category">offence Categorie(enum value)</param>
         /// <param name="dateTime">offence date and time</param>
         /// <param name="location">offence location</param>
-        public void SetOffenceData(string description, string category, DateTime dateTime, Location location)
+        public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
             Offence.Category = category;
             Offence.Description = description;
