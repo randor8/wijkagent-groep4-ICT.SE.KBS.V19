@@ -1,6 +1,10 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,11 +27,11 @@ namespace WPFWijkagent
 		{
 			InitializeComponent();
 
+            _offenceController = new OffenceController();
+            FillOffenceList();
+      FillCategoriesCombobox();
 			SetMapBackground(172, 199, 242);
 			SetZoomBoundaryCheck();
-
-			_offenceController = new OffenceController();
-			FillOffenceList();
 		}
 
 		/// <summary>
@@ -40,6 +44,34 @@ namespace WPFWijkagent
 		{
 			wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
 		}
+
+        /// <summary>
+        /// Makes sure the zoom level will not go beyond the given upper and lower bounds.
+        /// </summary>
+        /// <param name="sender">Object sending the event.</param>
+        /// <param name="e">Parameters given by the sender.</param>
+        private void CheckZoomBoundaries(object sender, MapEventArgs e)
+        {
+            double maxZoom = 3; double minZoom = 20;
+            if (sender.Equals(map_Main))
+            {
+                if (map_Main.ZoomLevel < maxZoom)
+                {
+                    map_Main.ZoomLevel = maxZoom;
+                } else if (map_Main.ZoomLevel > minZoom)
+                {
+                    map_Main.ZoomLevel = minZoom;
+                }
+            }
+        }
+        /// <summary>
+        /// fills the listbox with all of the offences 
+        /// </summary>
+        private void FillOffenceList()
+        {
+            //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
+            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            offenceListItems = ConvertListOffenceToOffenceListItem(_offenceController.GetOffences());
 
 		/// <summary>
 		/// Adds check on zooming.
@@ -69,6 +101,61 @@ namespace WPFWijkagent
 				}
 			}
 		}
+
+        /// <summary>
+        /// Fills the categories combobox
+        /// </summary>
+        private void FillCategoriesCombobox()
+        {
+            wpf_cb_categoriesFilter.Items.Add("Alles tonen");
+
+            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
+            {
+                wpf_cb_categoriesFilter.Items.Add(offenceItem);
+            }
+
+            wpf_cb_categoriesFilter.SelectedIndex = 0;
+
+        }
+
+        /// <summary>
+        /// Converts an Offence list into an OffenceListItem list
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns></returns>
+        private List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
+        {
+            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            foreach (Offence offenceItem in offence)
+            {
+               offenceListItems.Add(new OffenceListItem(offenceItem.ID, offenceItem.DateTime, offenceItem.Description, offenceItem.Category));
+            }
+
+            return offenceListItems;
+        }
+
+        /// <summary>
+        /// gets called when a offence in the list is clicked/selected.
+        /// </summary>
+        /// <param name="sender">the publisher</param>
+        /// <param name="e">arguments for retrieving the selected item</param>
+        private void wpf_lb_delicten_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Offence offence = e.AddedItems[0] as Offence;
+            //TODO: place code for selected offence here
+        }
+
+        /// <summary>
+        /// Gets called when the categories combobox selection is changed
+        /// Fills the OffenceListItems with the correct Offences
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            wpf_lb_delicten.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences()); 
+        }
+    }
 
 		/// <summary>
 		/// fills the listbox with all of the offences 

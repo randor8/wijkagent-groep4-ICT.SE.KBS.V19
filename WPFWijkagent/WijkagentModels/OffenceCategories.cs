@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WijkagentModels
 {
-    enum OffenceCategories
+    public enum OffenceCategories
     {
         categorie1,
         categorie2,

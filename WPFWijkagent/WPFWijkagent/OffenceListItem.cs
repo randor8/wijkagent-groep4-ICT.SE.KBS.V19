@@ -1,3 +1,6 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 ﻿using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Media;
 using WijkagentModels;
@@ -14,12 +17,13 @@ namespace WijkagentWPF
 
 		public Offence Offence { get; private set; }
 		public Pushpin Pushpin { get; private set; }
+    public OffenceCategories Category { get; set; }
 
 		/// <summary>
 		/// inits the offence list item so it can be used to display in a list
 		/// </summary>
 		/// <param name="offence"> the offence db item</param>
-		public OffenceListItem(Offence offence)
+		public OffenceListItem(Offence offence, OffenceCategories category)
 		{
 			Offence = offence;
 			Pushpin = new Pushpin
@@ -31,6 +35,7 @@ namespace WijkagentWPF
 				},
 				Background = ColorDefault
 			};
+      Category = category;
 		}
 
 		/// <summary>
