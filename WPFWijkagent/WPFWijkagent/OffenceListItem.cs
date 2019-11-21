@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WijkagentModels;
 
 namespace WijkagentWPF
 {
@@ -15,15 +16,17 @@ namespace WijkagentWPF
         /// <param name="iD"> the offence db item id</param>
         /// <param name="dateTime"> the offence db item date and time</param>
         /// <param name="description">the offence db item description</param>
-        public OffenceListItem(int iD, DateTime dateTime, string description)
+        public OffenceListItem(int iD, DateTime dateTime, string description, OffenceCategories category)
         {
             ID = iD;
             DateTime = dateTime;
             Description = description;
+            Category = category;
         }
         public int ID { get; set; }
         public DateTime DateTime { get; set; }
         public string Description { get; set; }
+        public OffenceCategories Category { get; set; }
         /// <summary>
         /// creates a string representation of the object
         /// </summary>
