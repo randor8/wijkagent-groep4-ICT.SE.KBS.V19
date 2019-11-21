@@ -37,7 +37,6 @@ namespace WijkagentTests
             //assert
             Assert.IsNotNull(result);
         }
-
         /// <summary>
         /// A test to control whether the function returns a list filled with results
         /// </summary>
@@ -45,7 +44,6 @@ namespace WijkagentTests
         public void GetSocialMediaMessages_offenceGiven_IsInstance()
         {
             //arrange
-            
             Offence offence = new Offence()
             {
                 ID = 3,
