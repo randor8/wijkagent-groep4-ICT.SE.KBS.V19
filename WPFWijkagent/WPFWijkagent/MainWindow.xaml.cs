@@ -46,14 +46,17 @@ namespace WPFWijkagent
             wpf_lb_delicten.ItemsSource = offenceListItems;
         }
 
+        /// <summary>
+        /// Fills the categories combobox
+        /// </summary>
         private void FillCategoriesCombobox()
         {
 
             wpf_cb_categoriesFilter.Items.Add("Alles tonen");
 
-            foreach (OffenceCategories loop in Enum.GetValues(typeof(OffenceCategories)))
+            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
             {
-                wpf_cb_categoriesFilter.Items.Add(loop);
+                wpf_cb_categoriesFilter.Items.Add(offenceItem);
             }
 
             wpf_cb_categoriesFilter.SelectedIndex = 0;
@@ -68,9 +71,9 @@ namespace WPFWijkagent
         private List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
         {
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            foreach (Offence i in offence)
+            foreach (Offence offenceItem in offence)
             {
-               offenceListItems.Add(new OffenceListItem(i.ID, i.DateTime, i.Description, i.Category));
+               offenceListItems.Add(new OffenceListItem(offenceItem.ID, offenceItem.DateTime, offenceItem.Description, offenceItem.Category));
             }
 
             return offenceListItems;
@@ -104,12 +107,12 @@ namespace WPFWijkagent
             } 
             else
             {
-                foreach (OffenceListItem i in offences)
+                foreach (OffenceListItem OffenceListItem in offences)
                 {
 
-                    if (i.Category.ToString() == wpf_cb_categoriesFilter.SelectedItem.ToString())
+                    if (OffenceListItem.Category.ToString() == wpf_cb_categoriesFilter.SelectedItem.ToString())
                     {
-                        offenceListItems.Add(new OffenceListItem(i.ID, i.DateTime, i.Description, i.Category));
+                        offenceListItems.Add(new OffenceListItem(OffenceListItem.ID, OffenceListItem.DateTime, OffenceListItem.Description, OffenceListItem.Category));
                     }
 
                 }
