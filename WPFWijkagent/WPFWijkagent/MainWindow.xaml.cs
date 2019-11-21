@@ -74,8 +74,10 @@ namespace WPFWijkagent
             //TODO: place code for selected offence here
         }
 
+        //when the addOffence button is clicked:
         private void Btn_addOffence_Click(object sender, RoutedEventArgs e)
         {
+            //change the cursor and the Add offence button context.
             if(AddModeActivated == true)
             {
                 Btn_addOffence.Content = "delict toevoegen";
@@ -91,8 +93,10 @@ namespace WPFWijkagent
             }
         }
 
+        //open the dialog when clicked on the map and AddMode is activiated
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
+            //create nieuw offencedialogue when clicked on map
             OffenceDialogue = new AddOffenceDialogue(_offenceController, this);
             if (AddModeActivated == true)
             {
@@ -107,10 +111,12 @@ namespace WPFWijkagent
                 //Convert the mouse coordinates to a locatoin on the map
                 Microsoft.Maps.MapControl.WPF.Location location = map_Main.ViewportPointToLocation(mousePosition);
 
+                //create a WijkAgendModels Location and convert the WPF location to that location.
                 WijkagentModels.Location newLocation = new WijkagentModels.Location();
                 newLocation.Longitude = location.Longitude;
                 newLocation.Latitude = location.Latitude;
 
+                //try to show the dialog, catch if the date enterd is in the future                                                   
                 OffenceDialogue.Location = newLocation;
                 try
                 {
@@ -125,6 +131,7 @@ namespace WPFWijkagent
             } 
         }
 
+        //refresh the list (used by the offence controller)
         public void refreshList()
         {
             FillOffenceList();

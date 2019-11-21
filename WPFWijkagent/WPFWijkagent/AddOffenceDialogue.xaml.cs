@@ -33,6 +33,7 @@ namespace WijkagentWPF
             //init windows
             InitializeComponent();
 
+            //init controller and window
             Controller = controller;
             MainWindow = mainWindow;
 
@@ -45,6 +46,7 @@ namespace WijkagentWPF
 
         private void InitializeCategories()
         {
+            //add all categories from the OffenceCategories enum to the combobox
             foreach (OffenceCategories categories in (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories)))
             {
                 CB_categorie.Items.Add(categories);
@@ -54,9 +56,12 @@ namespace WijkagentWPF
         private void InitializeDatePicker()
         {
             //Install-Package Extended.Wpf.Toolkit -Version 3.6.0
+
+            //set the maximum date for the datetimepicker
             DateTimePicker.Maximum = DateTime.Now;
         }
 
+        //when 'toevoegen' is clicked. Add Offence to the Controllers offence data and refresh the list of main window.
         private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
         {
             DateTime dateTime = DateTimePicker.Value.Value;
