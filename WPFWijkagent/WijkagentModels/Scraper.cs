@@ -9,6 +9,9 @@ using WijkagentModels;
 
 namespace WijkagentModels
 {
+    /// <summary>
+    /// De klase is verantwoordelijk voor het ophalen van de berichten van Twitter en zet deze gegevens hierna om naar objecten van de klasse SocialMedia
+    /// </summary>
     public class Scraper
     {
         public Offence Offence { get; set; }

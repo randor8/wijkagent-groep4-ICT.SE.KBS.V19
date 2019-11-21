@@ -42,7 +42,7 @@ namespace WijkagentTests
         /// A test to control whether the function returns a list filled with results
         /// </summary>
         [Test]
-        public void GetSocialMediaMessages_offenceGiven_ReturnsList()
+        public void GetSocialMediaMessages_offenceGiven_IsInstance()
         {
             //arrange
             
