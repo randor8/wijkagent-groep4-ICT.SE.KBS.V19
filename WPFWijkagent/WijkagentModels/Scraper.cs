@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
+using WijkagentModels;
 
 namespace WijkagentModels
 {
     public class Scraper
     {
+        public Offence Offence { get; set; }
+
+        SearchTweetsParameters SearchParameters;
+
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
         private static readonly string customerKey = "qwR0YaAerXPeXtrT99scdSnU1";
@@ -17,9 +23,22 @@ namespace WijkagentModels
         private static readonly string accesTokenSecret = "YTiE5MZyYhD1tYchjFPT47QF3QqkO36UGL9tq9Yd3ivby";
         #endregion;
 
+        public Scraper(Offence offence)
+        {
+            Offence = offence;
+            SearchParameters = new SearchTweetsParameters("")
+            {
+                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
+                SearchType = SearchResultType.Recent,
+                Lang = LanguageFilter.Dutch,
+                MaximumNumberOfResults = 10,
+                Until = new DateTime(offence.Time.Year, offence.Time.Month, offence.Time.Day)
+            };
+        }
+
         // containing Test Methods to test network Connectivity
         #region Test
-        public string GetUsername()
+        public static string GetUsername()
         {
             Console.WriteLine($"{DateTime.Now} Bot started");
             Connect();
@@ -27,37 +46,33 @@ namespace WijkagentModels
             return data;
         }
 
-        public object GetUser()
+        public static object GetUser()
         {
             Console.WriteLine($"{DateTime.Now} Bot started");
             var exp = Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
-            return exp;            
+            return exp;
         }
         #endregion
 
+        // bassfunctie om de connectie te maken tussen de API en het autorizeren
         public static void Connect()
         {
             Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
         }
 
-        public static List<SocialMediaMessage> GetSocialMediaMessages(Offence offence)
+        /// <summary>
+        /// This function uses the search parameters attribute to find tweets that 
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns>list of social media messages </returns>
+        public List<SocialMediaMessage> GetSocialMediaMessages()
         {
-            Connect();
             List<SocialMediaMessage> feed = new List<SocialMediaMessage>();
-            var SearchParameters = new SearchTweetsParameters("")
-            {
-                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 0.5, DistanceMeasure.Kilometers),
-                SearchType = SearchResultType.Recent,
-                Lang = LanguageFilter.Dutch,
-                MaximumNumberOfResults = 10,
-                Until = offence.Time,
-            };
             var tweets = Search.SearchTweets(SearchParameters);
             foreach (var tweet in tweets)
             {
-                SocialMediaMessage s = new SocialMediaMessage((int)tweet.Id, tweet.CreatedAt, tweet.Text, new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
-                Console.WriteLine(s);
-                feed.Add(s);
+                Console.WriteLine(tweet.CreatedBy+"\n");
+                feed.Add(new SocialMediaMessage((int)tweet.Id,Offence.Time, tweet.Text, Offence.LocationID));
             }
             return feed;
         }
