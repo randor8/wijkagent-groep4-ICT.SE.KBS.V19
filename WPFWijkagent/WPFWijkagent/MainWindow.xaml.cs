@@ -26,7 +26,6 @@ namespace WPFWijkagent
         private OffenceController _offenceController { get; set; }
         public MainWindow()
         {
-
             InitializeComponent();
             _offenceController = new OffenceController();
             FillOffenceList();
