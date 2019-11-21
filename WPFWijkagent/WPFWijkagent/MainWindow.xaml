@@ -8,14 +8,15 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Button x:Name="Btn_addOffence" Content="delict toevoegen" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Btn_addOffence_Click"/>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="200" />
         </Grid.ColumnDefinitions>
+        
         <Grid Grid.Column="0" Margin="10,10,10,10">
-                <m:Map Name="map_Main" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15"/>
+                <m:Map Name="map_Main" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15" Margin="0,10,0,0"/>
         </Grid>
+        <Button x:Name="Btn_addOffence" Content="delict toevoegen" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Btn_addOffence_Click"/>
         <ListBox Grid.Column="1" x:Name="wpf_lb_delicten" SelectionChanged="wpf_lb_delicten_SelectionChanged"/>
     </Grid>
 </Window>
