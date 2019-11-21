@@ -14,37 +14,25 @@ namespace WijkagentModels
                     ID=1,
                     DateTime= new DateTime().ToLocalTime(),
                     Description = "een delict..",
-                    LocationID= new Location(){ 
-                        Longitude=52.499853m,
-                        Latitude=6.081799m
-                    },
+                    LocationID= new Location(52.499853,6.081799 )
                 },
                 new Offence(){
                     ID=2,
                     DateTime= new DateTime().ToLocalTime(),
                     Description = "twee delict..",
-                    LocationID= new Location(){
-                        Longitude=52.498599m,
-                        Latitude=6.083880m
-                    },
+                    LocationID= new Location(52.498599,6.083880 )
                 },
                 new Offence() {
                     ID=3,
                     DateTime= new DateTime().ToLocalTime(),
                     Description = "drie delict..",
-                    LocationID= new Location(){
-                        Longitude=52.497853m,
-                        Latitude=6.080799m
-                    },
+                    LocationID= new Location(52.497853, 6.080799)
                 },
                 new Offence(){
                     ID=4,
                     DateTime= new DateTime().ToLocalTime(),
                     Description = "vier delict..",
-                    LocationID= new Location(){
-                        Longitude=52.50853m,
-                        Latitude=6.084099m
-                    },
+                    LocationID= new Location(52.50853,6.084099 )
                 }
             };
         }

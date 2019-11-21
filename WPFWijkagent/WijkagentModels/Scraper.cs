@@ -35,7 +35,7 @@ namespace WijkagentModels
                 SearchType = SearchResultType.Recent,
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = new DateTime(offence.Time.Year, offence.Time.Month, offence.Time.Day)
+                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day)
             };
         }
 
@@ -75,7 +75,7 @@ namespace WijkagentModels
             foreach (var tweet in tweets)
             {
                 Console.WriteLine(tweet.CreatedBy+"\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id,Offence.Time, tweet.Text, Offence.LocationID));
+                feed.Add(new SocialMediaMessage((int)tweet.Id,Offence.DateTime, tweet.Text, Offence.LocationID));
             }
             return feed;
         }

@@ -49,7 +49,7 @@ namespace WijkagentTests
             Offence offence = new Offence()
             {
                 ID = 3,
-                Time = new DateTime().ToLocalTime(),
+                DateTime = new DateTime().ToLocalTime(),
                 Description = "een delict..",
                 LocationID = new Location(52.501127, 6.0789937)
             };

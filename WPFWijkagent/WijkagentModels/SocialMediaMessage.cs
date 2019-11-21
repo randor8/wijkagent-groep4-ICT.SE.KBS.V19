@@ -14,14 +14,14 @@ namespace WijkagentModels
         public SocialMediaMessage(int id, DateTime time, string message, Location location)
         {
             ID = id;
-            Time = time;
+            DateTime = time;
             Message = message;
             LocationID = location;
         }
 
         public override string ToString()
         {
-            return $"Id: {ID}\nDate: {Time}\nContent: {Message}\nLocation: {LocationID.Latitude} : {LocationID.Longitude}";
+            return $"Id: {ID}\nDate: {DateTime}\nContent: {Message}\nLocation: {LocationID.Latitude} : {LocationID.Longitude}";
         }
     }
 }
