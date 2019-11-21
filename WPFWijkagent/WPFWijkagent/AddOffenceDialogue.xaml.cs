@@ -28,22 +28,25 @@ namespace WijkagentWPF
 
         public MainWindow MainWindow { get; }
 
+        //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
         public AddOffenceDialogue(OffenceController controller, MainWindow mainWindow)
         {
-            //init windows
+            //Initializes itself (the Window)
             InitializeComponent();
 
-            //init controller and window
+            //init controller and window so these properties can be used later on
             Controller = controller;
             MainWindow = mainWindow;
 
-            //add all enum categories to ComboBox
+            //add all enum categories to ComboBox so they can be selected
             InitializeCategories();
 
-            //Init the DateTimePicker
+            //Init the DateTimePicker (add a max date)
             InitializeDatePicker();
         }
 
+
+        //Add al the categories (currently from the enum, later on from the database) to the combobox of the dialog
         private void InitializeCategories()
         {
             //add all categories from the OffenceCategories enum to the combobox
@@ -53,10 +56,9 @@ namespace WijkagentWPF
             }
         }
 
+        //set the maximum date for the datepicker
         private void InitializeDatePicker()
-        {
-            //Install-Package Extended.Wpf.Toolkit -Version 3.6.0
-
+        { 
             //set the maximum date for the datetimepicker
             DateTimePicker.Maximum = DateTime.Now;
         }
