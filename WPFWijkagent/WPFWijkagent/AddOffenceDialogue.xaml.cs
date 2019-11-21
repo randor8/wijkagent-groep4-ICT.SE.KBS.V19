@@ -67,7 +67,7 @@ namespace WijkagentWPF
             DateTime dateTime = DateTimePicker.Value.Value;
             if(dateTime < DateTime.Now)
             {
-                Controller.SetOffenceData(TxtB_omschrijving.Text, CB_categorie.Text, dateTime, Location);
+                Controller.SetOffenceData(TxtB_omschrijving.Text,(OffenceCategories) CB_categorie.SelectedItem, dateTime, Location);
                 this.Close();
                 MainWindow.refreshList();
             }

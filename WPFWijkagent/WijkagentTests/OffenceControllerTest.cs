@@ -27,7 +27,7 @@ namespace WijkagentTests
         public void SetOffence_WithFormData_DataSet(string description, string category)
         {
             OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(description, category, dateTime);
+            offenceController.SetOffenceData(description, OffenceCategories.categorie1, dateTime);
 
             Assert.AreEqual(offenceController.Offence.Description, description);
             Assert.AreEqual(offenceController.Offence.Category, category);
@@ -48,7 +48,7 @@ namespace WijkagentTests
         public void SetOffence_WithAllFields_DataSet(string description, string category)
         {
             OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(description, category, dateTime, location);
+            offenceController.SetOffenceData(description, OffenceCategories.categorie1, dateTime, location);
 
             Assert.AreEqual(offenceController.Offence.Description, description);
             Assert.AreEqual(offenceController.Offence.Category, category);
