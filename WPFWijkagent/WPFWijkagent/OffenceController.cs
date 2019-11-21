@@ -91,8 +91,8 @@ namespace WijkagentWPF
         public List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
         {
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            List<OffenceListItem> convertedOffences = ConvertListOffenceToOffenceListItem(offence);
-            foreach (OffenceListItem offenceItem in convertedOffences)
+            /*List<OffenceListItem> convertedOffences = ConvertListOffenceToOffenceListItem(offence);*/
+            foreach (Offence offenceItem in offence)
             {
                 offenceListItems.Add(new OffenceListItem(offenceItem.ID, offenceItem.DateTime, offenceItem.Description, offenceItem.Category));
             }
