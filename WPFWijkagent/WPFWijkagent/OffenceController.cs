@@ -53,6 +53,12 @@ namespace WijkagentWPF
             Offence.LocationID = location;
         }
 
+        /// <summary>
+        /// Get all offences from a specific category
+        /// </summary>
+        /// <param name="categoryFilter"></param>
+        /// <param name="offences"></param>
+        /// <returns></returns>
         public List<OffenceListItem> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
         {
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
@@ -77,6 +83,11 @@ namespace WijkagentWPF
             return offenceListItems;
         }
 
+        /// <summary>
+        /// Converts an Offence list into an OffenceListItem list
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns></returns>
         public List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
         {
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
