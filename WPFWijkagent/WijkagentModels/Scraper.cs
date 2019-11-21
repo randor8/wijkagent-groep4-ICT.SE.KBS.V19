@@ -57,7 +57,7 @@ namespace WijkagentModels
         }
         #endregion
 
-        // bassfunctie om de connectie te maken tussen de API en het autorizeren
+        // basicfunction that supplies the authentication information
         public static void Connect()
         {
             Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
