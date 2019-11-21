@@ -5,7 +5,6 @@ namespace WijkagentModels
 {
     public class Offence
     {
-        //returns a list of 4 offence objects
         public static List<Offence> OffenceData { get; set; } = new List<Offence>();
          
         public int ID { get; set; }

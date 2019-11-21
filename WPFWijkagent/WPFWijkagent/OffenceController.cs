@@ -35,7 +35,6 @@ namespace WijkagentWPF
         public void SetOffenceData(string description, string category, DateTime dateTime)
         {
             SetOffenceData(description, category, dateTime, Offence.LocationID);
-
         }
 
         /// <summary>
