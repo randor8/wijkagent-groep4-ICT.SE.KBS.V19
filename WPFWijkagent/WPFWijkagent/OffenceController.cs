@@ -46,11 +46,13 @@ namespace WijkagentWPF
         /// <param name="location">offence location</param>
         public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
-            Offence.Category = category;
-            Offence.Description = description;
-            Offence.DateTime = dateTime;
+            Offence NewOffence = new Offence();
+            NewOffence.Category = category;
+            NewOffence.Description = description;
+            NewOffence.DateTime = dateTime;
+            NewOffence.LocationID = location;
             //TODO: save the location as a separate object
-            Offence.LocationID = location;
+            Offence.OffenceData.Add(NewOffence);
         }
 
         /// <summary>
@@ -71,12 +73,10 @@ namespace WijkagentWPF
             {
                 foreach (OffenceListItem OffenceListItem in convertedOffences)
                 {
-
-                    if (OffenceListItem.Category.ToString() == categoryFilter)
+                    if (OffenceListItem.Offence.Category.ToString() == categoryFilter)
                     {
-                        offenceListItems.Add(new OffenceListItem(OffenceListItem.ID, OffenceListItem.DateTime, OffenceListItem.Description, OffenceListItem.Category));
+                        offenceListItems.Add(new OffenceListItem(OffenceListItem.Offence));
                     }
-
                 }
             }
 
@@ -93,7 +93,7 @@ namespace WijkagentWPF
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
             foreach (Offence offenceItem in offence)
             {
-                offenceListItems.Add(new OffenceListItem(offenceItem.ID, offenceItem.DateTime, offenceItem.Description, offenceItem.Category));
+                offenceListItems.Add(new OffenceListItem(offenceItem));
             }
 
             return offenceListItems;
@@ -105,7 +105,7 @@ namespace WijkagentWPF
         /// <returns></returns>
         public List<Offence> GetOffences()
         {
-            return Offence.OffenceData();
+            return Offence.OffenceData;
         }
     }
 }
