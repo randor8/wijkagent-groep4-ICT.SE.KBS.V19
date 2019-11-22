@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WijkagentModels
 {
-    public class SocialMediaMessage
+    public class SocialMediaMessage : IModels
     {
         public int ID { get; set; }
         public DateTime DateTime { get; set; }

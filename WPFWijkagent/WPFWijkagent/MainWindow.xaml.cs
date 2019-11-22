@@ -31,7 +31,7 @@ namespace WPFWijkagent
 
             SetMapBackground(172, 199, 242);
             SetZoomBoundaryCheck();
-
+            new DBContext<Offence>();
             _offenceController = new OffenceController();
             FillOffenceList();
         }
