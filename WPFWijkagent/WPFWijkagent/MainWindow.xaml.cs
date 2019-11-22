@@ -23,8 +23,6 @@ namespace WPFWijkagent
         //controls the offences for this window
         private OffenceController _offenceController { get; set; }
 
-        private AddOffenceDialogue OffenceDialogue { get; set; }
-
         private bool AddModeActivated = false;
 
         public MainWindow()
@@ -138,7 +136,7 @@ namespace WPFWijkagent
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
             //create nieuw offencedialogue when clicked on map
-            OffenceDialogue = new AddOffenceDialogue(_offenceController);
+            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(_offenceController);
             if (AddModeActivated == true)
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
