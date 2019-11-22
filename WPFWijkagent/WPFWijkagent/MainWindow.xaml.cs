@@ -34,7 +34,7 @@ namespace WPFWijkagent
             //SetZoomBoundaryCheck();
             _offenceController = new OffenceController();
             FillOffenceList();
-          //  FillCategoriesCombobox();
+            //FillCategoriesCombobox();
             wpfMapMain.MouseLeftButtonDown += AddPin;
         }
 
@@ -138,7 +138,7 @@ namespace WPFWijkagent
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
             //create nieuw offencedialogue when clicked on map
-            OffenceDialogue = new AddOffenceDialogue(_offenceController, this);
+            OffenceDialogue = new AddOffenceDialogue(_offenceController);
             if (AddModeActivated == true)
             {
                 Mouse.OverrideCursor = Cursors.Arrow;
@@ -159,25 +159,12 @@ namespace WPFWijkagent
 
                 //try to show the dialog, catch if the date enterd is in the future                                                   
                 OffenceDialogue.Location = newLocation;
-                try
-                {
-                    OffenceDialogue.ShowDialog();
-                }
 
-                catch (ArgumentOutOfRangeException)
-                {
-                    MessageBox.Show("Date cannot be in the future!");
-                    OffenceDialogue.Focus();
-                }
+                OffenceDialogue.ShowDialog();
+                FillOffenceList();
+                Btn_addOffence.Content = "delict toevoegen";
+                AddModeActivated = false;
             }
-        }
-
-        //refresh the list (used by the offence controller)
-        public void refreshList()
-        {
-            FillOffenceList();
-            Btn_addOffence.Content = "delict toevoegen";
-            AddModeActivated = false;
         }
 
         /// <summary>

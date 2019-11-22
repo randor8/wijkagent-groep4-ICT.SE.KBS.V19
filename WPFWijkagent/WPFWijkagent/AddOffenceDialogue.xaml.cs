@@ -26,23 +26,18 @@ namespace WijkagentWPF
 
         public Location Location { get; set; }
 
-        public MainWindow MainWindow { get; }
 
         //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
-        public AddOffenceDialogue(OffenceController controller, MainWindow mainWindow)
+        public AddOffenceDialogue(OffenceController controller)
         {
             //Initializes itself (the Window)
             InitializeComponent();
 
             //init controller and window so these properties can be used later on
             Controller = controller;
-            MainWindow = mainWindow;
 
             //add all enum categories to ComboBox so they can be selected
             InitializeCategories();
-
-            //Init the DateTimePicker (add a max date)
-            InitializeDatePicker();
         }
 
 
@@ -56,22 +51,18 @@ namespace WijkagentWPF
             }
         }
 
-        //set the maximum date for the datepicker
-        private void InitializeDatePicker()
-        { 
-            //set the maximum date for the datetimepicker
-            DateTimePicker.Maximum = DateTime.Now;
-        }
 
         //when 'toevoegen' is clicked. Add Offence to the Controllers offence data and refresh the list of main window.
         private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
         {
-            DateTime dateTime = DateTimePicker.Value.Value;
-            if(dateTime < DateTime.Now)
+            if(DateTimePicker.Value.HasValue && CB_categorie.SelectedItem != null && Location != null)
             {
-                Controller.SetOffenceData(TxtB_omschrijving.Text,(OffenceCategories) CB_categorie.SelectedItem, dateTime, Location);
-                this.Close();
-                MainWindow.refreshList();
+                DateTime dateTime = DateTimePicker.Value.Value;
+                if (dateTime < DateTime.Now)
+                {
+                    Controller.SetOffenceData(TxtB_omschrijving.Text, (OffenceCategories)CB_categorie.SelectedItem, dateTime, Location);
+                    this.Close();
+                }
             }
         }
     }
