@@ -57,7 +57,7 @@ namespace WijkagentModels
         }
         #endregion
 
-        // Functie to authorize the class for fetching from twitter
+        // bassfunctie om de connectie te maken tussen de API en het autorizeren
         public static void Connect()
         {
             Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
