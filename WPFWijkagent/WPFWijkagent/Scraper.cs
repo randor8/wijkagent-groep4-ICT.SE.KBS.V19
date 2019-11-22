@@ -10,7 +10,7 @@ using WijkagentModels;
 namespace WijkagentModels
 {
     /// <summary>
-    /// De klase is verantwoordelijk voor het ophalen van de berichten van Twitter en zet deze gegevens hierna om naar objecten van de klasse SocialMedia
+    /// The class is responsible for fetching twitter messages and converting them to social Media Messages
     /// </summary>
     public class Scraper
     {
@@ -57,7 +57,7 @@ namespace WijkagentModels
         }
         #endregion
 
-        // bassfunctie om de connectie te maken tussen de API en het autorizeren
+        // Functie to authorize the class for fetching from twitter
         public static void Connect()
         {
             Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
