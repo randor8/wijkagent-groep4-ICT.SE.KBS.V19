@@ -10,11 +10,10 @@ namespace WijkagentModels
         public double Longitude { get; set; }
         public double Latitude { get; set; }
 
-        public Location(double latitude, double longitude)
+        public Location( double longtitude, double latitude)
         {
+            Longitude = longtitude;
             Latitude = latitude;
-            Longitude = longitude;
         }
-
     }
 }
