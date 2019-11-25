@@ -32,7 +32,7 @@ namespace WPFWijkagent
             //SetZoomBoundaryCheck();
             _offenceController = new OffenceController();
             FillOffenceList();
-            //FillCategoriesCombobox();
+            FillCategoriesCombobox();
             wpfMapMain.MouseLeftButtonDown += AddPin;
         }
 
@@ -87,6 +87,30 @@ namespace WPFWijkagent
         }
 
         /// <summary>
+        /// Fills the categories combobox
+        /// </summary>
+        private void FillCategoriesCombobox()
+        {
+            wpf_cb_categoriesFilter.Items.Add("Alles tonen");
+
+            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
+            {
+                wpf_cb_categoriesFilter.Items.Add(offenceItem);
+            }
+
+            wpf_cb_categoriesFilter.SelectedIndex = 0;
+
+        }
+
+        /// <summary>
+        /// Updates the categories combobox
+        /// </summary>
+        private void UpdateCategoriesCombobox()
+        {
+            wpfLBSelection.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+        }
+
+        /// <summary>
         /// Converts an Offence list into an OffenceListItem list
         /// </summary>
         /// <param name="offence"></param>
@@ -110,7 +134,7 @@ namespace WPFWijkagent
         /// <param name="e"></param>
         private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            wpfLBSelection.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+            UpdateCategoriesCombobox();
         }
 
         //when the addOffence button is clicked:
@@ -158,6 +182,7 @@ namespace WPFWijkagent
 
                 OffenceDialogue.ShowDialog();
                 FillOffenceList();
+                UpdateCategoriesCombobox();
                 Btn_addOffence.Content = "delict toevoegen";
                 AddModeActivated = false;
             }
