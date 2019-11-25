@@ -28,6 +28,7 @@ namespace WijkagentWPF
             Offence = offence;
             Pushpin = new Pushpin
             {
+                Name =  offence.ID.ToString(),
                 Location = new Microsoft.Maps.MapControl.WPF.Location
                 {
                     Latitude = offence.LocationID.Latitude,

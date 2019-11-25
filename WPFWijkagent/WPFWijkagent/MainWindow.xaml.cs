@@ -23,6 +23,7 @@ namespace WPFWijkagent
         //controls the offences for this window
         private OffenceController _offenceController { get; set; }
 
+
         private bool AddModeActivated = false;
 
         public MainWindow()
@@ -181,6 +182,14 @@ namespace WPFWijkagent
             {
                 OffenceListItem removed = e.RemovedItems[i] as OffenceListItem;
                 removed.Pushpin.Background = OffenceListItem.ColorDefault;
+            }
+        }
+
+        private void wpfMapMain_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(sender is Pushpin)
+            {
+                SocialMediaDialogue sc = new SocialMediaDialogue();         
             }
         }
     }

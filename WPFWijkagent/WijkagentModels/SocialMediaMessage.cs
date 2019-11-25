@@ -11,6 +11,8 @@ namespace WijkagentModels
         public string Message { get; set; }
         public virtual Location LocationID { get; set; }
 
+        public static List<SocialMediaMessage> SocialMediaData = new List<SocialMediaMessage>();
+
         public SocialMediaMessage(int id, DateTime time, string message, Location location)
         {
             ID = id;
@@ -18,6 +20,8 @@ namespace WijkagentModels
             Message = message;
             LocationID = location;
         }
+
+
 
         public override string ToString()
         {
