@@ -6,10 +6,15 @@ namespace WijkagentModels
 {
     public enum OffenceCategories
     {
-        categorie1,
-        categorie2,
-        categorie3,
-        categorie4,
-        categorie5,
+        Cybercrime,
+        Drugs,
+        Fraude,
+        Geweld,
+        Inbraak,
+        Kinderporno,
+        Mensenhandel,
+        Overvallen,
+        Straatroof,
+        Milieucriminaliteit
     }
 }
