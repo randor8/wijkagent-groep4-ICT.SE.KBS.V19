@@ -4,7 +4,6 @@ using System.Text;
 using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Media;
 using WijkagentModels;
-using WijkagentModels;
 
 namespace WijkagentWPF
 {
