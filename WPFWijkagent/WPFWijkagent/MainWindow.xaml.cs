@@ -31,8 +31,8 @@ namespace WPFWijkagent
             SetMapBackground(172, 199, 242);
             //SetZoomBoundaryCheck();
             _offenceController = new OffenceController();
-            FillOffenceList();
             FillCategoriesCombobox();
+            FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
         }
 
@@ -73,13 +73,14 @@ namespace WPFWijkagent
         private void FillOffenceList()
         {
             //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
-            List<Offence> offences = _offenceController.GetOffences();
+            wpfMapMain.Children.Clear();
+            List<OffenceListItem> offences = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            
             offences.ForEach(of =>
             {
-                OffenceListItem i = new OffenceListItem(of);
-                offenceListItems.Add(i);
-                wpfMapMain.Children.Add(i.Pushpin);
+                offenceListItems.Add(of);
+                wpfMapMain.Children.Add(of.Pushpin);
             });
 
             wpfLBSelection.ItemsSource = offenceListItems;
@@ -135,6 +136,7 @@ namespace WPFWijkagent
         private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateCategoriesCombobox();
+            FillOffenceList();
         }
 
         //when the addOffence button is clicked:
