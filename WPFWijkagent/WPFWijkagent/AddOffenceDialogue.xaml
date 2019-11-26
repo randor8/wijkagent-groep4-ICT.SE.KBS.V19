@@ -3,18 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WijkagentWPF"
-        xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
+		xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="delict toevoegen" Height="217" Width="340">
     <Grid>
-        <Label x:Name="Lbl_Catagorie" Content="Categorie" HorizontalAlignment="Left" Margin="28,15,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="Lbl_omschrijving" Content="Omschrijving" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="Lbl_datumTijd" Content="Datum/tijd" HorizontalAlignment="Left" Margin="22,109,0,0" VerticalAlignment="Top"/>
-        <Button x:Name="Btn_toevoegen" Content="toevoegen" HorizontalAlignment="Left" Margin="256,147,0,0" VerticalAlignment="Top" Click="Btn_toevoegen_Click"/>
-        <ComboBox x:Name="CB_categorie" HorizontalAlignment="Left" Margin="116,19,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="TxtB_omschrijving" HorizontalAlignment="Left" Margin="116,46,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="201" Height="64" Grid.ColumnSpan="2"/>
-        <wpfx:TimePicker x:Name="TimePicker" Height="24" HorizontalAlignment="Left" Margin="239,115,0,0" VerticalAlignment="Top" Width="78" />
-        <DatePicker x:Name="DatePicker" HorizontalAlignment="Left" Margin="116,115,0,0" VerticalAlignment="Top" Width="123"/>
+        <Label Content="Categorie" HorizontalAlignment="Left" Margin="28,15,0,0" VerticalAlignment="Top"/>
+        <Label Content="Omschrijving" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
+        <Label Content="Datum/tijd" HorizontalAlignment="Left" Margin="22,109,0,0" VerticalAlignment="Top"/>
+		<Button x:Name="wpfBTNToevoegen" Content="toevoegen" HorizontalAlignment="Left" Margin="256,147,0,0" VerticalAlignment="Top" Click="wpfBTNToevoegen_Click"/>
+        <ComboBox x:Name="wpfCBCategorie" HorizontalAlignment="Left" Margin="116,19,0,0" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="wpfTBOmschrijving" HorizontalAlignment="Left" Margin="116,46,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="201" Height="64" Grid.ColumnSpan="2"/>
+        <wpfx:TimePicker x:Name="wpfTPTimePicker" Height="24" HorizontalAlignment="Left" Margin="239,115,0,0" VerticalAlignment="Top" Width="78" />
+        <DatePicker x:Name="wpfDBDatePicker" HorizontalAlignment="Left" Margin="116,115,0,0" VerticalAlignment="Top" Width="123"/>
     </Grid>
 </Window>
