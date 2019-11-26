@@ -31,8 +31,8 @@ namespace WPFWijkagent
             SetMapBackground(172, 199, 242);
             //SetZoomBoundaryCheck();
             _offenceController = new OffenceController();
+            FillCategoriesCombobox();
             FillOffenceList();
-            //FillCategoriesCombobox();
             wpfMapMain.MouseLeftButtonDown += AddPin;
         }
 
@@ -73,17 +73,42 @@ namespace WPFWijkagent
         private void FillOffenceList()
         {
             //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
-            List<Offence> offences = _offenceController.GetOffences();
+            wpfMapMain.Children.Clear();
+            List<OffenceListItem> offences = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            
             offences.ForEach(of =>
             {
-                OffenceListItem i = new OffenceListItem(of);
-                offenceListItems.Add(i);
-                wpfMapMain.Children.Add(i.Pushpin);
+                offenceListItems.Add(of);
+                wpfMapMain.Children.Add(of.Pushpin);
             });
 
             wpfLBSelection.ItemsSource = offenceListItems;
             wpfLBSelection.Items.Refresh();
+        }
+
+        /// <summary>
+        /// Fills the categories combobox
+        /// </summary>
+        private void FillCategoriesCombobox()
+        {
+            wpf_cb_categoriesFilter.Items.Add("Alles tonen");
+
+            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
+            {
+                wpf_cb_categoriesFilter.Items.Add(offenceItem);
+            }
+
+            wpf_cb_categoriesFilter.SelectedIndex = 0;
+
+        }
+
+        /// <summary>
+        /// Updates the categories combobox
+        /// </summary>
+        private void UpdateCategoriesCombobox()
+        {
+            wpfLBSelection.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
         }
 
         /// <summary>
@@ -110,7 +135,8 @@ namespace WPFWijkagent
         /// <param name="e"></param>
         private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            wpfLBSelection.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+            UpdateCategoriesCombobox();
+            FillOffenceList();
         }
 
         //when the addOffence button is clicked:
@@ -158,6 +184,7 @@ namespace WPFWijkagent
 
                 OffenceDialogue.ShowDialog();
                 FillOffenceList();
+                UpdateCategoriesCombobox();
                 Btn_addOffence.Content = "delict toevoegen";
                 AddModeActivated = false;
             }

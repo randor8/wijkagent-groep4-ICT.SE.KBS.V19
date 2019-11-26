@@ -23,7 +23,7 @@ namespace WijkagentWPF
         /// <param name="location">the location object to add</param>
         public void SetOffenceData(Location location)
         {
-            SetOffenceData("", OffenceCategories.categorie1, new DateTime().ToLocalTime(), location);
+            SetOffenceData("", OffenceCategories.Cybercrime, new DateTime().ToLocalTime(), location);
         }
 
         /// <summary>
