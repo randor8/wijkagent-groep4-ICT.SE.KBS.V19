@@ -55,15 +55,25 @@ namespace WijkagentWPF
         //when 'toevoegen' is clicked. Add Offence to the Controllers offence data and refresh the list of main window.
         private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
         {
-            if(DateTimePicker.Value.HasValue && CB_categorie.SelectedItem != null && Location != null)
+            if(DatePicker.SelectedDate.HasValue && TimePicker.Value.HasValue)
             {
-                DateTime dateTime = DateTimePicker.Value.Value;
-                if (dateTime < DateTime.Now)
+                DateTime date = new DateTime(
+                DatePicker.SelectedDate.Value.Year,
+                DatePicker.SelectedDate.Value.Month,
+                DatePicker.SelectedDate.Value.Day,
+                TimePicker.Value.Value.Hour,
+                TimePicker.Value.Value.Minute,
+                TimePicker.Value.Value.Second,
+                TimePicker.Value.Value.Millisecond
+                );
+
+                if (date != null && date < DateTime.Now && CB_categorie.SelectedItem != null && Location != null)
                 {
-                    Controller.SetOffenceData(TxtB_omschrijving.Text, (OffenceCategories)CB_categorie.SelectedItem, dateTime, Location);
+                    Controller.SetOffenceData(TxtB_omschrijving.Text, (OffenceCategories)CB_categorie.SelectedItem, date, Location);
                     this.Close();
                 }
             }
+
         }
     }
 }
