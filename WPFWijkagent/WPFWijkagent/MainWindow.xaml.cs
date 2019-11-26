@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF;
+using System.Windows.Threading;
 
 namespace WPFWijkagent
 {
@@ -22,7 +23,7 @@ namespace WPFWijkagent
     {
         //controls the offences for this window
         private OffenceController _offenceController { get; set; }
-
+        public List<OffenceListItem> offenceListItems;
 
         private bool AddModeActivated = false;
 
@@ -35,6 +36,7 @@ namespace WPFWijkagent
             FillOffenceList();
             //FillCategoriesCombobox();
             wpfMapMain.MouseLeftButtonDown += AddPin;
+
         }
 
         /// <summary>
@@ -73,18 +75,27 @@ namespace WPFWijkagent
         /// </summary>
         private void FillOffenceList()
         {
+            
             //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             List<Offence> offences = _offenceController.GetOffences();
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+            offenceListItems = new List<OffenceListItem>();
             offences.ForEach(of =>
             {
                 OffenceListItem i = new OffenceListItem(of);
                 offenceListItems.Add(i);
+                //TODO: Fix the event
+                i.Pushpin.MouseDown += new MouseButtonEventHandler(Pushpin_MouseDown); 
                 wpfMapMain.Children.Add(i.Pushpin);
             });
 
             wpfLBSelection.ItemsSource = offenceListItems;
             wpfLBSelection.Items.Refresh();
+        }
+
+        public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            SocialMediaDialogue social = new SocialMediaDialogue((Pushpin)sender, offenceListItems);
+            social.Show();
         }
 
         /// <summary>
@@ -185,13 +196,7 @@ namespace WPFWijkagent
             }
         }
 
-        private void wpfMapMain_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if(sender is Pushpin)
-            {
-                SocialMediaDialogue sc = new SocialMediaDialogue();         
-            }
-        }
+        
     }
 }
 

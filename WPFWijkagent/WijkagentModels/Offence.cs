@@ -12,6 +12,5 @@ namespace WijkagentModels
         public string Description { get; set; }
         public virtual Location LocationID { get; set; }
         public OffenceCategories Category { get; set; }
-        //public List<SocialMediaMessage> SocialMediaMessages { get; set; }
     }
 }

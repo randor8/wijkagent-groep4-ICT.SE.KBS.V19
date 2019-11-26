@@ -16,7 +16,7 @@
         <ComboBox x:Name="wpf_cb_categoriesFilter" HorizontalAlignment="Left" Height="23" Margin="295,0,0,0" VerticalAlignment="Top" Width="140" SelectionChanged="wpf_cb_categories_SelectionChanged">
         </ComboBox>
         <Grid Grid.Column="0">
-			<m:Map Name="wpfMapMain" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15" MouseDown="wpfMapMain_MouseDown"/>
+			<m:Map Name="wpfMapMain" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15"/>
 		</Grid>
 		<ListBox Grid.Column="1" x:Name="wpfLBSelection" SelectionChanged="wpfLBSelection_SelectionChanged"/>
         <Button x:Name="Btn_addOffence" Content="delict toevoegen" HorizontalAlignment="Left" VerticalAlignment="Top" Click="Btn_addOffence_Click"/>
