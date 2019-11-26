@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using WijkagentModels;
 using WijkagentWPF;
@@ -14,7 +12,7 @@ namespace WijkagentTests
         /// used in the test cases for seting the offence
         /// </summary>
         public static DateTime dateTime = new DateTime().ToLocalTime();
-        public static Location location = new Location() {Latitude=1.1m, Longitude=2.1m};
+        public static Location location = new Location(1.1, 2.1);
 
         [Test]
         public void GetOffences_WithResults_ReturnsOffencesList()
@@ -27,13 +25,14 @@ namespace WijkagentTests
         public void SetOffence_WithFormData_DataSet(string description, string category)
         {
             OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(description, category, dateTime);
+            offenceController.SetOffenceData(description, OffenceCategories.Cybercrime, dateTime);
 
             Assert.AreEqual(offenceController.Offence.Description, description);
             Assert.AreEqual(offenceController.Offence.Category, category);
             Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
         }
         
+
         [Test]
         public void SetOffence_WithLocation_DataSet()
         {
@@ -47,13 +46,12 @@ namespace WijkagentTests
         public void SetOffence_WithAllFields_DataSet(string description, string category)
         {
             OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(description, category, dateTime, location);
+            offenceController.SetOffenceData(description, OffenceCategories.Cybercrime, dateTime, location);
 
             Assert.AreEqual(offenceController.Offence.Description, description);
             Assert.AreEqual(offenceController.Offence.Category, category);
             Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
             Assert.AreEqual(offenceController.Offence.LocationID, location);
         }
-
     }
 }
