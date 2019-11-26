@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using WijkagentModels;
 using WijkagentWPF;
 
 namespace WijkagentTests
@@ -14,13 +12,11 @@ namespace WijkagentTests
         OffenceController offenceController = new OffenceController();
         [TestCase("Alles tonen")]
         public void wpf_cb_categories_SelectionChanged_ValidList_ChangeListBox(string category)
-        {   
+        {
             List<OffenceListItem> offences = offenceController.ConvertListOffenceToOffenceListItem(offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = offenceController.GetOffenceDataByCategory(category, offenceController.GetOffences());
 
             Assert.IsTrue(offenceListItems.SequenceEqual(offences));
-
         }
-
     }
 }

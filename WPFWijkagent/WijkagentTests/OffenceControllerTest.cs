@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using WijkagentModels;
 using WijkagentWPF;
@@ -55,6 +53,5 @@ namespace WijkagentTests
             Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
             Assert.AreEqual(offenceController.Offence.LocationID, location);
         }
-
     }
 }

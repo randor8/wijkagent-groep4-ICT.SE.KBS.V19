@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Text;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
-using WijkagentModels;
 
 namespace WijkagentModels
 {
@@ -16,7 +13,7 @@ namespace WijkagentModels
     {
         public Offence Offence { get; set; }
 
-        SearchTweetsParameters SearchParameters;
+        readonly SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
@@ -29,7 +26,7 @@ namespace WijkagentModels
         public Scraper(Offence offence)
         {
             Offence = offence;
-            SearchParameters = new SearchTweetsParameters("")
+            _searchParameters = new SearchTweetsParameters("")
             {
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
                 SearchType = SearchResultType.Recent,
@@ -71,11 +68,11 @@ namespace WijkagentModels
         public List<SocialMediaMessage> GetSocialMediaMessages()
         {
             List<SocialMediaMessage> feed = new List<SocialMediaMessage>();
-            var tweets = Search.SearchTweets(SearchParameters);
+            var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
-                Console.WriteLine(tweet.CreatedBy+"\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id,Offence.DateTime, tweet.Text, Offence.LocationID));
+                Console.WriteLine(tweet.CreatedBy + "\n");
+                feed.Add(new SocialMediaMessage((int)tweet.Id, Offence.DateTime, tweet.Text, Offence.LocationID));
             }
             return feed;
         }
