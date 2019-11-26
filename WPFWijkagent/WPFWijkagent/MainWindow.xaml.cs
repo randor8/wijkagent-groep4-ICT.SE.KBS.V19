@@ -6,9 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
-using WijkagentWPF;
 
-namespace WPFWijkagent
+namespace WijkagentWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -40,40 +39,19 @@ namespace WPFWijkagent
         }
 
         /// <summary>
-        /// Makes sure the zoom level will not go beyond the given upper and lower bounds.
-        /// </summary>
-        /// <param name="sender">Object sending the event.</param>
-        /// <param name="e">Parameters given by the sender.</param>
-        private void CheckZoomBoundaries(object sender, MapEventArgs e)
-        {
-            double maxZoom = 3; double minZoom = 20;
-            if (sender.Equals(wpfMapMain))
-            {
-                if (wpfMapMain.ZoomLevel < maxZoom)
-                {
-                    wpfMapMain.ZoomLevel = maxZoom;
-                }
-                else if (wpfMapMain.ZoomLevel > minZoom)
-                {
-                    wpfMapMain.ZoomLevel = minZoom;
-                }
-            }
-        }
-
-        /// <summary>
         /// fills the listbox with all of the offences 
         /// </summary>
         private void FillOffenceList()
         {
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             wpfMapMain.Children.Clear();
-            List<OffenceListItem> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+            List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
 
             offences.ForEach(of =>
             {
-                offenceListItems.Add(of);
-                wpfMapMain.Children.Add(of.Pushpin);
+                offenceListItems.Add(of.GetListItem());
+                wpfMapMain.Children.Add(of.GetPushpin());
             });
 
             wpfLBSelection.ItemsSource = offenceListItems;
@@ -96,30 +74,6 @@ namespace WPFWijkagent
         }
 
         /// <summary>
-        /// Updates the categories combobox
-        /// </summary>
-        private void UpdateCategoriesCombobox()
-        {
-            wpfLBSelection.ItemsSource = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
-        }
-
-        /// <summary>
-        /// Converts an Offence list into an OffenceListItem list
-        /// </summary>
-        /// <param name="offence"></param>
-        /// <returns></returns>
-        private List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
-        {
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            foreach (Offence offenceItem in offence)
-            {
-                offenceListItems.Add(new OffenceListItem(offenceItem));
-            }
-
-            return offenceListItems;
-        }
-
-        /// <summary>
         /// Gets called when the categories combobox selection is changed
         /// Fills the OffenceListItems with the correct Offences
         /// </summary>
@@ -127,7 +81,6 @@ namespace WPFWijkagent
         /// <param name="e"></param>
         private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateCategoriesCombobox();
             FillOffenceList();
         }
 
@@ -182,7 +135,6 @@ namespace WPFWijkagent
 
             OffenceDialogue.ShowDialog();
             FillOffenceList();
-            UpdateCategoriesCombobox();
             wpfBTNAddOffence.Content = "delict toevoegen";
             _addModeActivated = false;
         }
@@ -197,15 +149,20 @@ namespace WPFWijkagent
             if (e.AddedItems.Count <= 0) return;
 
             OffenceListItem item = e.AddedItems[0] as OffenceListItem;
-            wpfMapMain.Center = item.Pushpin.Location;
+            wpfMapMain.Center = item.Offence.GetPushpin().Location;
             wpfMapMain.ZoomLevel = 16;
-            item.Pushpin.Background = OffenceListItem.ColorSelected;
+            item.Offence.GetPushpin().Background = OffenceExtensions.ColorSelected;
 
             for (int i = 0; i < e.RemovedItems.Count; i++)
             {
                 OffenceListItem removed = e.RemovedItems[i] as OffenceListItem;
-                removed.Pushpin.Background = OffenceListItem.ColorDefault;
+                removed.Offence.GetPushpin().Background = OffenceExtensions.ColorDefault;
             }
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
         }
     }
 }

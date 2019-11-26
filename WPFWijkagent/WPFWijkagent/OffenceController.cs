@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -11,6 +10,8 @@ namespace WijkagentWPF
     public class OffenceController
     {
         public Offence Offence { get; private set; }
+
+        private readonly Dictionary<Offence, OffenceListItem> _offenceItems = new Dictionary<Offence, OffenceListItem>();
 
         public OffenceController()
         {
@@ -63,26 +64,25 @@ namespace WijkagentWPF
         /// <param name="categoryFilter"></param>
         /// <param name="offences"></param>
         /// <returns></returns>
-        public List<OffenceListItem> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
+        public List<Offence> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
         {
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            List<OffenceListItem> convertedOffences = ConvertListOffenceToOffenceListItem(offences);
+            List<Offence> offenceItems = new List<Offence>();
             if (categoryFilter == "Alles tonen")
             {
-                offenceListItems = convertedOffences;
+               return offences;
             }
             else
             {
-                foreach (OffenceListItem OffenceListItem in convertedOffences)
+                foreach (Offence offence in offences)
                 {
-                    if (OffenceListItem.Offence.Category.ToString() == categoryFilter)
+                    if (offence.Category.ToString() == categoryFilter)
                     {
-                        offenceListItems.Add(new OffenceListItem(OffenceListItem.Offence));
+                        offenceItems.Add(Offence);
                     }
                 }
             }
 
-            return offenceListItems;
+            return offenceItems;
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace WijkagentWPF
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
             foreach (Offence offenceItem in offence)
             {
-                offenceListItems.Add(new OffenceListItem(offenceItem));
+                offenceListItems.Add(offenceItem.GetListItem());
             }
 
             return offenceListItems;

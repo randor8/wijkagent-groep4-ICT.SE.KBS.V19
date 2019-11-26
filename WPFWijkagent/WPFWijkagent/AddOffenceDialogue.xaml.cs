@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using WijkagentModels;
+using WPFWijkagent;
 
 namespace WijkagentWPF
 {

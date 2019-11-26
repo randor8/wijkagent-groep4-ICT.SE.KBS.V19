@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace WPFWijkagent
+namespace WijkagentWPF
 {
     /// <summary>
     /// Interaction logic for App.xaml
