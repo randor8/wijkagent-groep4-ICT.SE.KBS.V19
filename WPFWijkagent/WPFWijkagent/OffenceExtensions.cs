@@ -1,4 +1,4 @@
-﻿using Microsoft.Maps.MapControl.WPF;
+using Microsoft.Maps.MapControl.WPF;
 using System.Collections.Generic;
 using System.Windows.Media;
 using WijkagentModels;
