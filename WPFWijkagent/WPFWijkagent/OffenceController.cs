@@ -77,7 +77,7 @@ namespace WijkagentWPF
                 {
                     if (offence.Category.ToString() == categoryFilter)
                     {
-                        offenceItems.Add(Offence);
+                        offenceItems.Add(offence);
                     }
                 }
             }
