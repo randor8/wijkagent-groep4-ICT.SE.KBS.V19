@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WijkagentModels;
 
 namespace WijkagentWPF
 {
@@ -20,7 +21,9 @@ namespace WijkagentWPF
             ID = iD;
             DateTime = dateTime;
             Description = description;
+            new DBContext<Offence>();
         }
+
         public int ID { get; set; }
         public DateTime DateTime { get; set; }
         public string Description { get; set; }
