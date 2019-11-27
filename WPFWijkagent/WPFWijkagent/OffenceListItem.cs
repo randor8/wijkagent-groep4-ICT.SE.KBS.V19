@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Maps.MapControl.WPF;
+﻿using Microsoft.Maps.MapControl.WPF;
 using System.Windows.Media;
 using WijkagentModels;
 
@@ -12,11 +9,7 @@ namespace WijkagentWPF
     /// </summary>
     public class OffenceListItem
     {
-        public static readonly SolidColorBrush ColorSelected = new SolidColorBrush(Colors.Red);
-        public static readonly SolidColorBrush ColorDefault = new SolidColorBrush(Colors.Blue);
-
         public Offence Offence { get; private set; }
-        public Pushpin Pushpin { get; private set; }
 
         /// <summary>
         /// inits the offence list item so it can be used to display in a list
@@ -25,15 +18,6 @@ namespace WijkagentWPF
         public OffenceListItem(Offence offence)
         {
             Offence = offence;
-            Pushpin = new Pushpin
-            {
-                Location = new Microsoft.Maps.MapControl.WPF.Location
-                {
-                    Latitude = offence.LocationID.Latitude,
-                    Longitude = offence.LocationID.Longitude
-                },
-                Background = ColorDefault
-            };
         }
 
         /// <summary>
