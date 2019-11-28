@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Title="SocialMediaDialogue" Height="450" Width="800">
     <ScrollViewer>
-    <Grid Margin="2">
-    <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="*" x:Name="List"/>
-    </Grid.ColumnDefinitions>
-    <Label x:Name="SocialMediaLabel" Grid.Column="0" Content=""/>
-    </Grid>
+        <Grid Margin="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" x:Name="List"/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="SocialMediaLabel" Grid.Column="0" Content=""/>
+        </Grid>
     </ScrollViewer>
 </Window>

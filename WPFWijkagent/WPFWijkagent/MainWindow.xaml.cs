@@ -83,7 +83,6 @@ namespace WPFWijkagent
             {
                 OffenceListItem i = new OffenceListItem(of);
                 offenceListItems.Add(i);
-                //TODO: Fix the event
                 i.Pushpin.MouseDown += new MouseButtonEventHandler(Pushpin_MouseDown); 
                 wpfMapMain.Children.Add(i.Pushpin);
             });
@@ -91,7 +90,11 @@ namespace WPFWijkagent
             wpfLBSelection.ItemsSource = offenceListItems;
             wpfLBSelection.Items.Refresh();
         }
-
+        /// <summary>
+        /// This method is subscribed to the mousedown event for the pushpin, and opens the socialMediaDialogue, with the information of the pushpin
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
             SocialMediaDialogue social = new SocialMediaDialogue((Pushpin)sender, offenceListItems);

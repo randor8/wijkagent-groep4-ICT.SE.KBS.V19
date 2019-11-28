@@ -29,12 +29,13 @@ namespace WijkagentModels
         public Scraper(Offence offence)
         {
             Offence = offence;
+            DateTime dateTime = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day);
             SearchParameters = new SearchTweetsParameters("")
             {
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day)
+                Until = dateTime,
             };
         }
 
