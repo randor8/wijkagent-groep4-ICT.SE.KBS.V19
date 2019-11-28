@@ -80,15 +80,6 @@ namespace WijkagentWPF
                 DBContext<IModels>.GetSshConnection();
             }
             _connection = new SqlConnection(connectionString);
-            //REMOVE:
-            _connection.Open();
-
-            var command = new SqlCommand("ALTER TABLE Offence ADD FOREIGN KEY (LocationID) REFERENCES Location(ID)", _connection);
-            var command2 = new SqlCommand("ALTER TABLE SocialMediaMessage ADD FOREIGN KEY (LocationID) REFERENCES Location(ID)", _connection);
-            var command3 = new SqlCommand("ALTER TABLE SocialMediaMessage ADD FOREIGN KEY (OffenceID) REFERENCES Offence(ID)", _connection);
-            var res = command.ExecuteNonQuery();
-
-            _connection.Dispose();
         }
 
         /// <summary>
@@ -99,10 +90,10 @@ namespace WijkagentWPF
         {
             item.ID++;
             _connection.Open();
-            
+
             var command = new SqlCommand("INSERT INTO Offence VALUES(:val1, ..)", _connection);
-            var res = command.ExecuteReader();
-            
+            var reader = command.ExecuteReader();
+
             _connection.Dispose();
         }
 
@@ -111,39 +102,88 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="ID"></param>
         /// <returns></returns>
-        public object[] GetItem(int ID)
+        public void GetItem(int ID, ref T item)
         {
             _connection.Open();
 
             var command = new SqlCommand("SELECT * FROM Offence WHERE ID = :ID", _connection);
-            command.CreateParameter();
-            var res = command.ExecuteReader();
-            object[] row = new object[res.FieldCount];
-            if (res.HasRows)
+
+            //add bind params
+            var reader = command.ExecuteReader();
+
+            if (reader.HasRows)
             {
-                res.GetValues(row);
+                foreach (object col in row)
+                {
+                    DataToObject(ref item, reader);
+                    //item.GetType().GetProperty(reader.GetFieldType(0).Name).SetValue(item, reader.GetValue(0));
+                }
             }
             _connection.Dispose();
-            return row;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="item"></param>
+        /// <param name="reader"></param>
+        private void DataToObject(ref T item, SqlDataReader reader)
+        {
+            object[] row = new object[reader.FieldCount];
+            reader.GetValues(row);
+            for(int i = 0; i < row.Length; i++)
+            {
+                Type propertyType = reader.GetFieldType(i);
+                string propertyName = propertyType.Name;
+
+                if (propertyType == "".GetType())
+                {
+                    var propertyValue = reader.GetFieldValue<string>(i);
+                    item.GetType().GetProperty(propertyName).SetValue(item, propertyValue);
+                } else if (propertyType == 0.GetType())
+                {
+                    var propertyValue = reader.GetFieldValue<int>(i);
+                    item.GetType().GetProperty(propertyName).SetValue(item, propertyType);
+                
+                } else if (propertyType.IsClass)
+                {    
+                    if (propertyType == DateTime.Now.GetType())
+                    {
+                        var propertyValue = reader.GetFieldValue<DateTime>(i);
+                        item.GetType().GetProperty(propertyName).SetValue(item, propertyType);
+                    } else
+                    {
+                        //TODO: we have a related obj
+                        var foreignKeyId= reader.GetFieldValue<int>(i);
+                        var relObj = GetItem(foreignKeyId, new propertyType());
+                        item.GetType().GetProperty(propertyName).SetValue(item,  propertyType);
+                    }
+                }
+            }
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        public object[] GetItems()
+        public List<T> GetItems(T obj)
         {
             _connection.Open();
 
+            List<T> results = new List<T>();
             var command = new SqlCommand("SELECT * FROM Offence WHERE ID = :ID", _connection);
-            var res = command.ExecuteReader();
-            object[] row = new object[res.FieldCount];
-            if (res.HasRows)
+            var reader = command.ExecuteReader();
+
+            if (reader.HasRows)
             {
-                res.GetValues(row);
+                while (reader.Read())
+                {
+                    DataToObject(ref obj, reader);
+                    results.Add(obj);
+                }
             }
             _connection.Dispose();
-            return row;
+            return results;
         }
 
         /// <summary>
