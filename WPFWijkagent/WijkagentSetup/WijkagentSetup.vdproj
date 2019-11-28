@@ -221,9 +221,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:WijkagentSetup"
+        "ProductName" = "8:Wijkagent"
         "ProductCode" = "8:{D1BF4C2A-5283-4E7A-8D90-E12007A19F9F}"
-        "PackageCode" = "8:{51DA4E9C-AC19-4212-A572-4BCA28A6DD65}"
+        "PackageCode" = "8:{8316DB47-97C3-49F7-AEB8-CC8ED1D41C93}"
         "UpgradeCode" = "8:{DDE71E16-F5F6-4855-BCC3-B0AEA891F44A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
