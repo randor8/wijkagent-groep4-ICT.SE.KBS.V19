@@ -12,6 +12,7 @@
         {
             Longitude = longtitude;
             Latitude = latitude;
+
         }
     }
 }
