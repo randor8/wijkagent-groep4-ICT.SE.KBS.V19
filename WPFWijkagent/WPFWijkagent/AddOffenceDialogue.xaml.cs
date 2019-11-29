@@ -1,14 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WijkagentModels;
 using WPFWijkagent;
 
@@ -17,7 +8,6 @@ namespace WijkagentWPF
     /// <summary>
     /// Interaction logic for AddOffenceWindow.xaml
     /// </summary>
-
     public partial class AddOffenceDialogue : Window
     {
         public OffenceCategories categories = new OffenceCategories();
@@ -41,26 +31,35 @@ namespace WijkagentWPF
         }
 
 
-        //Add al the categories (currently from the enum, later on from the database) to the combobox of the dialog
+        // Add al the categories (currently from the enum, later on from the database) to the combobox of the dialog
         private void InitializeCategories()
         {
-            //add all categories from the OffenceCategories enum to the combobox
+            // add all categories from the OffenceCategories enum to the combobox
             foreach (OffenceCategories categories in (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories)))
             {
-                CB_categorie.Items.Add(categories);
+                wpfCBCategorie.Items.Add(categories);
             }
         }
 
 
-        //when 'toevoegen' is clicked. Add Offence to the Controllers offence data and refresh the list of main window.
-        private void Btn_toevoegen_Click(object sender, RoutedEventArgs e)
+        // when 'toevoegen' is clicked. Add Offence to the Controllers offence data and refresh the list of main window.
+        private void wpfBTNToevoegen_Click(object sender, RoutedEventArgs e)
         {
-            if(DateTimePicker.Value.HasValue && CB_categorie.SelectedItem != null && Location != null)
+            if (wpfDBDatePicker.SelectedDate.HasValue && wpfTPTimePicker.Value.HasValue)
             {
-                DateTime dateTime = DateTimePicker.Value.Value;
-                if (dateTime < DateTime.Now)
+                DateTime date = new DateTime(
+                wpfDBDatePicker.SelectedDate.Value.Year,
+                wpfDBDatePicker.SelectedDate.Value.Month,
+                wpfDBDatePicker.SelectedDate.Value.Day,
+                wpfTPTimePicker.Value.Value.Hour,
+                wpfTPTimePicker.Value.Value.Minute,
+                wpfTPTimePicker.Value.Value.Second,
+                wpfTPTimePicker.Value.Value.Millisecond
+                );
+
+                if (date != null && date < DateTime.Now && wpfCBCategorie.SelectedItem != null && Location != null)
                 {
-                    Controller.SetOffenceData(TxtB_omschrijving.Text, (OffenceCategories)CB_categorie.SelectedItem, dateTime, Location);
+                    Controller.SetOffenceData(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
                     this.Close();
                 }
             }

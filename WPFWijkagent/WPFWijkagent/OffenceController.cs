@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -10,32 +9,7 @@ namespace WijkagentWPF
     /// </summary>
     public class OffenceController
     {
-        public Offence Offence { get; private set; }
-
-        public OffenceController()
-        {
-            Offence = new Offence();
-        }
-
-        /// <summary>
-        /// sets the offence location
-        /// </summary>
-        /// <param name="location">the location object to add</param>
-        public void SetOffenceData(Location location)
-        {
-            SetOffenceData("", OffenceCategories.categorie1, new DateTime().ToLocalTime(), location);
-        }
-
-        /// <summary>
-        /// sets the form fields for the offence 
-        /// </summary>
-        /// <param name="description">offence description</param>
-        /// <param name="category">offence Categorie(enum value)</param>
-        /// <param name="dateTime">offence date and time</param>
-        public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime)
-        {
-            SetOffenceData(description, category, dateTime, Offence.LocationID);
-        }
+        private readonly Dictionary<Offence, OffenceListItem> _offenceItems = new Dictionary<Offence, OffenceListItem>();
 
         /// <summary>
         /// sets all the offence fields
@@ -46,11 +20,13 @@ namespace WijkagentWPF
         /// <param name="location">offence location</param>
         public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
-            Offence NewOffence = new Offence();
-            NewOffence.Category = category;
-            NewOffence.Description = description;
-            NewOffence.DateTime = dateTime;
-            NewOffence.LocationID = location;
+            Offence NewOffence = new Offence
+            {
+                Category = category,
+                Description = description,
+                DateTime = dateTime,
+                LocationID = location
+            };
             //TODO: save the location as a separate object
             Offence.OffenceData.Add(NewOffence);
         }
@@ -61,26 +37,25 @@ namespace WijkagentWPF
         /// <param name="categoryFilter"></param>
         /// <param name="offences"></param>
         /// <returns></returns>
-        public List<OffenceListItem> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
+        public List<Offence> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
         {
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            List<OffenceListItem> convertedOffences = ConvertListOffenceToOffenceListItem(offences);
+            List<Offence> offenceItems = new List<Offence>();
             if (categoryFilter == "Alles tonen")
             {
-                offenceListItems = convertedOffences;
+               return offences;
             }
             else
             {
-                foreach (OffenceListItem OffenceListItem in convertedOffences)
+                foreach (Offence offence in offences)
                 {
-                    if (OffenceListItem.Offence.Category.ToString() == categoryFilter)
+                    if (offence.Category.ToString() == categoryFilter)
                     {
-                        offenceListItems.Add(new OffenceListItem(OffenceListItem.Offence));
+                        offenceItems.Add(offence);
                     }
                 }
             }
 
-            return offenceListItems;
+            return offenceItems;
         }
 
         /// <summary>
@@ -93,7 +68,7 @@ namespace WijkagentWPF
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
             foreach (Offence offenceItem in offence)
             {
-                offenceListItems.Add(new OffenceListItem(offenceItem));
+                offenceListItems.Add(offenceItem.GetListItem());
             }
 
             return offenceListItems;

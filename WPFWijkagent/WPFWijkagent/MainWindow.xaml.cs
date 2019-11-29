@@ -1,11 +1,6 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,27 +9,23 @@ using WijkagentModels;
 using WijkagentWPF;
 using System.Windows.Threading;
 
-namespace WPFWijkagent
+namespace WijkagentWPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        //controls the offences for this window
-        private OffenceController _offenceController { get; set; }
-        public List<OffenceListItem> offenceListItems;
-
-        private bool AddModeActivated = false;
+        // controls the offences for this window
+        private readonly OffenceController _offenceController = new OffenceController();
+        private bool _addModeActivated = false;
 
         public MainWindow()
         {
             InitializeComponent();
             SetMapBackground(172, 199, 242);
-            //SetZoomBoundaryCheck();
-            _offenceController = new OffenceController();
+            FillCategoriesCombobox();
             FillOffenceList();
-            //FillCategoriesCombobox();
             wpfMapMain.MouseLeftButtonDown += AddPin;
 
         }
@@ -51,40 +42,20 @@ namespace WPFWijkagent
         }
 
         /// <summary>
-        /// Makes sure the zoom level will not go beyond the given upper and lower bounds.
-        /// </summary>
-        /// <param name="sender">Object sending the event.</param>
-        /// <param name="e">Parameters given by the sender.</param>
-        private void CheckZoomBoundaries(object sender, MapEventArgs e)
-        {
-            double maxZoom = 3; double minZoom = 20;
-            if (sender.Equals(wpfMapMain))
-            {
-                if (wpfMapMain.ZoomLevel < maxZoom)
-                {
-                    wpfMapMain.ZoomLevel = maxZoom;
-                }
-                else if (wpfMapMain.ZoomLevel > minZoom)
-                {
-                    wpfMapMain.ZoomLevel = minZoom;
-                }
-            }
-        }
-        /// <summary>
         /// fills the listbox with all of the offences 
         /// </summary>
         private void FillOffenceList()
         {
-            
-            //convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
-            List<Offence> offences = _offenceController.GetOffences();
-            offenceListItems = new List<OffenceListItem>();
+            // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
+            wpfMapMain.Children.Clear();
+            List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
+
             offences.ForEach(of =>
             {
-                OffenceListItem i = new OffenceListItem(of);
-                offenceListItems.Add(i);
                 i.Pushpin.MouseDown += new MouseButtonEventHandler(Pushpin_MouseDown); 
-                wpfMapMain.Children.Add(i.Pushpin);
+                offenceListItems.Add(of.GetListItem());
+                wpfMapMain.Children.Add(of.GetPushpin());
             });
 
             wpfLBSelection.ItemsSource = offenceListItems;
@@ -102,19 +73,18 @@ namespace WPFWijkagent
         }
 
         /// <summary>
-        /// Converts an Offence list into an OffenceListItem list
+        /// Fills the categories combobox
         /// </summary>
-        /// <param name="offence"></param>
-        /// <returns></returns>
-        private List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
+        private void FillCategoriesCombobox()
         {
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            foreach (Offence offenceItem in offence)
+            wpfCBCategoriesFilter.Items.Add("Alles tonen");
+
+            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
             {
-                offenceListItems.Add(new OffenceListItem(offenceItem));
+                wpfCBCategoriesFilter.Items.Add(offenceItem);
             }
 
-            return offenceListItems;
+            wpfCBCategoriesFilter.SelectedIndex = 0;
         }
 
         /// <summary>
@@ -123,59 +93,64 @@ namespace WPFWijkagent
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void wpf_cb_categories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            wpfLBSelection.ItemsSource = _offenceController.GetOffenceDataByCategory(wpf_cb_categoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+            FillOffenceList();
         }
 
-        //when the addOffence button is clicked:
-        private void Btn_addOffence_Click(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// when the addOffence button is clicked:
+        /// </summary>
+        private void wpfBTNAddOffence_Click(object sender, RoutedEventArgs e)
         {
-            //change the cursor and the Add offence button context.
-            if (AddModeActivated == true)
+            // change the cursor and the Add offence button context.
+            if (_addModeActivated == true)
             {
-                Btn_addOffence.Content = "delict toevoegen";
+                wpfBTNAddOffence.Content = "delict toevoegen";
                 Mouse.OverrideCursor = Cursors.Arrow;
-                AddModeActivated = false;
+                _addModeActivated = false;
             }
-
             else
             {
-                Btn_addOffence.Content = "Annuleer";
+                wpfBTNAddOffence.Content = "Annuleer";
                 Mouse.OverrideCursor = Cursors.Cross;
-                AddModeActivated = true;
+                _addModeActivated = true;
             }
         }
 
-        //open the dialog when clicked on the map and AddMode is activiated
+        /// <summary>
+        /// open the dialog when clicked on the map and AddMode is activiated
+        /// </summary>
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
             //create nieuw offencedialogue when clicked on map
             AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(_offenceController);
-            if (AddModeActivated == true)
+            if (!_addModeActivated)
             {
-                Mouse.OverrideCursor = Cursors.Arrow;
-                // Disables the default mouse double-click action.
-                e.Handled = true;
-
-                // Determin the location to place the pushpin at on the map.
-
-                //Get the mouse click coordinates
-                Point mousePosition = e.GetPosition(this);
-                //Convert the mouse coordinates to a locatoin on the map
-                Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
-
-                //create a WijkAgendModels Location and convert the WPF location to that location.
-                WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Longitude, location.Latitude);
-
-                //try to show the dialog, catch if the date enterd is in the future                                                   
-                OffenceDialogue.Location = newLocation;
-
-                OffenceDialogue.ShowDialog();
-                FillOffenceList();
-                Btn_addOffence.Content = "delict toevoegen";
-                AddModeActivated = false;
+                return;
             }
+
+            Mouse.OverrideCursor = Cursors.Arrow;
+            // Disables the default mouse double-click action.
+            e.Handled = true;
+
+            // Determin the location to place the pushpin at on the map.
+
+            // Get the mouse click coordinates
+            Point mousePosition = e.GetPosition(this);
+            // Convert the mouse coordinates to a locatoin on the map
+            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
+
+            // create a WijkAgendModels Location and convert the WPF location to that location.
+            WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Latitude, location.Longitude);
+
+            // try to show the dialog, catch if the date enterd is in the future                                                   
+            OffenceDialogue.Location = newLocation;
+
+            OffenceDialogue.ShowDialog();
+            FillOffenceList();
+            wpfBTNAddOffence.Content = "delict toevoegen";
+            _addModeActivated = false;
         }
 
         /// <summary>
@@ -188,18 +163,21 @@ namespace WPFWijkagent
             if (e.AddedItems.Count <= 0) return;
 
             OffenceListItem item = e.AddedItems[0] as OffenceListItem;
-            wpfMapMain.Center = item.Pushpin.Location;
+            wpfMapMain.Center = item.Offence.GetPushpin().Location;
             wpfMapMain.ZoomLevel = 16;
-            item.Pushpin.Background = OffenceListItem.ColorSelected;
+            item.Offence.GetPushpin().Background = OffenceExtensions.ColorSelected;
 
             for (int i = 0; i < e.RemovedItems.Count; i++)
             {
                 OffenceListItem removed = e.RemovedItems[i] as OffenceListItem;
-                removed.Pushpin.Background = OffenceListItem.ColorDefault;
+                removed.Offence.GetPushpin().Background = OffenceExtensions.ColorDefault;
             }
         }
 
-        
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
     }
 }
 
