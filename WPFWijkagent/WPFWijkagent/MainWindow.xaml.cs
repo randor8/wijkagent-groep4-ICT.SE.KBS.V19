@@ -128,7 +128,7 @@ namespace WijkagentWPF
             Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
 
             // create a WijkAgendModels Location and convert the WPF location to that location.
-            WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Longitude, location.Latitude);
+            WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Latitude, location.Longitude);
 
             // try to show the dialog, catch if the date enterd is in the future                                                   
             OffenceDialogue.Location = newLocation;
