@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WijkagentModels
 {
-    public class Offence : IModels
+    public class Offence
     {
         //returns a list of 4 offence objects
         public static List<Offence> OffenceData()

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WijkagentModels
 {
-    public class Location : IModels
+    public class Location
     {
         public int ID { get; set; }
         public decimal Longitude { get; set; }
