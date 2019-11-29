@@ -107,17 +107,14 @@ namespace WijkagentWPF
             _connection.Open();
 
             var command = new SqlCommand("SELECT * FROM Offence WHERE ID = :ID", _connection);
-
+            command.Parameters.Add(":ID", System.Data.SqlDbType.Int);
+            command.Parameters["@ID"].Value = ID;
             //add bind params
             var reader = command.ExecuteReader();
 
             if (reader.HasRows)
             {
-                foreach (object col in row)
-                {
-                    DataToObject(ref item, reader);
-                    //item.GetType().GetProperty(reader.GetFieldType(0).Name).SetValue(item, reader.GetValue(0));
-                }
+                DBRowToObject(ref item, reader);
             }
             _connection.Dispose();
         }
@@ -127,10 +124,11 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="item"></param>
         /// <param name="reader"></param>
-        private void DataToObject(ref T item, SqlDataReader reader)
+        private void DBRowToObject(ref T item, SqlDataReader reader)
         {
             object[] row = new object[reader.FieldCount];
             reader.GetValues(row);
+            //fill object with clumns from row 
             for(int i = 0; i < row.Length; i++)
             {
                 Type propertyType = reader.GetFieldType(i);
@@ -155,7 +153,8 @@ namespace WijkagentWPF
                     {
                         //TODO: we have a related obj
                         var foreignKeyId= reader.GetFieldValue<int>(i);
-                        var relObj = GetItem(foreignKeyId, new propertyType());
+                        IModels instance = (IModels)Activator.CreateInstance(propertyType);
+                        var relObj = GetItem(foreignKeyId, ref instance);
                         item.GetType().GetProperty(propertyName).SetValue(item,  propertyType);
                     }
                 }
@@ -178,7 +177,7 @@ namespace WijkagentWPF
             {
                 while (reader.Read())
                 {
-                    DataToObject(ref obj, reader);
+                    DBRowToObject(ref obj, reader);
                     results.Add(obj);
                 }
             }
