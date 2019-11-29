@@ -22,5 +22,23 @@ namespace WijkagentModels
         /// </summary>
         /// <returns> the string representation of the object</returns>
         public override string ToString() => $"{Description}, {DateTime}";
+
+        /// <summary>
+        /// Compares given object with this object.
+        /// </summary>
+        /// <param name="obj">Object to compare this object with.</param>
+        /// <returns>True if given object and this object are the same, false otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is Offence)
+            {
+                Offence that = (Offence)obj;
+                if (this.Category == that.Category && this.DateTime.Equals(that.DateTime) && this.LocationID.Equals(that.LocationID))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
