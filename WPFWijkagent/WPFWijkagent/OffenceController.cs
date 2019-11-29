@@ -9,8 +9,6 @@ namespace WijkagentWPF
     /// </summary>
     public class OffenceController
     {
-        private readonly Dictionary<Offence, OffenceListItem> _offenceItems = new Dictionary<Offence, OffenceListItem>();
-
         /// <summary>
         /// sets all the offence fields
         /// </summary>
@@ -56,22 +54,6 @@ namespace WijkagentWPF
             }
 
             return offenceItems;
-        }
-
-        /// <summary>
-        /// Converts an Offence list into an OffenceListItem list
-        /// </summary>
-        /// <param name="offence"></param>
-        /// <returns></returns>
-        public List<OffenceListItem> ConvertListOffenceToOffenceListItem(List<Offence> offence)
-        {
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            foreach (Offence offenceItem in offence)
-            {
-                offenceListItems.Add(offenceItem.GetListItem());
-            }
-
-            return offenceListItems;
         }
 
         /// <summary>

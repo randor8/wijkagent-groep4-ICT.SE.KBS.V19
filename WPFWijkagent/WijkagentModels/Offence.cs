@@ -16,5 +16,11 @@ namespace WijkagentModels
         public virtual Location LocationID { get; set; }
 
         public OffenceCategories Category { get; set; }
+
+        /// <summary>
+        /// creates a string representation of the object
+        /// </summary>
+        /// <returns> the string representation of the object</returns>
+        public override string ToString() => $"{Description}, {DateTime}";
     }
 }
