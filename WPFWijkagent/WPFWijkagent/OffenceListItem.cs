@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
+﻿using Microsoft.Maps.MapControl.WPF;
+using System.Windows.Media;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -10,30 +10,21 @@ namespace WijkagentWPF
     /// </summary>
     public class OffenceListItem
     {
+        public Offence Offence { get; private set; }
+
         /// <summary>
         /// inits the offence list item so it can be used to display in a list
         /// </summary>
-        /// <param name="iD"> the offence db item id</param>
-        /// <param name="dateTime"> the offence db item date and time</param>
-        /// <param name="description">the offence db item description</param>
-        public OffenceListItem(int iD, DateTime dateTime, string description)
+        /// <param name="offence"> the offence db item</param>
+        public OffenceListItem(Offence offence)
         {
-            ID = iD;
-            DateTime = dateTime;
-            Description = description;
-            new DBContext<Offence>();
+            Offence = offence;
         }
 
-        public int ID { get; set; }
-        public DateTime DateTime { get; set; }
-        public string Description { get; set; }
         /// <summary>
         /// creates a string representation of the object
         /// </summary>
         /// <returns> the string representation of the object</returns>
-        public override string ToString()
-        {
-            return $"{Description}, {DateTime}";
-        }
+        public override string ToString() => $"{Offence.Description}, {Offence.DateTime}";
     }
 }
