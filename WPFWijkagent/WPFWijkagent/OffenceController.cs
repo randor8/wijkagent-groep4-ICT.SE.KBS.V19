@@ -64,7 +64,6 @@ namespace WijkagentWPF
             return offenceItems;
         }
 
-
         public static Pushpin GetPushpin(this Offence value)
         {
             if (!_pushpins.ContainsKey(value)) _pushpins.Add(value, CreatePushpin(value));
