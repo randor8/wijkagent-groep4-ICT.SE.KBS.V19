@@ -13,7 +13,7 @@ namespace WijkagentModels
     {
         public Offence Offence { get; set; }
 
-        readonly SearchTweetsParameters _searchParameters;
+        private SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
@@ -26,7 +26,7 @@ namespace WijkagentModels
         public Scraper(Offence offence)
         {
             Offence = offence;
-            _searchParameters = new SearchTweetsParameters("")
+            _searchParameters = new SearchTweetsParameters(" ")
             {
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,

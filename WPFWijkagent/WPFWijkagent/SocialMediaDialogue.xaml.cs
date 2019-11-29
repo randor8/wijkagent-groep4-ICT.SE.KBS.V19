@@ -10,6 +10,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using WijkagentModels;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -19,10 +21,11 @@ namespace WijkagentWPF
     public partial class SocialMediaDialogue : Window
     {
         private SocialMediaDialogueController controller;
-        public SocialMediaDialogue(Pushpin pin, List<OffenceListItem> offenceListItems)
+        public SocialMediaDialogue(Pushpin pin, List<Offence> offenceListItems)
         {
             InitializeComponent();
-            controller = new SocialMediaDialogueController(pin, offenceListItems);
+            Location l = new Location(pin.Location.Latitude, pin.Location.Longitude);
+            controller = new SocialMediaDialogueController(l, offenceListItems);
             string display = controller.DisplayMessages(controller.RetrieveOffence());
             SocialMediaLabel.Content = display;
         }

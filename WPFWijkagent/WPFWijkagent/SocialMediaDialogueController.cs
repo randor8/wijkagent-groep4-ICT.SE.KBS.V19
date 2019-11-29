@@ -4,27 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using WijkagentModels;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
     public class SocialMediaDialogueController
     {
         private Scraper scraper;
-        private List<OffenceListItem> listItems;
+        private List<Offence> offenceList;
         //test variable
         public string testDisplay;
-
-        public Pushpin Pin { get; set; }
+        public Location Location { get; set; }
 
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
         /// </summary>
         /// <param name="pin"></param>
         /// <param name="offenceListItems"></param>
-        public SocialMediaDialogueController(Pushpin pin, List<OffenceListItem> offenceListItems)
+        public SocialMediaDialogueController(Location location, List<Offence> offences)
         {
-            listItems = offenceListItems;
-            Pin = pin;
+
+            offenceList = offences;
+            Location = location;
         }
 
         /// <summary>
@@ -35,9 +36,9 @@ namespace WijkagentWPF
         {
             Offence o = new Offence();
             IEnumerable<Offence> offenceQuerry =
-            from OffenceItem in listItems
-            where OffenceItem.Pushpin.Location == Pin.Location
-            select OffenceItem.Offence;
+            from OffenceItem in offenceList
+            where OffenceItem.LocationID == Location
+            select OffenceItem;
             foreach (var item in offenceQuerry)
             {
                 o = item;
@@ -48,6 +49,7 @@ namespace WijkagentWPF
         /// This method creates a single string from all elements within the list of found SocialMediaItems 
         /// </summary>
         /// <param name="offence"></param>
+        /// <returns>string</returns>
         public string DisplayMessages(Offence offence)
         {
             scraper = new Scraper(offence);
