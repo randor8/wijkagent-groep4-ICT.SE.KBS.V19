@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
-using WijkagentWPF;
 using System.Windows.Threading;
 
 namespace WijkagentWPF
@@ -53,7 +52,7 @@ namespace WijkagentWPF
 
             offences.ForEach(of =>
             {
-                i.Pushpin.MouseDown += new MouseButtonEventHandler(Pushpin_MouseDown); 
+                of.GetPushpin().MouseDown += new MouseButtonEventHandler(Pushpin_MouseDown); 
                 offenceListItems.Add(of.GetListItem());
                 wpfMapMain.Children.Add(of.GetPushpin());
             });

@@ -31,7 +31,7 @@ namespace WijkagentModels
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = dateTime,
+                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
             };
         }
 
@@ -72,7 +72,7 @@ namespace WijkagentModels
             foreach (var tweet in tweets)
             {
                 Console.WriteLine(tweet.CreatedBy + "\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id, Offence.DateTime, tweet.Text, Offence.LocationID));
+                feed.Add(new SocialMediaMessage((int)tweet.Id,tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, Offence.DateTime, tweet.Text, Offence.LocationID));
             }
             return feed;
         }
