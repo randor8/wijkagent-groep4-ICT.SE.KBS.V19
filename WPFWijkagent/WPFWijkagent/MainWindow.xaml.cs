@@ -14,8 +14,6 @@ namespace WijkagentWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        // controls the offences for this window
-        private readonly OffenceController _offenceController = new OffenceController();
         private bool _addModeActivated = false;
 
         public MainWindow()
@@ -45,7 +43,7 @@ namespace WijkagentWPF
         {
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             wpfMapMain.Children.Clear();
-            List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
+            List<Offence> offences = OffenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), OffenceController.GetOffences());
             List<Offence> offenceListItems = new List<Offence>();
 
             offences.ForEach(of =>
@@ -110,7 +108,7 @@ namespace WijkagentWPF
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
             //create nieuw offencedialogue when clicked on map
-            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(_offenceController);
+            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue();
             if (!_addModeActivated)
             {
                 return;
@@ -151,12 +149,12 @@ namespace WijkagentWPF
             Offence item = e.AddedItems[0] as Offence;
             wpfMapMain.Center = item.GetPushpin().Location;
             wpfMapMain.ZoomLevel = 16;
-            item.GetPushpin().Background = OffenceExtensions.ColorSelected;
+            item.GetPushpin().Background = OffenceController.ColorSelected;
 
             for (int i = 0; i < e.RemovedItems.Count; i++)
             {
                 Offence removed = e.RemovedItems[i] as Offence;
-                removed.GetPushpin().Background = OffenceExtensions.ColorDefault;
+                removed.GetPushpin().Background = OffenceController.ColorDefault;
             }
         }
 

@@ -17,8 +17,7 @@ namespace WijkagentTests
         [Test]
         public void GetOffences_WithResults_ReturnsOffencesList()
         {
-            OffenceController offenceController = new OffenceController();
-            Assert.IsNotNull(offenceController.GetOffences());
+            Assert.IsNotNull(OffenceController.GetOffences());
         }
     }
 }

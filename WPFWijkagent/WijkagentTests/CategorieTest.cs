@@ -10,12 +10,11 @@ namespace WijkagentTests
     [TestFixture]
     public class CategorieTest
     {
-        OffenceController offenceController = new OffenceController();
         [TestCase("Alles tonen")]
         public void wpf_cb_categories_SelectionChanged_ValidList_ChangeListBox(string category)
         {
-            List<Offence> offences = offenceController.GetOffences();
-            List<Offence> offenceListItems = offenceController.GetOffenceDataByCategory(category, offenceController.GetOffences());
+            List<Offence> offences = OffenceController.GetOffences();
+            List<Offence> offenceListItems = OffenceController.GetOffenceDataByCategory(category, OffenceController.GetOffences());
 
             Assert.IsTrue(offenceListItems.SequenceEqual(offences));
         }
