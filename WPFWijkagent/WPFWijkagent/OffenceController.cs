@@ -9,34 +9,7 @@ namespace WijkagentWPF
     /// </summary>
     public class OffenceController
     {
-        public Offence Offence { get; private set; }
-
         private readonly Dictionary<Offence, OffenceListItem> _offenceItems = new Dictionary<Offence, OffenceListItem>();
-
-        public OffenceController()
-        {
-            Offence = new Offence();
-        }
-
-        /// <summary>
-        /// sets the offence location
-        /// </summary>
-        /// <param name="location">the location object to add</param>
-        public void SetOffenceData(Location location)
-        {
-            SetOffenceData("", OffenceCategories.Cybercrime, new DateTime().ToLocalTime(), location);
-        }
-
-        /// <summary>
-        /// sets the form fields for the offence 
-        /// </summary>
-        /// <param name="description">offence description</param>
-        /// <param name="category">offence Categorie(enum value)</param>
-        /// <param name="dateTime">offence date and time</param>
-        public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime)
-        {
-            SetOffenceData(description, category, dateTime, Offence.LocationID);
-        }
 
         /// <summary>
         /// sets all the offence fields
