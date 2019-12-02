@@ -73,7 +73,9 @@ namespace WijkagentWPF
             social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
             social.Show();
         }
-
+        /// <summary>
+        /// Removes Mouse events from thr Pushpin to make certain the amount of events stays equal to one 
+        /// </summary>
         public void RemoveMouseDownEvents()
         {
             if(offenceList.Count != 0)

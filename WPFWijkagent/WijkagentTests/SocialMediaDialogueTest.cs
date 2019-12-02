@@ -30,6 +30,9 @@ namespace WijkagentTests
 
         Location location = new Location(52.501127, 6.0789937);
 
+        /// <summary>
+        /// Tests of the retrieveOffence functions finds the right offence
+        /// </summary>
         [Test]
         public void RetrieveOffence_OffenceGiven_ReturnsCorrectOffence()
         {
