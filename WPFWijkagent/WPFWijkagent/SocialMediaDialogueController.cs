@@ -10,8 +10,8 @@ namespace WijkagentWPF
 {
     public class SocialMediaDialogueController
     {
-        private Scraper scraper;
-        private List<Offence> offenceList;
+        private Scraper _scraper;
+        private List<Offence> _offenceList;
         //test variable
         public string testDisplay;
         public Location Location { get; set; }
@@ -23,7 +23,7 @@ namespace WijkagentWPF
         /// <param name="offenceListItems"></param>
         public SocialMediaDialogueController(Location location, List<Offence> offences)
         {
-            offenceList = offences;
+            _offenceList = offences;
             Location = location;
         }
 
@@ -35,7 +35,7 @@ namespace WijkagentWPF
         {
             Offence o = new Offence();
             IEnumerable<Offence> offenceQuerry =
-            from OffenceItem in offenceList
+            from OffenceItem in _offenceList
             where OffenceItem.LocationID.Latitude == Location.Latitude 
             && OffenceItem.LocationID.Longitude == Location.Longitude
             select OffenceItem;
@@ -52,8 +52,8 @@ namespace WijkagentWPF
         /// <returns>string</returns>
         public string DisplayMessages(Offence offence)
         {
-            scraper = new Scraper(offence);
-            List<SocialMediaMessage> feed = scraper.GetSocialMediaMessages();
+            _scraper = new Scraper(offence);
+            List<SocialMediaMessage> feed = _scraper.GetSocialMediaMessages();
             string display = "";
             foreach (SocialMediaMessage media in feed)
             {
