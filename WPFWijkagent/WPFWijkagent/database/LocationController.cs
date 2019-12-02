@@ -15,31 +15,47 @@ namespace WijkagentWPF.database
         {
             _dbContext = new DBContext();
         }
-        //INSERT INTO Location VALUES()
-        public bool SetLocation()
+
+        /// <summary>
+        /// saves the location in the database
+        /// </summary>
+        /// <param name="latitude">location latitude</param>
+        /// <param name="longitude">location longitude</param>
+        /// <returns>the id of the inserted location</returns>
+        public int SetLocation(double latitude, double longitude)
         {
-            SqlCommand query = new SqlCommand("");
-            query.Parameters.Add(":ID", System.Data.SqlDbType.Int);
-            query.Parameters[":ID"].Value = ID;
-            return _dbContext.ExecuteQuery(query) == 0 ? false : true;
+            SqlCommand query = new SqlCommand("INSERT INTO Location VALUES(:Latitude, :Longitude) output INSERTED.ID VALUES(:Latitude, :Longitude)");
+
+            query.Parameters.Add(":Latitude", System.Data.SqlDbType.Float);
+            query.Parameters.Add(":Longitude", System.Data.SqlDbType.Float);
+            query.Parameters[":Latitude"].Value = latitude;
+            query.Parameters[":Longitude"].Value = longitude;
+            
+            return _dbContext.ExecuteInsertQuery(query);
         }
 
+        /// <summary>
+        /// gets the specified location from the db
+        /// </summary>
+        /// <param name="ID">location id you need</param>
+        /// <returns>the location object requested</returns>
         public Location GetLocation(int ID)
         {
             SqlCommand query = new SqlCommand("");
             query.Parameters.Add(":ID", System.Data.SqlDbType.Int);
             query.Parameters[":ID"].Value = ID;
             List<object[]>  rows = _dbContext.ExecuteSelectQuery(query);
+
+
             if (rows.Count == 1)
             {
                 object[] row = rows[0];
-                return new Location()
+                return new Location((double)row[0], (double)row[1])
                 {
                     ID = ID,
-                    Latitude = (double)row[0],
-                    Longitude = (double)row[1] 
                 };
             }
+            return null;
         }
 
     }

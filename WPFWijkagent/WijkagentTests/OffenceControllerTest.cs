@@ -20,5 +20,17 @@ namespace WijkagentTests
             OffenceController offenceController = new OffenceController();
             Assert.IsNotNull(offenceController.GetOffences());
         }
+
+        [Test]
+        public void SetOffence_WithLocationAsID_ReturnsID()
+        { 
+        
+        }
+
+        [Test]
+        public void SetOffence_WithLocationAsObj_ReturnsID()
+        {
+
+        }
     }
 }
