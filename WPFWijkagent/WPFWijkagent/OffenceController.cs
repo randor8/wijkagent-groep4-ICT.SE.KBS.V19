@@ -54,7 +54,6 @@ namespace WijkagentWPF
                     }
                 }
             }
-
             return offenceItems;
         }
 
