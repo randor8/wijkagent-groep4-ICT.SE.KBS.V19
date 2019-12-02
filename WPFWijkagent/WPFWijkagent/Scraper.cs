@@ -13,7 +13,7 @@ namespace WijkagentModels
     {
         public Offence Offence { get; set; }
 
-        readonly SearchTweetsParameters _searchParameters;
+        private SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
@@ -26,13 +26,12 @@ namespace WijkagentModels
         public Scraper(Offence offence)
         {
             Offence = offence;
-            _searchParameters = new SearchTweetsParameters("")
+            _searchParameters = new SearchTweetsParameters(" ")
             {
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
-                SearchType = SearchResultType.Recent,
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day)
+                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
             };
         }
 
@@ -67,12 +66,13 @@ namespace WijkagentModels
         /// <returns>list of social media messages </returns>
         public List<SocialMediaMessage> GetSocialMediaMessages()
         {
+            Connect();
             List<SocialMediaMessage> feed = new List<SocialMediaMessage>();
             var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
                 Console.WriteLine(tweet.CreatedBy + "\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id, Offence.DateTime, tweet.Text, Offence.LocationID));
+                feed.Add(new SocialMediaMessage((int)tweet.Id,tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, Offence.DateTime, tweet.Text, Offence.LocationID));
             }
             return feed;
         }

@@ -46,13 +46,13 @@ namespace WijkagentTests
                 ID = 3,
                 Description = "een delict.."
             };
-            Scraper scraper = new Scraper(offence);
+            Scraper s = new Scraper(offence);
             //act
-            Scraper.Connect();
-            List<SocialMediaMessage> result = scraper.GetSocialMediaMessages();
+            List<SocialMediaMessage> socials = s.GetSocialMediaMessages();
+            Console.WriteLine(socials.Count);
             //assert
-            Assert.IsNotNull(result);
-            Assert.GreaterOrEqual(result.Count, 1);
+            Assert.Greater(socials.Count, 0);
+
         }
     }
 }
