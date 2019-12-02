@@ -11,7 +11,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" x:Name="List"/>
             </Grid.ColumnDefinitions>
-            <Label x:Name="SocialMediaLabel" Grid.Column="0" Content=""/>
+            <TextBox Margin="10" TextWrapping="WrapWithOverflow" x:Name="SocialMediaLabel" Grid.Column="0"/>
         </Grid>
     </ScrollViewer>
 </Window>

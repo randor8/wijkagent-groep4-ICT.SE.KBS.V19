@@ -12,8 +12,6 @@ namespace WijkagentWPF
     {
         private Scraper _scraper;
         private List<Offence> _offenceList;
-        //test variable
-        public string testDisplay;
         public Location Location { get; set; }
 
         /// <summary>
