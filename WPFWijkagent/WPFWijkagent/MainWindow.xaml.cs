@@ -19,8 +19,7 @@ namespace WijkagentWPF
         private readonly OffenceController _offenceController = new OffenceController();
         private bool _addModeActivated = false;
         SocialMediaDialogue social;
-        private List<Offence> offenceList = new List<Offence>();
-
+        private List<Offence> _offenceList = new List<Offence>();
 
         public MainWindow()
         {
@@ -29,7 +28,6 @@ namespace WijkagentWPF
             FillCategoriesCombobox();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
-
         }
 
         /// <summary>
@@ -53,7 +51,7 @@ namespace WijkagentWPF
             wpfMapMain.Children.Clear();
             List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            offenceList = offences;
+            _offenceList = offences;
             offences.ForEach(of =>
             {
                 of.GetPushpin().MouseDown += Pushpin_MouseDown;
@@ -63,6 +61,7 @@ namespace WijkagentWPF
             wpfLBSelection.ItemsSource = offenceListItems;
             wpfLBSelection.Items.Refresh();
         }
+
         /// <summary>
         /// This method is subscribed to the mousedown event for the pushpin, and opens the socialMediaDialogue, with the information of the pushpin
         /// </summary>
@@ -73,14 +72,15 @@ namespace WijkagentWPF
             social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
             social.Show();
         }
+
         /// <summary>
         /// Removes Mouse events from thr Pushpin to make certain the amount of events stays equal to one 
         /// </summary>
         public void RemoveMouseDownEvents()
         {
-            if(offenceList.Count != 0)
+            if(_offenceList.Count != 0)
             {
-                foreach (var item in offenceList)
+                foreach (var item in _offenceList)
                 {
                     item.GetPushpin().MouseDown -= Pushpin_MouseDown;
                 }
@@ -195,5 +195,3 @@ namespace WijkagentWPF
         }
     }
 }
-
-

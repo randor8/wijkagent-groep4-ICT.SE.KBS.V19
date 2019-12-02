@@ -54,7 +54,6 @@ namespace WijkagentWPF
                     }
                 }
             }
-
             return offenceItems;
         }
 
@@ -73,7 +72,6 @@ namespace WijkagentWPF
 
             return offenceListItems;
         }
-
 
         /// <summary>
         /// gets all the offences from the db
