@@ -22,9 +22,36 @@ namespace WijkagentWPF
         {
             InitializeComponent();
             SetMapBackground(172, 199, 242);
+            SetZoomBoundaryCheck();
             FillCategoriesCombobox();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
+        }
+
+        /// <summary>
+        /// Sets the zoom boundary check on the map in the main window.
+        /// </summary>
+        public void SetZoomBoundaryCheck()
+        {
+            wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
+        }
+
+        /// <summary>
+        /// Checks whether the map in the main window is on a zoom level within specified boundaries.
+        /// </summary>
+        /// <param name="sender">Caller of the event.</param>
+        /// <param name="e">Parameters associated with the event.</param>
+        private void CheckZoomBoundaries(object sender, MapEventArgs e)
+        {
+            double maxZoom = 3;
+            double minZoom = 20;
+            if (wpfMapMain.ZoomLevel < maxZoom)
+            {
+                wpfMapMain.ZoomLevel = maxZoom;
+            } else if (wpfMapMain.ZoomLevel > minZoom)
+            {
+                wpfMapMain.ZoomLevel = minZoom;
+            }
         }
 
         /// <summary>
