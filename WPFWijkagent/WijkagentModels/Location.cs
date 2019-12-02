@@ -28,7 +28,7 @@
                 if (this.Latitude == that.Latitude && this.Longitude == that.Longitude)
                 {
                     return true;
-                } 
+                }
             }
             return false;
         }

@@ -13,8 +13,8 @@ namespace WijkagentTests
         [TestCase("Alles tonen")]
         public void wpf_cb_categories_SelectionChanged_ValidList_ChangeListBox(string category)
         {
-            List<Offence> offences = OffenceController.GetOffences();
-            List<Offence> offenceListItems = OffenceController.GetOffenceDataByCategory(category, OffenceController.GetOffences());
+            List<Offence> offences = WijkagentWPF.MainWindowController.GetOffences();
+            List<Offence> offenceListItems = WijkagentWPF.MainWindowController.GetOffencesByCategory(category);
 
             Assert.IsTrue(offenceListItems.SequenceEqual(offences));
         }

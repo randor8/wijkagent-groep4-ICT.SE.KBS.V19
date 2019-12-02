@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Tweetinvi;
-using Tweetinvi.Models;
 using WijkagentModels;
 using Location = WijkagentModels.Location;
 
@@ -44,12 +41,10 @@ namespace WijkagentTests
         public void GetSocialMediaMessages_offenceGiven_IsInstance()
         {
             //arrange
-            Offence offence = new Offence()
+            Offence offence = new Offence(new DateTime().ToLocalTime(), new Location(52.501127, 6.0789937))
             {
                 ID = 3,
-                DateTime = new DateTime().ToLocalTime(),
-                Description = "een delict..",
-                LocationID = new Location(52.501127, 6.0789937)
+                Description = "een delict.."
             };
             Scraper scraper = new Scraper(offence);
             //act

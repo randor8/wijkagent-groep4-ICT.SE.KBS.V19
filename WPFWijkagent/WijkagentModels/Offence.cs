@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace WijkagentModels
 {
     public class Offence
     {
-        public static List<Offence> OffenceData { get; set; } = new List<Offence>();
-
         public int ID { get; set; }
 
         public DateTime DateTime { get; set; }
@@ -16,6 +13,12 @@ namespace WijkagentModels
         public virtual Location LocationID { get; set; }
 
         public OffenceCategories Category { get; set; }
+
+        public Offence(DateTime dateTime, Location Location)
+        {
+            DateTime = dateTime;
+            LocationID = Location;
+        }
 
         /// <summary>
         /// creates a string representation of the object
@@ -33,7 +36,7 @@ namespace WijkagentModels
             if (obj is Offence)
             {
                 Offence that = (Offence)obj;
-                if (this.Category == that.Category && this.DateTime.Equals(that.DateTime) && this.LocationID.Equals(that.LocationID))
+                if (this.ID == that.ID)
                 {
                     return true;
                 }

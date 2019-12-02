@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using WijkagentModels;
-using WPFWijkagent;
 
 namespace WijkagentWPF
 {
@@ -54,7 +53,7 @@ namespace WijkagentWPF
 
                 if (date != null && date < DateTime.Now && wpfCBCategorie.SelectedItem != null && Location != null)
                 {
-                    OffenceController.SetOffenceData(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
+                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
                     this.Close();
                 }
             }

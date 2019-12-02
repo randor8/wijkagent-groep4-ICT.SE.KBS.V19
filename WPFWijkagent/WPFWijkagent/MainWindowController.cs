@@ -10,31 +10,26 @@ namespace WijkagentWPF
     /// <summary>
     /// controls the offence(s) for the wpf application
     /// </summary>
-    public static class OffenceController
+    public static class MainWindowController
     {
         public static readonly SolidColorBrush ColorSelected = new SolidColorBrush(Colors.Red);
         public static readonly SolidColorBrush ColorDefault = new SolidColorBrush(Colors.Blue);
 
+        private static List<Offence> _offences = new List<Offence>();
+
         private static readonly Dictionary<Offence, Pushpin> _pushpins = new Dictionary<Offence, Pushpin>();
 
         /// <summary>
-        /// sets all the offence fields
+        /// Adds an offence to the list of offences for this window.
         /// </summary>
         /// <param name="description">offence description</param>
         /// <param name="category">offence Categorie(enum value)</param>
         /// <param name="dateTime">offence date and time</param>
         /// <param name="location">offence location</param>
-        public static void SetOffenceData(string description, OffenceCategories category, DateTime dateTime, Location location)
+        public static void AddOffence(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
-            Offence NewOffence = new Offence
-            {
-                Category = category,
-                Description = description,
-                DateTime = dateTime,
-                LocationID = location
-            };
-            //TODO: save the location as a separate object
-            Offence.OffenceData.Add(NewOffence);
+            Offence offence = new Offence(dateTime, location) { Description = description, Category = category };
+            _offences.Add(offence);
         }
 
         /// <summary>
@@ -43,25 +38,25 @@ namespace WijkagentWPF
         /// <param name="categoryFilter"></param>
         /// <param name="offences"></param>
         /// <returns></returns>
-        public static List<Offence> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
+        public static List<Offence> GetOffencesByCategory(string categoryFilter)
         {
-            List<Offence> offenceItems = new List<Offence>();
+            List<Offence> filteredOffences = new List<Offence>();
             if (categoryFilter == "Alles tonen")
             {
-               return offences;
+                return _offences;
             }
             else
             {
-                foreach (Offence offence in offences)
+                foreach (Offence offence in _offences)
                 {
                     if (offence.Category.ToString() == categoryFilter)
                     {
-                        offenceItems.Add(offence);
+                        filteredOffences.Add(offence);
                     }
                 }
             }
 
-            return offenceItems;
+            return filteredOffences;
         }
 
         public static Pushpin GetPushpin(this Offence value)
@@ -84,6 +79,11 @@ namespace WijkagentWPF
         /// gets all the offences from the db
         /// </summary>
         /// <returns></returns>
-        public static List<Offence> GetOffences() => Offence.OffenceData;
+        public static List<Offence> GetOffences() => _offences;
+
+        /// <summary>
+        /// Clears the list offences in this controller.
+        /// </summary>
+        public static void ClearOffences() => _offences = new List<Offence>();
     }
 }

@@ -1,4 +1,3 @@
-using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -70,16 +69,14 @@ namespace WijkagentWPF
         {
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             wpfMapMain.Children.Clear();
-            List<Offence> offences = OffenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), OffenceController.GetOffences());
-            List<Offence> offenceListItems = new List<Offence>();
+            List<Offence> offences = MainWindowController.GetOffencesByCategory(wpfCBCategoriesFilter.SelectedItem.ToString());
 
             offences.ForEach(of =>
             {
-                offenceListItems.Add(of);
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
 
-            wpfLBSelection.ItemsSource = offenceListItems;
+            wpfLBSelection.ItemsSource = offences;
             wpfLBSelection.Items.Refresh();
         }
 
@@ -176,12 +173,12 @@ namespace WijkagentWPF
             Offence item = e.AddedItems[0] as Offence;
             wpfMapMain.Center = item.GetPushpin().Location;
             wpfMapMain.ZoomLevel = 16;
-            item.GetPushpin().Background = OffenceController.ColorSelected;
+            item.GetPushpin().Background = MainWindowController.ColorSelected;
 
             for (int i = 0; i < e.RemovedItems.Count; i++)
             {
                 Offence removed = e.RemovedItems[i] as Offence;
-                removed.GetPushpin().Background = OffenceController.ColorDefault;
+                removed.GetPushpin().Background = MainWindowController.ColorDefault;
             }
         }
 
