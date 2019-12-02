@@ -23,7 +23,6 @@ namespace WijkagentWPF
         /// <param name="offenceListItems"></param>
         public SocialMediaDialogueController(Location location, List<Offence> offences)
         {
-
             offenceList = offences;
             Location = location;
         }
@@ -37,7 +36,8 @@ namespace WijkagentWPF
             Offence o = new Offence();
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in offenceList
-            where OffenceItem.LocationID == Location
+            where OffenceItem.LocationID.Latitude == Location.Latitude 
+            && OffenceItem.LocationID.Longitude == Location.Longitude
             select OffenceItem;
             foreach (var item in offenceQuerry)
             {

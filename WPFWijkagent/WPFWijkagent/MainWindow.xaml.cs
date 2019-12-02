@@ -18,6 +18,9 @@ namespace WijkagentWPF
         // controls the offences for this window
         private readonly OffenceController _offenceController = new OffenceController();
         private bool _addModeActivated = false;
+        SocialMediaDialogue social;
+        private List<Offence> offenceList = new List<Offence>();
+
 
         public MainWindow()
         {
@@ -46,17 +49,17 @@ namespace WijkagentWPF
         private void FillOffenceList()
         {
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
+            RemoveMouseDownEvents();
             wpfMapMain.Children.Clear();
             List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-
+            offenceList = offences;
             offences.ForEach(of =>
             {
-                of.GetPushpin().MouseDown += new MouseButtonEventHandler(Pushpin_MouseDown); 
+                of.GetPushpin().MouseDown += Pushpin_MouseDown;
                 offenceListItems.Add(of.GetListItem());
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-
             wpfLBSelection.ItemsSource = offenceListItems;
             wpfLBSelection.Items.Refresh();
         }
@@ -67,8 +70,19 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            SocialMediaDialogue social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
+            social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
             social.Show();
+        }
+
+        public void RemoveMouseDownEvents()
+        {
+            if(offenceList.Count != 0)
+            {
+                foreach (var item in offenceList)
+                {
+                    item.GetPushpin().MouseDown -= Pushpin_MouseDown;
+                }
+            }
         }
 
         /// <summary>
