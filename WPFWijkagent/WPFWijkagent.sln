@@ -3,30 +3,42 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFWijkagent", "WPFWijkagent\WPFWijkagent.csproj", "{C3FB83A8-A534-47C6-BBF5-63C59166C416}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFWijkagent", "WPFWijkagent\WPFWijkagent.csproj", "{C3FB83A8-A534-47C6-BBF5-63C59166C416}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WijkagentModels", "WijkagentModels\WijkagentModels.csproj", "{7B4A408E-C216-4574-8562-3CE229983920}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WijkagentModels", "WijkagentModels\WijkagentModels.csproj", "{7B4A408E-C216-4574-8562-3CE229983920}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WijkagentTests", "WijkagentTests\WijkagentTests.csproj", "{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WijkagentTests", "WijkagentTests\WijkagentTests.csproj", "{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "WijkagentSetup", "WijkagentSetup\WijkagentSetup.vdproj", "{9571B6B2-A9AB-4B2B-9F88-9C30D0D7EE2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		All|Any CPU = All|Any CPU
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C3FB83A8-A534-47C6-BBF5-63C59166C416}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{C3FB83A8-A534-47C6-BBF5-63C59166C416}.All|Any CPU.Build.0 = Release|Any CPU
 		{C3FB83A8-A534-47C6-BBF5-63C59166C416}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C3FB83A8-A534-47C6-BBF5-63C59166C416}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C3FB83A8-A534-47C6-BBF5-63C59166C416}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C3FB83A8-A534-47C6-BBF5-63C59166C416}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B4A408E-C216-4574-8562-3CE229983920}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{7B4A408E-C216-4574-8562-3CE229983920}.All|Any CPU.Build.0 = Release|Any CPU
 		{7B4A408E-C216-4574-8562-3CE229983920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B4A408E-C216-4574-8562-3CE229983920}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B4A408E-C216-4574-8562-3CE229983920}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7B4A408E-C216-4574-8562-3CE229983920}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}.All|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}.All|Any CPU.Build.0 = Release|Any CPU
 		{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8B15B0E-86AA-45EC-8932-AE985AFE4DF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9571B6B2-A9AB-4B2B-9F88-9C30D0D7EE2C}.All|Any CPU.ActiveCfg = Release
+		{9571B6B2-A9AB-4B2B-9F88-9C30D0D7EE2C}.Debug|Any CPU.ActiveCfg = Debug
+		{9571B6B2-A9AB-4B2B-9F88-9C30D0D7EE2C}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
