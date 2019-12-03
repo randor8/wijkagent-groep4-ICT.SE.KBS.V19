@@ -93,7 +93,7 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
+            social = new SocialMediaDialogue((Pushpin)sender, MainWindowController.GetOffences());
             social.Show();
         }
 

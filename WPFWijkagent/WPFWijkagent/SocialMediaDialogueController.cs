@@ -33,7 +33,7 @@ namespace WijkagentWPF
         /// <returns>The method returns the offence that has the same pin</returns>
         public Offence RetrieveOffence()
         {
-            Offence o = new Offence();
+            Offence o = null;
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in _offenceList
             where OffenceItem.LocationID.Latitude == Location.Latitude 
