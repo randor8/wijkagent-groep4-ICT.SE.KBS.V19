@@ -20,38 +20,5 @@ namespace WijkagentTests
             OffenceController offenceController = new OffenceController();
             Assert.IsNotNull(offenceController.GetOffences());
         }
-
-        [TestCase("een beschirjving", "diefstal")]
-        public void SetOffence_WithFormData_DataSet(string description, string category)
-        {
-            OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(description, OffenceCategories.Cybercrime, dateTime);
-
-            Assert.AreEqual(offenceController.Offence.Description, description);
-            Assert.AreEqual(offenceController.Offence.Category, category);
-            Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
-        }
-        
-
-        [Test]
-        public void SetOffence_WithLocation_DataSet()
-        {
-            OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(location);
-
-            Assert.AreEqual(offenceController.Offence.LocationID, location);
-        }
-        
-        [TestCase("beschrijving", "categorie")]
-        public void SetOffence_WithAllFields_DataSet(string description, string category)
-        {
-            OffenceController offenceController = new OffenceController();
-            offenceController.SetOffenceData(description, OffenceCategories.Cybercrime, dateTime, location);
-
-            Assert.AreEqual(offenceController.Offence.Description, description);
-            Assert.AreEqual(offenceController.Offence.Category, category);
-            Assert.AreEqual(offenceController.Offence.DateTime, dateTime);
-            Assert.AreEqual(offenceController.Offence.LocationID, location);
-        }
     }
 }
