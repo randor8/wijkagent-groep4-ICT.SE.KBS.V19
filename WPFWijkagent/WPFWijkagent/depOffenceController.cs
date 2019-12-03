@@ -7,7 +7,7 @@ namespace WijkagentWPF
     /// <summary>
     /// controls the offence(s) for the wpf application
     /// </summary>
-    public class OffenceController
+    public class depOffenceController
     {
         private readonly Dictionary<Offence, OffenceListItem> _offenceItems = new Dictionary<Offence, OffenceListItem>();
 

@@ -6,7 +6,7 @@ using WijkagentModels;
 
 namespace WijkagentWPF.database
 {
-    class OffenceController
+    public class OffenceController
     {
         private DBContext _dbContext { get; set; }
 

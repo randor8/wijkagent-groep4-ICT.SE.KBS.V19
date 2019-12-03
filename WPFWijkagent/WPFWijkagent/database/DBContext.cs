@@ -80,7 +80,7 @@ namespace WijkagentWPF
                 _port.Exception += delegate (object sender, ExceptionEventArgs e)
                 {
                     SSHStatus = "no portforward can be made on the server!";
-                    DBContext<IModels>.CloseSshConnection();
+                    DBContext.CloseSshConnection();
                 };
             
                 _port.Start();
@@ -88,11 +88,11 @@ namespace WijkagentWPF
             } catch(SshConnectionException)
             {
                 SSHStatus = "no ssh connection can be made to the ubuntu server please inform the system admin.";
-                DBContext<IModels>.CloseSshConnection();
+                DBContext.CloseSshConnection();
             } catch(ObjectDisposedException)
             {
                 SSHStatus = "the ssh connection to the ubuntu server has been disposed and cannot be used";
-                DBContext<IModels>.CloseSshConnection();
+                DBContext.CloseSshConnection();
             }
         }
 

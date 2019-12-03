@@ -15,7 +15,7 @@ namespace WijkagentWPF
     public partial class MainWindow : Window
     {
         // controls the offences for this window
-        private readonly OffenceController _offenceController = new OffenceController();
+        private readonly depOffenceController _offenceController = new depOffenceController();
         private bool _addModeActivated = false;
 
         public MainWindow()

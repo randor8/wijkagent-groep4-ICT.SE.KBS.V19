@@ -9,14 +9,18 @@ namespace WijkagentModels
         public int ID { get; set; }
         public DateTime DateTime { get; set; }
         public string Message { get; set; }
+        public string User { get; set; }
+        public string Handle { get; set; }
         public virtual Location LocationID { get; set; }
         public Offence OffenceID { get; set; }
 
-        public SocialMediaMessage(int id, DateTime time, string message, Location location, Offence offence = null)
+        public SocialMediaMessage(int id, DateTime time, string message, string user, string handle, Location location, Offence offence = null)
         {
             ID = id;
             DateTime = time;
             Message = message;
+            User = user;
+            Handle = handle;
             LocationID = location;
             OffenceID = offence;
         }

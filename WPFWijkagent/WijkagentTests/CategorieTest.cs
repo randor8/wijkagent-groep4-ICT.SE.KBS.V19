@@ -9,7 +9,7 @@ namespace WijkagentTests
     [TestFixture]
     public class CategorieTest
     {
-        OffenceController offenceController = new OffenceController();
+        depOffenceController offenceController = new depOffenceController();
         [TestCase("Alles tonen")]
         public void wpf_cb_categories_SelectionChanged_ValidList_ChangeListBox(string category)
         {

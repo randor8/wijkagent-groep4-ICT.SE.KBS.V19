@@ -6,7 +6,7 @@ using System.Data.SqlClient;
 
 namespace WijkagentWPF.database
 {
-    class LocationController
+    public class LocationController
     {
 
         private DBContext _dbContext { get; set; }

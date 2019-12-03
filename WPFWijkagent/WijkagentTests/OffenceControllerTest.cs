@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using WijkagentModels;
 using WijkagentWPF;
+using WijkagentWPF.database;
 
 namespace WijkagentTests
 {
@@ -17,14 +18,15 @@ namespace WijkagentTests
         [Test]
         public void GetOffences_WithResults_ReturnsOffencesList()
         {
-            OffenceController offenceController = new OffenceController();
+            depOffenceController offenceController = new depOffenceController();
             Assert.IsNotNull(offenceController.GetOffences());
         }
 
         [Test]
         public void SetOffence_WithLocationAsID_ReturnsID()
-        { 
-        
+        {
+            OffenceController offenceController = new OffenceController();
+            Assert.IsNotNull(offenceController);
         }
 
         [Test]

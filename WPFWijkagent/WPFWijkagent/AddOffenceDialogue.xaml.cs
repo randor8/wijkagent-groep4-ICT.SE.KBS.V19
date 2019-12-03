@@ -12,13 +12,13 @@ namespace WijkagentWPF
     {
         public OffenceCategories categories = new OffenceCategories();
 
-        private OffenceController Controller { get; }
+        private depOffenceController Controller { get; }
 
         public Location Location { get; set; }
 
 
         //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
-        public AddOffenceDialogue(OffenceController controller)
+        public AddOffenceDialogue(depOffenceController controller)
         {
             //Initializes itself (the Window)
             InitializeComponent();
