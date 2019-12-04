@@ -15,13 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_7CF5457DB29A4688BE0EB8C9C323E224"
+        "MsmKey" = "8:_2BA6C1C38DF44B6E9A7B2D6453B2B3FE"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_998C43FF02B04290866E15E020D7EC6F"
+        "MsmKey" = "8:_7CF5457DB29A4688BE0EB8C9C323E224"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -120,9 +120,9 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_998C43FF02B04290866E15E020D7EC6F"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2BA6C1C38DF44B6E9A7B2D6453B2B3FE"
             {
-            "SourcePath" = "8:..\\..\\..\\..\\..\\Downloads\\WijkAgentIcon.ico"
+            "SourcePath" = "8:WijkAgentIcon.ico"
             "TargetName" = "8:WijkAgentIcon.ico"
             "Tag" = "8:"
             "Folder" = "8:_FE954903B4674A4C86C0CBE494708792"
@@ -197,7 +197,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Wijkagent"
         "ProductCode" = "8:{28A4BA51-FA96-41AD-A33E-0EF30D88E169}"
-        "PackageCode" = "8:{5B7FCD45-05A2-47B1-9B88-8DE616B4F8CC}"
+        "PackageCode" = "8:{1BD4DBF4-D2B1-42CB-8B48-0E31DB54B897}"
         "UpgradeCode" = "8:{DDE71E16-F5F6-4855-BCC3-B0AEA891F44A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -328,7 +328,7 @@
             "Target" = "8:_7CF5457DB29A4688BE0EB8C9C323E224"
             "Folder" = "8:_DA2F9A62BE784C3DB8F8171E08D9B651"
             "WorkingFolder" = "8:_FE954903B4674A4C86C0CBE494708792"
-            "Icon" = "8:_998C43FF02B04290866E15E020D7EC6F"
+            "Icon" = "8:_2BA6C1C38DF44B6E9A7B2D6453B2B3FE"
             "Feature" = "8:"
             }
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_528A7096F4DE4ACFA8578A27760DEE63"
@@ -342,7 +342,7 @@
             "Target" = "8:_7CF5457DB29A4688BE0EB8C9C323E224"
             "Folder" = "8:_57D0FE6BB81E44EE8E880BC57C73ED3F"
             "WorkingFolder" = "8:_FE954903B4674A4C86C0CBE494708792"
-            "Icon" = "8:_998C43FF02B04290866E15E020D7EC6F"
+            "Icon" = "8:_2BA6C1C38DF44B6E9A7B2D6453B2B3FE"
             "Feature" = "8:"
             }
         }
