@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using System.Windows.Threading;
 
 namespace WijkagentWPF
 {
@@ -17,6 +18,8 @@ namespace WijkagentWPF
         // controls the offences for this window
         private readonly OffenceController _offenceController = new OffenceController();
         private bool _addModeActivated = false;
+        SocialMediaDialogue social;
+        private List<Offence> _offenceList = new List<Offence>();
 
         public MainWindow()
         {
@@ -71,18 +74,44 @@ namespace WijkagentWPF
         private void FillOffenceList()
         {
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
+            RemoveMouseDownEvents();
             wpfMapMain.Children.Clear();
             List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
             List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-
+            _offenceList = offences;
             offences.ForEach(of =>
             {
+                of.GetPushpin().MouseDown += Pushpin_MouseDown;
                 offenceListItems.Add(of.GetListItem());
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-
             wpfLBSelection.ItemsSource = offenceListItems;
             wpfLBSelection.Items.Refresh();
+        }
+
+        /// <summary>
+        /// This method is subscribed to the mousedown event for the pushpin, and opens the socialMediaDialogue, with the information of the pushpin
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
+            social.Show();
+        }
+
+        /// <summary>
+        /// Removes Mouse events from thr Pushpin to make certain the amount of events stays equal to one 
+        /// </summary>
+        public void RemoveMouseDownEvents()
+        {
+            if(_offenceList.Count != 0)
+            {
+                foreach (var item in _offenceList)
+                {
+                    item.GetPushpin().MouseDown -= Pushpin_MouseDown;
+                }
+            }
         }
 
         /// <summary>
@@ -193,5 +222,3 @@ namespace WijkagentWPF
         }
     }
 }
-
-
