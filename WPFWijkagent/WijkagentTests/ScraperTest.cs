@@ -41,11 +41,7 @@ namespace WijkagentTests
         public void GetSocialMediaMessages_offenceGiven_IsInstance()
         {
             //arrange
-            Offence offence = new Offence(new DateTime().ToLocalTime(), new Location(52.501127, 6.0789937))
-            {
-                ID = 3,
-                Description = "een delict.."
-            };
+            Offence offence = new Offence(DateTime.Now, new Location(52.37317168, 4.8936582));
             Scraper s = new Scraper(offence);
             //act
             List<SocialMediaMessage> socials = s.GetSocialMediaMessages();
