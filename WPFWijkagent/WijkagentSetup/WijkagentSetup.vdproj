@@ -21,6 +21,7 @@
         }
         "Entry"
         {
+
         "MsmKey" = "8:_7CF5457DB29A4688BE0EB8C9C323E224"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -317,6 +318,7 @@
         }
         "Shortcut"
         {
+
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4C592B32CB9D4B4C9A387EEEEA45B9B9"
             {
             "Name" = "8:Wijkagent"

@@ -46,13 +46,12 @@ namespace WijkagentTests
             //arrange
             Offence offence = new Offence()
             {
-                LocationID = new Location(52.501127, 6.0789937),
-                DateTime = new DateTime(2019, 11, 25)
+                LocationID = new Location(52.37317168, 4.8936582),
+                DateTime = DateTime.Now
             };
             Scraper s = new Scraper(offence);
             //act
             List<SocialMediaMessage> socials = s.GetSocialMediaMessages();
-            Console.WriteLine(socials.Count);
             //assert
             Assert.Greater(socials.Count, 0);
 
