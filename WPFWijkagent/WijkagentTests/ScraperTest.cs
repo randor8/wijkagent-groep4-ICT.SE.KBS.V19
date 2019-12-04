@@ -47,7 +47,7 @@ namespace WijkagentTests
             Offence offence = new Offence()
             {
                 LocationID = new Location(52.37317168, 4.8936582),
-                DateTime = new DateTime(2019, 12, 4)
+                DateTime = DateTime.Now
             };
             Scraper s = new Scraper(offence);
             //act
