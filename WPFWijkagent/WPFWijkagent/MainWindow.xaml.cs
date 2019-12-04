@@ -17,7 +17,6 @@ namespace WijkagentWPF
     {
         private bool _addModeActivated = false;
         SocialMediaDialogue social;
-        private List<Offence> _offenceList = new List<Offence>();
 
         public MainWindow()
         {
@@ -102,9 +101,9 @@ namespace WijkagentWPF
         /// </summary>
         public void RemoveMouseDownEvents()
         {
-            if(_offenceList.Count != 0)
+            if(MainWindowController.GetOffences().Count != 0)
             {
-                foreach (var item in _offenceList)
+                foreach (var item in MainWindowController.GetOffences())
                 {
                     item.GetPushpin().MouseDown -= Pushpin_MouseDown;
                 }
