@@ -52,7 +52,6 @@ namespace WijkagentTests
             Scraper s = new Scraper(offence);
             //act
             List<SocialMediaMessage> socials = s.GetSocialMediaMessages();
-            //Console.WriteLine(socials.Count);
             //assert
             Assert.Greater(socials.Count, 0);
 
