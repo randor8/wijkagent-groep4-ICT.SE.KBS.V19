@@ -32,6 +32,7 @@ namespace WijkagentModels
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
+                Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day - 1)
             };
         }
 
@@ -68,11 +69,20 @@ namespace WijkagentModels
         {
             Connect();
             List<SocialMediaMessage> feed = new List<SocialMediaMessage>();
+            Location location;
             var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
+                if (tweet.Coordinates != null)
+                {
+                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
+                }
+                else
+                {
+                    location = new Location(Offence.LocationID.Latitude, Offence.LocationID.Longitude);
+                }
                 Console.WriteLine(tweet.CreatedBy + "\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id,tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, Offence.DateTime, tweet.Text, Offence.LocationID));
+                feed?.Add(new SocialMediaMessage((int)tweet.Id, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, tweet.CreatedAt, tweet.Text, location));
             }
             return feed;
         }

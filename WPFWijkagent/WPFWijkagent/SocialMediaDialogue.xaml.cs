@@ -27,7 +27,7 @@ namespace WijkagentWPF
             Location l = new Location(pin.Location.Latitude, pin.Location.Longitude);
             _controller = new SocialMediaDialogueController(l, offences);
             string display = _controller.DisplayMessages(_controller.RetrieveOffence());
-            SocialMediaLabel.Content = display;
+            SocialMediaLabel.Text = display;
         }
     }
 }
