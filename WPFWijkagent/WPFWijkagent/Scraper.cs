@@ -26,7 +26,6 @@ namespace WijkagentModels
         public Scraper(Offence offence)
         {
             Offence = offence;
-            DateTime d = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day);
             _searchParameters = new SearchTweetsParameters(" ")
             {
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
