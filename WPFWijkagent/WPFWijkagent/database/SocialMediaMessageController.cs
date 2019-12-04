@@ -44,20 +44,20 @@ namespace WijkagentWPF.database
         /// <returns>returns the inserted id that has been added</returns>
         public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, int locationID, int offenceID)
         {
-            SqlCommand query = new SqlCommand("INSERT INTO SocialMediaMessage VALUES(:DateTime, :message, :user, :handle, :LocationID, :OffenceID) output INSERTED.ID VALUES(:DateTime, :message, :user, :handle, :LocationID, :OffenceID)");
+            SqlCommand query = new SqlCommand("INSERT INTO SocialMediaMessage VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID) output INSERTED.ID VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID)");
 
-            query.Parameters.Add(":DateTime", System.Data.SqlDbType.DateTime);
-            query.Parameters.Add(":message", System.Data.SqlDbType.VarChar);
-            query.Parameters.Add(":user", System.Data.SqlDbType.VarChar);
-            query.Parameters.Add(":handle", System.Data.SqlDbType.VarChar);
-            query.Parameters.Add(":LocationID", System.Data.SqlDbType.Int);
-            query.Parameters.Add(":OffenceID", System.Data.SqlDbType.Int);
-            query.Parameters[":DateTime"].Value = dateTime;
-            query.Parameters[":message"].Value = message;
-            query.Parameters[":user"].Value = user;
-            query.Parameters[":handle"].Value = handle;
-            query.Parameters[":LocationID"].Value = locationID;
-            query.Parameters[":OffenceID"].Value = offenceID;
+            query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
+            query.Parameters.Add("@message", System.Data.SqlDbType.VarChar);
+            query.Parameters.Add("@user", System.Data.SqlDbType.VarChar);
+            query.Parameters.Add("@handle", System.Data.SqlDbType.VarChar);
+            query.Parameters.Add("@LocationID", System.Data.SqlDbType.Int);
+            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters["@DateTime"].Value = dateTime;
+            query.Parameters["@message"].Value = message;
+            query.Parameters["@user"].Value = user;
+            query.Parameters["@handle"].Value = handle;
+            query.Parameters["@LocationID"].Value = locationID;
+            query.Parameters["@OffenceID"].Value = offenceID;
 
             return _dbContext.ExecuteInsertQuery(query);
         }
@@ -70,13 +70,13 @@ namespace WijkagentWPF.database
         private SocialMediaMessage ObjectArrayToSocialMediaMessage(object[] socialMediaMessageData)
         {
             string[] dateTimeStrings = socialMediaMessageData[1].ToString().Split(DBContext.DateTimeSeparator);
-            int dd, mm, yyyy, ss, min, hh;
-            int.TryParse(dateTimeStrings[0], out dd);
-            int.TryParse(dateTimeStrings[1], out mm);
-            int.TryParse(dateTimeStrings[2], out yyyy);
-            int.TryParse(dateTimeStrings[3], out ss);
-            int.TryParse(dateTimeStrings[4], out min);
-            int.TryParse(dateTimeStrings[5], out hh);
+            int.TryParse(dateTimeStrings[0], out int dd);
+            int.TryParse(dateTimeStrings[1], out int mm);
+            int.TryParse(dateTimeStrings[2], out int yyyy);
+            int.TryParse(dateTimeStrings[3], out int hh);
+            int.TryParse(dateTimeStrings[4], out int min);
+            int.TryParse(dateTimeStrings[5], out int ss);
+
             return new SocialMediaMessage(
                 (int)socialMediaMessageData[0],
                 new DateTime(yyyy,mm,dd,hh,min,ss),
@@ -96,11 +96,10 @@ namespace WijkagentWPF.database
         /// <returns>the new SocialMediaMessage object requested</returns>
         public SocialMediaMessage GetLocation(int ID)
         {
-            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, User, Handle, LocationID, OffenceID FROM SocialMediaMessage WHERE ID = :ID");
-            query.Parameters.Add(":ID", System.Data.SqlDbType.Int);
-            query.Parameters[":ID"].Value = ID;
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, User, Handle, LocationID, OffenceID FROM SocialMediaMessage WHERE ID = @ID");
+            query.Parameters.Add("@ID", System.Data.SqlDbType.Int);
+            query.Parameters["@ID"].Value = ID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
-
 
             if (rows.Count == 1)
             {

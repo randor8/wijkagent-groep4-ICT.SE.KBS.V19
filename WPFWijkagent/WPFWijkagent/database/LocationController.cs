@@ -24,12 +24,12 @@ namespace WijkagentWPF.database
         /// <returns>the id of the inserted location</returns>
         public int SetLocation(double latitude, double longitude)
         {
-            SqlCommand query = new SqlCommand("INSERT INTO Location VALUES(:Latitude, :Longitude) output INSERTED.ID VALUES(:Latitude, :Longitude)");
+            SqlCommand query = new SqlCommand("INSERT INTO Location VALUES(@Latitude, @Longitude) output INSERTED.ID VALUES(@Latitude, @Longitude)");
 
-            query.Parameters.Add(":Latitude", System.Data.SqlDbType.Float);
-            query.Parameters.Add(":Longitude", System.Data.SqlDbType.Float);
-            query.Parameters[":Latitude"].Value = latitude;
-            query.Parameters[":Longitude"].Value = longitude;
+            query.Parameters.Add("@Latitude", System.Data.SqlDbType.Float);
+            query.Parameters.Add("@Longitude", System.Data.SqlDbType.Float);
+            query.Parameters["@Latitude"].Value = latitude;
+            query.Parameters["@Longitude"].Value = longitude;
             
             return _dbContext.ExecuteInsertQuery(query);
         }
@@ -41,16 +41,16 @@ namespace WijkagentWPF.database
         /// <returns>the location object requested</returns>
         public Location GetLocation(int ID)
         {
-            SqlCommand query = new SqlCommand("");
-            query.Parameters.Add(":ID", System.Data.SqlDbType.Int);
-            query.Parameters[":ID"].Value = ID;
+            SqlCommand query = new SqlCommand("SELECT ID, Latitude, Longitude FROM Location WHERE ID = @ID");
+            query.Parameters.Add("@ID", System.Data.SqlDbType.Int);
+            query.Parameters["@ID"].Value = ID;
             List<object[]>  rows = _dbContext.ExecuteSelectQuery(query);
 
 
             if (rows.Count == 1)
             {
                 object[] row = rows[0];
-                return new Location((double)row[0], (double)row[1])
+                return new Location((double)row[1], (double)row[2])
                 {
                     ID = ID,
                 };

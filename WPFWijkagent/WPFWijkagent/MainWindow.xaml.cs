@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
@@ -25,6 +26,7 @@ namespace WijkagentWPF
             FillCategoriesCombobox();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
+            OffenceController ofc = new OffenceController();
         }
 
         /// <summary>

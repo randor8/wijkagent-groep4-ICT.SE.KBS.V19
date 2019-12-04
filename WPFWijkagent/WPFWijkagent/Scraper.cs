@@ -72,7 +72,7 @@ namespace WijkagentModels
             foreach (var tweet in tweets)
             {
                 Console.WriteLine(tweet.CreatedBy + "\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id, Offence.DateTime, tweet.Text, Offence.LocationID));
+                feed.Add(new SocialMediaMessage((int)tweet.Id, Offence.DateTime, tweet.Text, "", "", Offence.LocationID, Offence));
             }
             return feed;
         }

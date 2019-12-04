@@ -24,12 +24,12 @@ namespace WijkagentWPF
         /// <summary>
         /// port we need to keep open to connect to the server.
         /// </summary>
-        private static ForwardedPort _port = new ForwardedPortLocal("127.0.0.1", 1433, "localhost", 1433);
+        private static readonly ForwardedPort _port = new ForwardedPortLocal("127.0.0.1", 1433, "localhost", 1433);
 
         /// <summary>
         /// seperator to use when spliting datetime fields from db
         /// </summary>
-        public static char[] DateTimeSeparator = new char[] { '/', ':' };
+        public static char[] DateTimeSeparator = new char[] { ' ', '-', ':' };
         
         /// <summary>
         /// current status of the database.
@@ -40,7 +40,7 @@ namespace WijkagentWPF
         /// <summary>
         /// gets the connection string present in the app.config.
         /// </summary>
-        private string _connectionString = ConfigurationManager.ConnectionStrings["Wijkagent"].ConnectionString;
+        private readonly string _connectionString = ConfigurationManager.ConnectionStrings["Wijkagent"].ConnectionString;
 
         /// <summary>
         /// connection to the database
@@ -115,14 +115,17 @@ namespace WijkagentWPF
         public List<object[]> ExecuteSelectQuery(SqlCommand SQLStatement)
         {
             _connection.Open();
+            SQLStatement.Connection = _connection;
             SqlDataReader reader = SQLStatement.ExecuteReader();
             List<object[]> rows = new List<object[]>();
             object[] row = new object[reader.FieldCount];
 
             while(reader.Read()){
                 reader.GetValues(row);
+                rows.Add(row);
             }
 
+            SQLStatement.Dispose();
             _connection.Close();
             return rows;
         }
@@ -135,8 +138,28 @@ namespace WijkagentWPF
         public int ExecuteInsertQuery(SqlCommand SQLStatement)
         {
             _connection.Open();
+            SQLStatement.Connection = _connection;
+            
             int id = (int)SQLStatement.ExecuteScalar();
 
+            SQLStatement.Dispose();
+            _connection.Close();
+            return id;
+        }
+        
+        /// <summary>
+        /// executes a query and returns the modified rows
+        /// </summary>
+        /// <param name="SQLStatement">the statement that needs to executed</param>
+        /// <returns>number of columns altered</returns>
+        public int ExecuteQuery(SqlCommand SQLStatement)
+        {
+            _connection.Open();
+            SQLStatement.Connection = _connection;
+            
+            int id = SQLStatement.ExecuteNonQuery();
+
+            SQLStatement.Dispose();
             _connection.Close();
             return id;
         }

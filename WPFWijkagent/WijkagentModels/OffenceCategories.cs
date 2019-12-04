@@ -15,6 +15,7 @@ namespace WijkagentModels
         Mensenhandel,
         Overvallen,
         Straatroof,
-        Milieucriminaliteit
+        Milieucriminaliteit,
+        Null
     }
 }
