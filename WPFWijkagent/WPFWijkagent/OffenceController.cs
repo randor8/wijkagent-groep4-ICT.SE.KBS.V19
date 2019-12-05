@@ -39,22 +39,16 @@ namespace WijkagentWPF
         /// <returns></returns>
         public List<Offence> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
         {
-            List<Offence> offenceItems = new List<Offence>();
             if (categoryFilter == "Alles tonen")
             {
                return offences;
             }
             else
             {
-                foreach (Offence offence in offences)
-                {
-                    if (offence.Category.ToString() == categoryFilter)
-                    {
-                        offenceItems.Add(offence);
-                    }
-                }
+                OffenceCategories offenceCategorie = (OffenceCategories)System.Enum.Parse(typeof(OffenceCategories), categoryFilter);
+                FilterList.AddFilter(new CategoryFilter(offenceCategorie));
+                return FilterList.ApplyFilters(offences);
             }
-            return offenceItems;
         }
 
         /// <summary>
