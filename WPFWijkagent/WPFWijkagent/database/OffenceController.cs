@@ -48,7 +48,7 @@ namespace WijkagentWPF.database
             query.Parameters.Add("@LocationID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@Category", System.Data.SqlDbType.VarChar);
 
-            query.Parameters["@DateTime"].Value = dateTime.GetDateTimeFormats();
+            query.Parameters["@DateTime"].Value = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
             query.Parameters["@Description"].Value = description;
             query.Parameters["@LocationID"].Value = locationID;
             query.Parameters["@Category"].Value = category.ToString();

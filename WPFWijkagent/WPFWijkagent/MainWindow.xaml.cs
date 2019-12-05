@@ -27,6 +27,9 @@ namespace WijkagentWPF
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
             OffenceController ofc = new OffenceController();
+            ofc.GetOffence(ofc.SetOffence(DateTime.Now, "", new WijkagentModels.Location(1.1, 1.1), OffenceCategories.Mensenhandel));
+
+
         }
 
         /// <summary>
