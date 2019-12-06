@@ -24,7 +24,14 @@ namespace WijkagentWPF
         {
             if (FilterQueue.Count > 0)
             {
-                return ApplyFilters(FilterQueue.Dequeue().ApplyOn(offences));
+                IFilter filter = FilterQueue.Dequeue();
+                if (filter.GetType().Equals(typeof(CategoryFilter)))
+                {
+                    
+                } else
+                {
+                    return ApplyFilters(filter.ApplyOn(offences));
+                }
             } else
             {
                 UpdateQueue();

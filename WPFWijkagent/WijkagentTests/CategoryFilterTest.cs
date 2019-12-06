@@ -32,6 +32,19 @@ namespace WijkagentTests
         }
 
         [Test]
+        public void ApplyOn_Cybercrime_OriginalListUnaltered()
+        {
+            List<Offence> _offences = new List<Offence>
+            {
+                new Offence() { Category = OffenceCategories.Cybercrime },
+                new Offence() { Category = OffenceCategories.Drugs }
+            };
+            CategoryFilter filter = new CategoryFilter(OffenceCategories.Cybercrime);
+            filter.ApplyOn(_offences);
+            Assert.IsTrue(_offences.Count == 2);
+        }
+
+        [Test]
         public void ApplyOn_Cybercrime_ReturnListWithOffencesWithCybercrimeAsCategory()
         {
             List<Offence> _offences = new List<Offence>();
