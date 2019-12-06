@@ -39,6 +39,7 @@ namespace WijkagentWPF
         /// <returns></returns>
         public List<Offence> GetOffenceDataByCategory(string categoryFilter, List<Offence> offences)
         {
+            FilterList.ClearFilters();
             if (categoryFilter == "Alles tonen")
             {
                return offences;

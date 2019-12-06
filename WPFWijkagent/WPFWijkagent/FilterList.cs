@@ -49,5 +49,12 @@ namespace WijkagentWPF
                 FilterQueue.Enqueue(filter);
             }
         }
+
+        public static void ClearFilters()
+        {
+            instance = new HashSet<IFilter>();
+
+            UpdateQueue();
+        }
     }
 }
