@@ -44,29 +44,5 @@ namespace WijkagentTests
             //Assert
             Assert.AreEqual(offence_1.ID, id);
         }
-
-
-
-        //[Test]
-        //public void DisplayMessages_OffencesFound_ReturnsString()
-        //{
-        //    //arrange
-        //    List<OffenceListItem> items = new List<OffenceListItem>() { new OffenceListItem(offence_1), new OffenceListItem(offence_2) };
-        //    SocialMediaDialogueController sd = new SocialMediaDialogueController(Pins, items);
-        //    //act
-        //    string result = "";
-        //    //Assert
-        //    Assert.GreaterOrEqual(0, result.Length);
-        //}
-
-        //[Test]
-        //public void MethodName_SituationGiven_ExpectedReturn()
-        //{
-        //    //arrange
-
-        //    //act
-
-        //    //Assert
-        //}
     }
 }

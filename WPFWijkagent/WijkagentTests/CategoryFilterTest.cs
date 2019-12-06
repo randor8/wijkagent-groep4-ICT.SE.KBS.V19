@@ -45,8 +45,7 @@ namespace WijkagentTests
         [Test]
         public void Equals_AddSameFilterToHashSet_FilterExistsOnce()
         {
-            HashSet<IFilter> filterSet = new HashSet<IFilter>();
-            filterSet.Add(filter1);
+            HashSet<IFilter> filterSet = new HashSet<IFilter> { filter1 };
             Assert.IsTrue(filterSet.Count == 1);
             filterSet.Add(filter1);
             Assert.IsTrue(filterSet.Count == 1);
@@ -55,8 +54,7 @@ namespace WijkagentTests
         [Test]
         public void Equals_AddDifferentFilterWithSameCategoryToHashSet_FilterExistsOnce()
         {
-            HashSet<IFilter> filterSet = new HashSet<IFilter>();
-            filterSet.Add(filter1);
+            HashSet<IFilter> filterSet = new HashSet<IFilter> { filter1 };
             Assert.IsTrue(filterSet.Count == 1);
             filterSet.Add(filter2);
             Assert.IsTrue(filterSet.Count == 1);
