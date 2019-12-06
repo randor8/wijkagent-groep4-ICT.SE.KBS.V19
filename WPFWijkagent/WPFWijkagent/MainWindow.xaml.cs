@@ -15,11 +15,8 @@ namespace WijkagentWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        // controls the offences for this window
-        private readonly OffenceController _offenceController = new OffenceController();
         private bool _addModeActivated = false;
         SocialMediaDialogue social;
-        private List<Offence> _offenceList = new List<Offence>();
 
         public MainWindow()
         {
@@ -76,16 +73,15 @@ namespace WijkagentWPF
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             RemoveMouseDownEvents();
             wpfMapMain.Children.Clear();
-            List<Offence> offences = _offenceController.GetOffenceDataByCategory(wpfCBCategoriesFilter.SelectedItem.ToString(), _offenceController.GetOffences());
-            List<OffenceListItem> offenceListItems = new List<OffenceListItem>();
-            _offenceList = offences;
+            List<Offence> offences = MainWindowController.GetOffencesByCategory(wpfCBCategoriesFilter.SelectedItem.ToString());
+
             offences.ForEach(of =>
             {
                 of.GetPushpin().MouseDown += Pushpin_MouseDown;
-                offenceListItems.Add(of.GetListItem());
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-            wpfLBSelection.ItemsSource = offenceListItems;
+
+            wpfLBSelection.ItemsSource = offences;
             wpfLBSelection.Items.Refresh();
         }
 
@@ -96,7 +92,7 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            social = new SocialMediaDialogue((Pushpin)sender, _offenceController.GetOffences());
+            social = new SocialMediaDialogue((Pushpin)sender, MainWindowController.GetOffences());
             social.Show();
         }
 
@@ -105,9 +101,9 @@ namespace WijkagentWPF
         /// </summary>
         public void RemoveMouseDownEvents()
         {
-            if(_offenceList.Count != 0)
+            if(MainWindowController.GetOffences().Count != 0)
             {
-                foreach (var item in _offenceList)
+                foreach (var item in MainWindowController.GetOffences())
                 {
                     item.GetPushpin().MouseDown -= Pushpin_MouseDown;
                 }
@@ -166,7 +162,7 @@ namespace WijkagentWPF
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
             //create nieuw offencedialogue when clicked on map
-            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(_offenceController);
+            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue();
             if (!_addModeActivated)
             {
                 return;
@@ -204,15 +200,15 @@ namespace WijkagentWPF
         {
             if (e.AddedItems.Count <= 0) return;
 
-            OffenceListItem item = e.AddedItems[0] as OffenceListItem;
-            wpfMapMain.Center = item.Offence.GetPushpin().Location;
+            Offence item = e.AddedItems[0] as Offence;
+            wpfMapMain.Center = item.GetPushpin().Location;
             wpfMapMain.ZoomLevel = 16;
-            item.Offence.GetPushpin().Background = OffenceExtensions.ColorSelected;
+            item.GetPushpin().Background = MainWindowController.ColorSelected;
 
             for (int i = 0; i < e.RemovedItems.Count; i++)
             {
-                OffenceListItem removed = e.RemovedItems[i] as OffenceListItem;
-                removed.Offence.GetPushpin().Background = OffenceExtensions.ColorDefault;
+                Offence removed = e.RemovedItems[i] as Offence;
+                removed.GetPushpin().Background = MainWindowController.ColorDefault;
             }
         }
 
