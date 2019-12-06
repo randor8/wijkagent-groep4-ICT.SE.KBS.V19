@@ -5,8 +5,8 @@ using WijkagentModels;
 
 namespace WijkagentWPF
 {
-    public interface IFilter
+    public interface IFilter : IEquatable<IFilter>
     {
-        List<Offence> Filter(List<Offence> offences);
+        List<Offence> ApplyOn(List<Offence> offences);
     }
 }
