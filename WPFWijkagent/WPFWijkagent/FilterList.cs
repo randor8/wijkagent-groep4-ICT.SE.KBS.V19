@@ -99,7 +99,7 @@ namespace WijkagentWPF
 
         private static void SortedInsert(IFilter filter)
         {
-            if (FilterStack.Count == 0 || filter.GetType().Equals(typeof(CategoryFilter)))
+            if (FilterStack.Count == 0 || !filter.GetType().Equals(typeof(CategoryFilter)))
             {
                 FilterStack.Push(filter);
             } else

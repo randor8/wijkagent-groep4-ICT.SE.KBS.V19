@@ -10,6 +10,8 @@ namespace WijkagentTests
     [TestFixture]
     public class FilterListTest
     {
+        private DateTime DateTime { get; } = DateTime.Now;
+
         [SetUp]
         public void Setup()
         {
@@ -17,32 +19,38 @@ namespace WijkagentTests
         }
 
         [Test]
-        public void AddFilter_EmptyFilterList_AddsFilterToList()
+        public void AddFilter_AddCategoryFilterToEmptyList_AddsFilterToList()
         {
-            CategoryFilter CybercrimeFilter = new CategoryFilter(OffenceCategories.Cybercrime);
-            FilterList.AddFilter(CybercrimeFilter);
-            Assert.Contains(CybercrimeFilter, FilterList.GetFilters());
+            CategoryFilter cybercrimeFilter = new CategoryFilter(OffenceCategories.Cybercrime);
+            FilterList.AddFilter(cybercrimeFilter);
+            Assert.Contains(cybercrimeFilter, FilterList.GetFilters());
+        }
+
+        [Test]
+        public void AddFilter_AddDateFilterToEmptyList_AddsFilterToList()
+        {
+            DateFilter dateFilter = new DateFilter(DateTime);
+            FilterList.AddFilter(dateFilter);
+            Assert.Contains(dateFilter, FilterList.GetFilters());
         }
 
         [Test]
         public void AddFilter_FilterListWith1DifferentFilter_AddsFilterToList()
         {
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Drugs));
-            CategoryFilter CybercrimeFilter = new CategoryFilter(OffenceCategories.Cybercrime);
-            FilterList.AddFilter(CybercrimeFilter);
+            FilterList.AddFilter(new DateFilter(DateTime));
+            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             Assert.IsTrue(FilterList.GetFilters().Count == 2);
         }
 
         [Test]
         public void AddFilter_FilterListWithSameFilter_FilterNotAddedToList()
         {
-            CategoryFilter CybercrimeFilter1 = new CategoryFilter(OffenceCategories.Cybercrime);
-            FilterList.AddFilter(CybercrimeFilter1);
-            Assert.Contains(CybercrimeFilter1, FilterList.GetFilters());
-            CategoryFilter CybercrimeFilter2 = new CategoryFilter(OffenceCategories.Cybercrime);
-            FilterList.AddFilter(CybercrimeFilter2);
+            CategoryFilter cybercrimeFilter = new CategoryFilter(OffenceCategories.Cybercrime);
+            FilterList.AddFilter(cybercrimeFilter);
+            Assert.Contains(cybercrimeFilter, FilterList.GetFilters());
+            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             Assert.IsTrue(FilterList.GetFilters().Count == 1);
-            Assert.AreEqual(CybercrimeFilter1, FilterList.GetFilters()[0]);
+            Assert.AreEqual(cybercrimeFilter, FilterList.GetFilters()[0]);
         }
 
         [Test]
@@ -90,8 +98,35 @@ namespace WijkagentTests
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Drugs));
             List<Offence> filtered = _offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime) || x.Category.Equals(OffenceCategories.Drugs));
-            List<Offence> filtered2 = FilterList.ApplyFilters(_offences);
-            Assert.AreEqual(filtered, filtered2);
+            Assert.AreEqual(filtered, FilterList.ApplyFilters(_offences));
+        }
+
+        [Test]
+        public void ApplyFilters_ApplyDateFilter_ReturnOffencesFromDate()
+        {
+            List<Offence> _offences = new List<Offence>
+            {
+                new Offence() { DateTime = DateTime },
+                new Offence() { DateTime = DateTime.AddDays(1) }
+            };
+            FilterList.AddFilter(new DateFilter(DateTime));
+            List<Offence> filtered = _offences.FindAll(x => x.DateTime.Date.Equals(DateTime.Date));
+            Assert.AreEqual(filtered, FilterList.ApplyFilters(_offences));
+        }
+
+        [Test]
+        public void ApplyFilters_ApplyDateFilterAndCybercrimeFilter_ReturnCybercrimeOffencesOnRightDate()
+        {
+            List<Offence> _offences = new List<Offence>
+            {
+                new Offence() { Category = OffenceCategories.Cybercrime, DateTime = DateTime },
+                new Offence() { Category = OffenceCategories.Cybercrime, DateTime = DateTime.AddDays(1) },
+                new Offence() { Category = OffenceCategories.Drugs, DateTime = DateTime }
+            };
+            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
+            FilterList.AddFilter(new DateFilter(DateTime));
+            List<Offence> filtered = _offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime) && x.DateTime.Date.Equals(DateTime.Date));
+            Assert.AreEqual(filtered, FilterList.ApplyFilters(_offences));
         }
     }
 }
