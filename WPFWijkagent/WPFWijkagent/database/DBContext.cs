@@ -32,7 +32,7 @@ namespace WijkagentWPF
         public static char[] DateTimeSeparator = new char[] { ' ', '-', ':' };
         
         /// <summary>
-        /// current status of the database.
+        /// database errors wil be stored here
         /// </summary>
         public string DBStatus { get; private set; }
 
@@ -114,54 +114,91 @@ namespace WijkagentWPF
         /// <returns>a list of database rows</returns>
         public List<object[]> ExecuteSelectQuery(SqlCommand SQLStatement)
         {
-            _connection.Open();
-            SQLStatement.Connection = _connection;
-            SqlDataReader reader = SQLStatement.ExecuteReader();
-            List<object[]> rows = new List<object[]>();
-            object[] row = new object[reader.FieldCount];
+            try
+            {
+                _connection.Open();
+                SQLStatement.Connection = _connection;
 
-            while(reader.Read()){
-                reader.GetValues(row);
-                rows.Add(row);
+                SqlDataReader reader = SQLStatement.ExecuteReader();
+                List<object[]> rows = new List<object[]>();
+                object[] row = new object[reader.FieldCount];
+
+                while (reader.Read())
+                {
+                    reader.GetValues(row);
+                    rows.Add(row);
+                }
+                return rows;
             }
-
-            SQLStatement.Dispose();
-            _connection.Close();
-            return rows;
+            catch (SqlException sqlEX)
+            {
+                //save the error and give empty result set
+                DBStatus = sqlEX.Message;
+                return new List<Object[]>();
+            } finally
+            {
+                // always close the database
+                SQLStatement.Dispose();
+                _connection.Close();
+            }
         }
         
         /// <summary>
         /// executes a query and returns the inserted last column(id)
         /// </summary>
         /// <param name="SQLStatement">the statement that needs to executed</param>
-        /// <returns>id of the inserted column</returns>
+        /// <returns>id of the inserted row</returns>
         public int ExecuteInsertQuery(SqlCommand SQLStatement)
         {
-            _connection.Open();
-            SQLStatement.Connection = _connection;
+            try
+            {
+                _connection.Open();
+                SQLStatement.Connection = _connection;
             
-            int id = (int)SQLStatement.ExecuteScalar();
+                int id = (int)SQLStatement.ExecuteScalar();
 
-            SQLStatement.Dispose();
-            _connection.Close();
-            return id;
+                return id;
+            }
+            catch (SqlException sqlEX)
+            {
+                //save the error and give useles result
+                DBStatus = sqlEX.Message;
+                return 0;
+            } finally
+            {
+                // always close the database
+                SQLStatement.Dispose();
+                _connection.Close();
+            }
         }
         
         /// <summary>
-        /// executes a query and returns the modified rows
+        /// executes a query and returns the modified rows count
         /// </summary>
         /// <param name="SQLStatement">the statement that needs to executed</param>
-        /// <returns>number of columns altered</returns>
+        /// <returns>number of rows altered</returns>
         public int ExecuteQuery(SqlCommand SQLStatement)
         {
-            _connection.Open();
-            SQLStatement.Connection = _connection;
-            
-            int id = SQLStatement.ExecuteNonQuery();
+            try
+            {
+                _connection.Open();
+                SQLStatement.Connection = _connection;
 
-            SQLStatement.Dispose();
-            _connection.Close();
-            return id;
+                int rows = SQLStatement.ExecuteNonQuery();
+
+                return rows;
+            }
+            catch (SqlException sqlEX)
+            {
+                //save the error and give useles result
+                DBStatus = sqlEX.Message;
+                return 0;
+            } finally
+            {
+                SQLStatement.Dispose();
+                _connection.Close();
+            }
+
         }
     }
 }

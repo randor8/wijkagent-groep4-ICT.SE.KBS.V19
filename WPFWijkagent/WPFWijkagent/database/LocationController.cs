@@ -24,7 +24,7 @@ namespace WijkagentWPF.database
         /// <returns>the id of the inserted location</returns>
         public int SetLocation(double latitude, double longitude)
         {
-            SqlCommand query = new SqlCommand("INSERT INTO Location VALUES(@Latitude, @Longitude) output INSERTED.ID VALUES(@Latitude, @Longitude)");
+            SqlCommand query = new SqlCommand("INSERT INTO Location (Latitude, Longitude) OUTPUT INSERTED.ID VALUES(@Latitude, @Longitude)");
 
             query.Parameters.Add("@Latitude", System.Data.SqlDbType.Float);
             query.Parameters.Add("@Longitude", System.Data.SqlDbType.Float);

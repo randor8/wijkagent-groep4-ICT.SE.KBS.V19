@@ -44,7 +44,7 @@ namespace WijkagentWPF.database
         /// <returns>returns the inserted id that has been added</returns>
         public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, int locationID, int offenceID)
         {
-            SqlCommand query = new SqlCommand("INSERT INTO SocialMediaMessage VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID) output INSERTED.ID VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID)");
+            SqlCommand query = new SqlCommand("INSERT INTO SocialMediaMessage (DateTime, Message, Username, Handle, locationID, OffenceID) OUTPUT INSERTED.ID VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID)");
 
             query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
             query.Parameters.Add("@message", System.Data.SqlDbType.VarChar);
@@ -52,7 +52,7 @@ namespace WijkagentWPF.database
             query.Parameters.Add("@handle", System.Data.SqlDbType.VarChar);
             query.Parameters.Add("@LocationID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
-            query.Parameters["@DateTime"].Value = dateTime;
+            query.Parameters["@DateTime"].Value = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
             query.Parameters["@message"].Value = message;
             query.Parameters["@user"].Value = user;
             query.Parameters["@handle"].Value = handle;
@@ -79,14 +79,12 @@ namespace WijkagentWPF.database
 
             return new SocialMediaMessage(
                 (int)socialMediaMessageData[0],
-                new DateTime(yyyy,mm,dd,hh,min,ss),
+                new DateTime(yyyy, mm, dd, hh, min, ss),
                 socialMediaMessageData[2].ToString(),
                 socialMediaMessageData[3].ToString(),
                 socialMediaMessageData[4].ToString(),
                 new LocationController().GetLocation((int)socialMediaMessageData[5]),
-                new Offence() {
-                    ID = (int)socialMediaMessageData[6] 
-                });
+                new OffenceController().GetOffence((int)socialMediaMessageData[6]));
         }
 
         /// <summary>
@@ -94,9 +92,9 @@ namespace WijkagentWPF.database
         /// </summary>
         /// <param name="ID">SocialMediaMessage id you need</param>
         /// <returns>the new SocialMediaMessage object requested</returns>
-        public SocialMediaMessage GetLocation(int ID)
+        public SocialMediaMessage GetSocialMediaMessage(int ID)
         {
-            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, User, Handle, LocationID, OffenceID FROM SocialMediaMessage WHERE ID = @ID");
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID FROM SocialMediaMessage WHERE ID = @ID");
             query.Parameters.Add("@ID", System.Data.SqlDbType.Int);
             query.Parameters["@ID"].Value = ID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
@@ -106,6 +104,26 @@ namespace WijkagentWPF.database
                 return ObjectArrayToSocialMediaMessage(rows[0]);
             }
             return null;
+        }
+        
+        /// <summary>
+        /// gets the specified SocialMediaMessages associated to the offence from the db
+        /// </summary>
+        /// <param name="ID">Offence id you need</param>
+        /// <returns>related socialmediamessages in a list</returns>
+        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(int offenceID)
+        {
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID FROM SocialMediaMessage WHERE OffenceID = @OffenceID");
+            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters["@OffenceID"].Value = offenceID;
+            List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
+            List<SocialMediaMessage> socialMediaMessages = new List<SocialMediaMessage>();
+
+            if (rows.Count > 0)
+            {
+                rows.ForEach(smm => socialMediaMessages.Add(ObjectArrayToSocialMediaMessage(smm)));
+            }
+            return socialMediaMessages;
         }
     }
 }

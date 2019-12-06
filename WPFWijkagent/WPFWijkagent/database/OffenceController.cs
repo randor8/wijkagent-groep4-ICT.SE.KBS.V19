@@ -40,7 +40,7 @@ namespace WijkagentWPF.database
         /// <returns> returns the ID of the inserted Offence</returns>
         public int SetOffence(DateTime dateTime, string description, int locationID, OffenceCategories category)
         {
-            SqlCommand query = new SqlCommand("INSERT INTO Offence VALUES(@DateTime, @Description, @LocationID, @Category) output INSERTED.ID VALUES(@DateTime, @Description, @LocationID, @Category)");
+            SqlCommand query = new SqlCommand("INSERT INTO Offence (DateTime, Description, LocationID, Category) OUTPUT INSERTED.ID VALUES(@DateTime, @Description, @LocationID, @Category)");
             
             //set values we want to insert
             query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
