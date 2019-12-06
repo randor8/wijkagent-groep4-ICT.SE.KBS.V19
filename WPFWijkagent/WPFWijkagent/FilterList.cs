@@ -9,7 +9,7 @@ namespace WijkagentWPF
     {
         private static readonly HashSet<IFilter> _filterSet = new HashSet<IFilter>();
 
-        private static Queue<IFilter> FilterQueue { get; set; } = new Queue<IFilter>();
+        private static Stack<IFilter> FilterStack { get; set; } = new Stack<IFilter>();
 
         static FilterList() { }
 
@@ -22,21 +22,34 @@ namespace WijkagentWPF
         /// <returns>The list of offences that meet the requirements of the applied filter.</returns>
         public static List<Offence> ApplyFilters(List<Offence> offences)
         {
-            if (FilterQueue.Count > 0)
+            if (FilterStack.Count > 0)
             {
-                IFilter filter = FilterQueue.Dequeue();
+                IFilter filter = FilterStack.Pop();
                 if (filter.GetType().Equals(typeof(CategoryFilter)))
                 {
-                    
+                    FilterStack.Push(filter);
+                    return ApplyCategoryFilter(offences);
                 } else
                 {
                     return ApplyFilters(filter.ApplyOn(offences));
                 }
             } else
             {
-                UpdateQueue();
+                UpdateStack();
                 return offences;
             }
+        }
+
+        private static List<Offence> ApplyCategoryFilter(List<Offence> offences)
+        {
+            List<Offence> filtered = new List<Offence>();
+            while (FilterStack.Count > 0)
+            {
+                CategoryFilter categoryFilter = (CategoryFilter)FilterStack.Pop();
+                filtered.AddRange(categoryFilter.ApplyOn(offences));
+            }
+            filtered.Reverse();
+            return filtered;
         }
 
         /// <summary>
@@ -47,7 +60,7 @@ namespace WijkagentWPF
         {
             _filterSet.Add(filter);
 
-            UpdateQueue();
+            UpdateStack();
         }
         
         /// <summary>
@@ -58,18 +71,42 @@ namespace WijkagentWPF
         {
             _filterSet.Remove(filter);
 
-            UpdateQueue();
+            UpdateStack();
         }
 
         /// <summary>
         /// Clears the FilterQueue and adds all filters from the filterList to the queue.
         /// </summary>
-        private static void UpdateQueue()
+        private static void UpdateStack()
         {
-            FilterQueue.Clear();
+            FilterStack.Clear();
             foreach (IFilter filter in _filterSet)
             {
-                FilterQueue.Enqueue(filter);
+                FilterStack.Push(filter);
+            }
+            SortStack();
+        }
+
+        private static void SortStack()
+        {
+            if (FilterStack.Count > 0)
+            {
+                IFilter filter = FilterStack.Pop();
+                SortStack();
+                SortedInsert(filter);
+            }
+        }
+
+        private static void SortedInsert(IFilter filter)
+        {
+            if (FilterStack.Count == 0 || filter.GetType().Equals(typeof(CategoryFilter)))
+            {
+                FilterStack.Push(filter);
+            } else
+            {
+                IFilter temp = FilterStack.Pop();
+                SortedInsert(filter);
+                FilterStack.Push(temp);
             }
         }
 
@@ -91,7 +128,7 @@ namespace WijkagentWPF
         {
             _filterSet.Clear();
 
-            UpdateQueue();
+            UpdateStack();
         }
     }
 }

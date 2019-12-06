@@ -90,7 +90,8 @@ namespace WijkagentTests
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Drugs));
             List<Offence> filtered = _offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime) || x.Category.Equals(OffenceCategories.Drugs));
-            Assert.AreEqual(filtered, FilterList.ApplyFilters(_offences));
+            List<Offence> filtered2 = FilterList.ApplyFilters(_offences);
+            Assert.AreEqual(filtered, filtered2);
         }
     }
 }
