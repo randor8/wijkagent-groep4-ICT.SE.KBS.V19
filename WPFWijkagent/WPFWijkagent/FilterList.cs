@@ -7,8 +7,14 @@ namespace WijkagentWPF
 {
     public sealed class FilterList
     {
+        /// <summary>
+        /// HashSet that holds all filters.
+        /// </summary>
         private static readonly HashSet<IFilter> _filterSet = new HashSet<IFilter>();
 
+        /// <summary>
+        /// Stack used to apply the filters from the HashSet.
+        /// </summary>
         private static Stack<IFilter> FilterStack { get; set; } = new Stack<IFilter>();
 
         static FilterList() { }
@@ -40,6 +46,11 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Applies all CategoryFilters to the given list of offences.
+        /// </summary>
+        /// <param name="offences">The list of offences that needs to be filtered.</param>
+        /// <returns>A list of offences belonging to one of the categories.</returns>
         private static List<Offence> ApplyCategoryFilter(List<Offence> offences)
         {
             List<Offence> filtered = new List<Offence>();
@@ -87,6 +98,9 @@ namespace WijkagentWPF
             SortStack();
         }
 
+        /// <summary>
+        /// Sorts the filters in the FilterStack with CategoryFilters placed on the bottom of the stack.
+        /// </summary>
         private static void SortStack()
         {
             if (FilterStack.Count > 0)
@@ -97,6 +111,10 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Recursive helper function for SortStack.
+        /// </summary>
+        /// <param name="filter"></param>
         private static void SortedInsert(IFilter filter)
         {
             if (FilterStack.Count == 0 || !filter.GetType().Equals(typeof(CategoryFilter)))
