@@ -37,8 +37,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence() { DateTime = DateTime },
-                new Offence() { DateTime = DateTime.AddDays(1) }
+                new Offence(DateTime, new Location(1.1, 1.1)),
+                new Offence(DateTime.AddDays(1), new Location(1.1, 1.1))
             };
             DateFilter filter = new DateFilter(DateTime);
             filter.ApplyOn(_offences);
@@ -50,8 +50,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence() { DateTime = DateTime },
-                new Offence() { DateTime = DateTime.AddDays(1) }
+                new Offence(DateTime, new Location(1.1, 1.1)),
+                new Offence(DateTime.AddDays(1), new Location(1.1, 1.1))
             };
             DateFilter filter = new DateFilter(DateTime);
             List<Offence> filtered = filter.ApplyOn(_offences);

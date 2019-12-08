@@ -79,8 +79,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence() { Category = OffenceCategories.Cybercrime },
-                new Offence() { Category = OffenceCategories.Drugs }
+                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
+                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Drugs }
             };
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             Assert.AreEqual(_offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime)), FilterList.ApplyFilters(_offences));
@@ -91,9 +91,9 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence() { Category = OffenceCategories.Cybercrime },
-                new Offence() { Category = OffenceCategories.Drugs },
-                new Offence() { Category = OffenceCategories.Fraude }
+                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
+                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Drugs },
+                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Fraude }
             };
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Drugs));
@@ -106,8 +106,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence() { DateTime = DateTime },
-                new Offence() { DateTime = DateTime.AddDays(1) }
+                new Offence(DateTime, new Location(1.1, 1.1)),
+                new Offence(DateTime.AddDays(1), new Location(1.1, 1.1))
             };
             FilterList.AddFilter(new DateFilter(DateTime));
             List<Offence> filtered = _offences.FindAll(x => x.DateTime.Date.Equals(DateTime.Date));
@@ -119,9 +119,9 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence() { Category = OffenceCategories.Cybercrime, DateTime = DateTime },
-                new Offence() { Category = OffenceCategories.Cybercrime, DateTime = DateTime.AddDays(1) },
-                new Offence() { Category = OffenceCategories.Drugs, DateTime = DateTime }
+                new Offence(DateTime, new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
+                new Offence(DateTime.AddDays(1), new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
+                new Offence(DateTime, new Location(1.1, 1.1)) { Category = OffenceCategories.Drugs }
             };
             FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
             FilterList.AddFilter(new DateFilter(DateTime));
