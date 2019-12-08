@@ -12,23 +12,19 @@ namespace WijkagentTests
     [TestFixture]
     class SocialMediaDialogueTest
     {
-        private Offence offence_1 = new Offence()
+        private Location location = new Location(52.501127, 6.0789937);
+
+        private Offence offence_1 = new Offence(DateTime.Now, new Location(52.501127, 6.0789937))
         {
             ID = 2,
-            DateTime = new DateTime().ToLocalTime(),
-            Description = "een delict..",
-            LocationID = new Location(52.501127, 6.0789937)
+            Description = "een delict.."
         };
 
-        private Offence offence_2 = new Offence()
+        private Offence offence_2 = new Offence(DateTime.Now, new Location(53.504127, 6.0789437))
         {
             ID = 3,
-            DateTime = new DateTime().ToLocalTime(),
-            Description = "een delict..",
-            LocationID = new Location(53.504127, 6.0789437)
+            Description = "een delict.."
         };
-
-        Location location = new Location(52.501127, 6.0789937);
 
         /// <summary>
         /// Tests of the retrieveOffence functions finds the right offence
