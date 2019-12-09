@@ -16,6 +16,7 @@ namespace WijkagentTests
         public static DateTime dateTime = new DateTime().ToLocalTime();
         public static Location location = new Location(0, 1.1, 2.1);
 
+        /*
         [Test]
         public void SetOffence_WithLocationAsID_ReturnsID()
         {
@@ -76,6 +77,6 @@ namespace WijkagentTests
             }
 
             Assert.AreEqual(rowCount, offenceController.GetOffences().Count);
-        }
+        }*/
     }
 }
