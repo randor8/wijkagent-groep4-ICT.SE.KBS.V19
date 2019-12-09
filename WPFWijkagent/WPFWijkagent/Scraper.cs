@@ -75,7 +75,7 @@ namespace WijkagentModels
             {
                 if (tweet.Coordinates != null)
                 {
-                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
+                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
                 }
                 else
                 {

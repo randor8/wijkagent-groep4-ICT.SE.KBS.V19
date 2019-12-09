@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -10,7 +8,7 @@ namespace WijkagentWPF
         /// <summary>
         /// HashSet that holds all filters.
         /// </summary>
-        private static readonly HashSet<IFilter> _filterSet = new HashSet<IFilter>();
+        private static HashSet<IFilter> _filterSet = new HashSet<IFilter>();
 
         /// <summary>
         /// Stack used to apply the filters from the HashSet.
@@ -35,11 +33,13 @@ namespace WijkagentWPF
                 {
                     FilterStack.Push(filter);
                     return ApplyCategoryFilter(offences);
-                } else
+                }
+                else
                 {
                     return ApplyFilters(filter.ApplyOn(offences));
                 }
-            } else
+            }
+            else
             {
                 UpdateStack();
                 return offences;
@@ -54,9 +54,8 @@ namespace WijkagentWPF
         private static List<Offence> ApplyCategoryFilter(List<Offence> offences)
         {
             List<Offence> filtered = new List<Offence>();
-            while (FilterStack.Count > 0)
+            while (FilterStack.Count > 0 && FilterStack.Pop() is CategoryFilter categoryFilter)
             {
-                CategoryFilter categoryFilter = (CategoryFilter)FilterStack.Pop();
                 filtered.AddRange(categoryFilter.ApplyOn(offences));
             }
             return filtered;
@@ -72,7 +71,7 @@ namespace WijkagentWPF
 
             UpdateStack();
         }
-        
+
         /// <summary>
         /// Removes a filter from the FilterList.
         /// </summary>
@@ -81,6 +80,15 @@ namespace WijkagentWPF
         {
             _filterSet.Remove(filter);
 
+            UpdateStack();
+        }
+
+        /// <summary>
+        /// Removes all category filters from the list.
+        /// </summary>
+        public static void RemoveCategoryFilters()
+        {
+            _filterSet.RemoveWhere(x => x is CategoryFilter);
             UpdateStack();
         }
 
@@ -119,7 +127,8 @@ namespace WijkagentWPF
             if (FilterStack.Count == 0 || !filter.GetType().Equals(typeof(CategoryFilter)))
             {
                 FilterStack.Push(filter);
-            } else
+            }
+            else
             {
                 IFilter temp = FilterStack.Pop();
                 SortedInsert(filter);

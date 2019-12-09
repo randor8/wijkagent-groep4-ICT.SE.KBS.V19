@@ -1,8 +1,6 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using WijkagentModels;
 using WijkagentWPF;
 using Location = WijkagentModels.Location;

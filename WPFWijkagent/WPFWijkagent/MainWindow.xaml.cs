@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
-using System.Windows.Threading;
 
 namespace WijkagentWPF
 {
@@ -48,7 +47,8 @@ namespace WijkagentWPF
             if (wpfMapMain.ZoomLevel < maxZoom)
             {
                 wpfMapMain.ZoomLevel = maxZoom;
-            } else if (wpfMapMain.ZoomLevel > minZoom)
+            }
+            else if (wpfMapMain.ZoomLevel > minZoom)
             {
                 wpfMapMain.ZoomLevel = minZoom;
             }
@@ -73,7 +73,7 @@ namespace WijkagentWPF
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             RemoveMouseDownEvents();
             wpfMapMain.Children.Clear();
-            List<Offence> offences = MainWindowController.GetOffencesByCategory(wpfCBCategoriesFilter.SelectedItem.ToString());
+            List<Offence> offences = MainWindowController.FilterOffences();
 
             offences.ForEach(of =>
             {
@@ -101,7 +101,7 @@ namespace WijkagentWPF
         /// </summary>
         public void RemoveMouseDownEvents()
         {
-            if(MainWindowController.GetOffences().Count != 0)
+            if (MainWindowController.GetOffences().Count != 0)
             {
                 foreach (var item in MainWindowController.GetOffences())
                 {
@@ -133,6 +133,16 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            string selection = wpfCBCategoriesFilter.SelectedItem.ToString();
+            if (selection.Equals("Alles tonen"))
+            {
+                FilterList.RemoveCategoryFilters();
+            }
+            else
+            {
+                FilterList.RemoveCategoryFilters();
+                FilterList.AddFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), selection)));
+            }
             FillOffenceList();
         }
 

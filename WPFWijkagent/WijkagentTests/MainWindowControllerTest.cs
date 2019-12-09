@@ -1,7 +1,5 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using WijkagentModels;
 using WijkagentWPF;
 using Location = WijkagentModels.Location;
@@ -17,33 +15,26 @@ namespace WijkagentTests
         [SetUp]
         public void SetUp()
         {
-            WijkagentWPF.MainWindowController.ClearOffences();
+            MainWindowController.ClearOffences();
+            FilterList.ClearFilters();
         }
 
         [Test]
-        public void GetOffencesByCategory_AllesTonen_ReturnsAllOffences()
+        public void FilterOffences_Cybercrime_ReturnsOneOffence()
         {
-            WijkagentWPF.MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
-            WijkagentWPF.MainWindowController.AddOffence("Offence2", OffenceCategories.Drugs, _dateTime, _location);
+            MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
+            MainWindowController.AddOffence("Offence2", OffenceCategories.Drugs, _dateTime, _location);
 
-            Assert.AreEqual(2, WijkagentWPF.MainWindowController.GetOffencesByCategory("Alles tonen").Count);
-        }
-
-        [Test]
-        public void GetOffencesByCategory_Cybercrime_ReturnsOneOffence()
-        {
-            WijkagentWPF.MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
-            WijkagentWPF.MainWindowController.AddOffence("Offence2", OffenceCategories.Drugs, _dateTime, _location);
-
-            Assert.AreEqual(1, WijkagentWPF.MainWindowController.GetOffencesByCategory("Cybercrime").Count);
+            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
+            Assert.AreEqual(1, MainWindowController.FilterOffences().Count);
         }
 
         [Test]
         public void AddOffence_EmptyController_AddsOffenceToController()
         {
-            WijkagentWPF.MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
+            MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
 
-            Offence offence = WijkagentWPF.MainWindowController.GetOffences()[0];
+            Offence offence = MainWindowController.GetOffences()[0];
             Assert.AreEqual(_dateTime, offence.DateTime);
             Assert.AreEqual(_location, offence.LocationID);
         }
@@ -51,14 +42,14 @@ namespace WijkagentTests
         [Test]
         public void GetOffences_EmptyController_ReturnsEmptyList()
         {
-            Assert.IsEmpty(WijkagentWPF.MainWindowController.GetOffences());
+            Assert.IsEmpty(MainWindowController.GetOffences());
         }
 
         public void GetOffences_ControllerHasAnOffence_ReturnsListWithOneOffence()
         {
-            WijkagentWPF.MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
+            MainWindowController.AddOffence("Offence1", OffenceCategories.Cybercrime, _dateTime, _location);
 
-            Assert.AreEqual(1, WijkagentWPF.MainWindowController.GetOffences().Count);
+            Assert.AreEqual(1, MainWindowController.GetOffences().Count);
         }
     }
 }
