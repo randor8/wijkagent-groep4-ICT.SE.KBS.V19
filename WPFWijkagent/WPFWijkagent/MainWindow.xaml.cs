@@ -120,7 +120,10 @@ namespace WijkagentWPF
 
             foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
             {
-                wpfCBCategoriesFilter.Items.Add(offenceItem);
+                if(offenceItem != OffenceCategories.Null)
+                {
+                    wpfCBCategoriesFilter.Items.Add(offenceItem);
+                }
             }
 
             wpfCBCategoriesFilter.SelectedIndex = 0;
