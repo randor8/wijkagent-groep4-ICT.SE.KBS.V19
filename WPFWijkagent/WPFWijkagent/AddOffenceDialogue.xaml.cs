@@ -31,7 +31,10 @@ namespace WijkagentWPF
             // add all categories from the OffenceCategories enum to the combobox
             foreach (OffenceCategories categories in (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories)))
             {
-                wpfCBCategorie.Items.Add(categories);
+                if (categories != OffenceCategories.Null)
+                {
+                    wpfCBCategorie.Items.Add(categories);
+                }
             }
         }
 
