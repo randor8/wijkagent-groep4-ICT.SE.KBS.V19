@@ -45,18 +45,17 @@ namespace WijkagentTests
         {
             //arrange
             Offence offence = new Offence(3,
-                new DateTime().ToLocalTime(),
+                DateTime.Now,
                 "een delict..",
-                new Location(0, 52.501127, 6.0789937),
+                new Location(0, 52.37317168, 4.8936582),
                 OffenceCategories.Cybercrime);
 
             Scraper scraper = new Scraper(offence);
             //act
-            Scraper.Connect();
-            List<SocialMediaMessage> result = scraper.GetSocialMediaMessages();
+            List<SocialMediaMessage> socials = scraper.GetSocialMediaMessages();
             //assert
-            Assert.IsNotNull(result);
-            Assert.GreaterOrEqual(result.Count, 1);
+            Assert.Greater(socials.Count, 0);
+
         }
     }
 }

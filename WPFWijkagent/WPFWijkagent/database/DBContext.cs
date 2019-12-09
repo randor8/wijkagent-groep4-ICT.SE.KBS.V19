@@ -121,10 +121,10 @@ namespace WijkagentWPF
 
                 SqlDataReader reader = SQLStatement.ExecuteReader();
                 List<object[]> rows = new List<object[]>();
-                object[] row = new object[reader.FieldCount];
 
                 while (reader.Read())
                 {
+                    object[] row = new object[reader.FieldCount];
                     reader.GetValues(row);
                     rows.Add(row);
                 }

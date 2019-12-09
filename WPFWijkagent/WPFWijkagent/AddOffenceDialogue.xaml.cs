@@ -48,14 +48,13 @@ namespace WijkagentWPF
             if (wpfDBDatePicker.SelectedDate.HasValue && wpfTPTimePicker.Value.HasValue)
             {
                 DateTime date = new DateTime(
-                wpfDBDatePicker.SelectedDate.Value.Year,
-                wpfDBDatePicker.SelectedDate.Value.Month,
-                wpfDBDatePicker.SelectedDate.Value.Day,
-                wpfTPTimePicker.Value.Value.Hour,
-                wpfTPTimePicker.Value.Value.Minute,
-                wpfTPTimePicker.Value.Value.Second,
-                wpfTPTimePicker.Value.Value.Millisecond
-                );
+                    wpfDBDatePicker.SelectedDate.Value.Year,
+                    wpfDBDatePicker.SelectedDate.Value.Month,
+                    wpfDBDatePicker.SelectedDate.Value.Day,
+                    wpfTPTimePicker.Value.Value.Hour,
+                    wpfTPTimePicker.Value.Value.Minute,
+                    wpfTPTimePicker.Value.Value.Second,
+                    wpfTPTimePicker.Value.Value.Millisecond);
 
                 if (date != null && date < DateTime.Now && wpfCBCategorie.SelectedItem != null && Location != null)
                 {

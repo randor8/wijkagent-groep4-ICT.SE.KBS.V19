@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using WijkagentModels;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
@@ -20,15 +21,19 @@ namespace WijkagentWPF
         /// <param name="location">offence location</param>
         public void SetOffenceData(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
-            Offence NewOffence = new Offence
-            {
-                Category = category,
-                Description = description,
-                DateTime = dateTime,
-                LocationID = location
-            };
-            //TODO: save the location as a separate object
-            Offence.OffenceData.Add(NewOffence);
+            OffenceController offenceController = new OffenceController();
+            int offenceID = offenceController.SetOffence(
+                dateTime,
+                description,
+                location,
+                category);
+            Scraper scraper = new Scraper(new Offence(
+                offenceID, 
+                dateTime,
+                description,
+                location,
+                category));
+            scraper.GetSocialMediaMessages();
         }
 
         /// <summary>
@@ -54,7 +59,6 @@ namespace WijkagentWPF
                     }
                 }
             }
-
             return offenceItems;
         }
 
@@ -80,7 +84,8 @@ namespace WijkagentWPF
         /// <returns></returns>
         public List<Offence> GetOffences()
         {
-            return Offence.OffenceData;
+            OffenceController offenceController = new OffenceController();
+            return offenceController.GetOffences();
         }
     }
 }

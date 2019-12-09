@@ -27,7 +27,7 @@ namespace WijkagentModels
 
         public override string ToString()
         {
-            return $"Id: {ID}\nDate: {DateTime}\nContent: {Message}\nLocation: {LocationID.Latitude} : {LocationID.Longitude}";
+            return $"User: {User}\nHandle: {Handle}\nContent: {Message}\nDate: {DateTime}";
         }
     }
 }

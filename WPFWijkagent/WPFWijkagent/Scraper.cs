@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
+using WijkagentWPF.database;
+
 
 namespace WijkagentModels
 {
@@ -13,7 +15,7 @@ namespace WijkagentModels
     {
         public Offence Offence { get; set; }
 
-        readonly SearchTweetsParameters _searchParameters;
+        private SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
@@ -26,13 +28,13 @@ namespace WijkagentModels
         public Scraper(Offence offence)
         {
             Offence = offence;
-            _searchParameters = new SearchTweetsParameters("")
+            _searchParameters = new SearchTweetsParameters(" ")
             {
                 GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
-                SearchType = SearchResultType.Recent,
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day)
+                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
+                Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day - 1)
             };
         }
 
@@ -65,16 +67,29 @@ namespace WijkagentModels
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>list of social media messages </returns>
-        public List<SocialMediaMessage> GetSocialMediaMessages()
+        public void GetSocialMediaMessages()
         {
-            List<SocialMediaMessage> feed = new List<SocialMediaMessage>();
+            Connect();
+            Location location;
             var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
-                Console.WriteLine(tweet.CreatedBy + "\n");
-                feed.Add(new SocialMediaMessage((int)tweet.Id, Offence.DateTime, tweet.Text, "", "", Offence.LocationID, Offence));
+                if (tweet.Coordinates != null)
+                {
+                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
+                } else
+                {
+                    location = Offence.LocationID;
+                }
+                SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+                socialMediaMessageController.SetSocialMediaMessage(
+                    tweet.CreatedAt, 
+                    tweet.Text, 
+                    tweet.CreatedBy.Name, 
+                    tweet.CreatedBy.ScreenName, 
+                    location, 
+                    Offence.ID);
             }
-            return feed;
         }
     }
 }
