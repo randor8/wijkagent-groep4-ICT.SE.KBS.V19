@@ -41,7 +41,6 @@ namespace WijkagentWPF
                 }
             } else
             {
-                UpdateStack();
                 return offences;
             }
         }
@@ -59,7 +58,6 @@ namespace WijkagentWPF
                 CategoryFilter categoryFilter = (CategoryFilter)FilterStack.Pop();
                 filtered.AddRange(categoryFilter.ApplyOn(offences));
             }
-            filtered.Reverse();
             return filtered;
         }
 
