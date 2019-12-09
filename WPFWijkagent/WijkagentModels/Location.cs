@@ -8,11 +8,11 @@
 
         public double Latitude { get; set; }
 
-        public Location(double latitude, double longtitude)
+        public Location(int id, double latitude, double longtitude)
         {
+            ID = id;
             Longitude = longtitude;
             Latitude = latitude;
-
         }
     }
 }

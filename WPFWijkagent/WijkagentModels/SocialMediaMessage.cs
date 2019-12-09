@@ -14,10 +14,10 @@ namespace WijkagentModels
         public virtual Location LocationID { get; set; }
         public Offence OffenceID { get; set; }
 
-        public SocialMediaMessage(int id, DateTime time, string message, string user, string handle, Location location, Offence offence = null)
+        public SocialMediaMessage(int id, DateTime dateTime, string message, string user, string handle, Location location, Offence offence = null)
         {
             ID = id;
-            DateTime = time;
+            DateTime = dateTime;
             Message = message;
             User = user;
             Handle = handle;

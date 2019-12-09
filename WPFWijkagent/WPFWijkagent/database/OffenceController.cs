@@ -40,7 +40,9 @@ namespace WijkagentWPF.database
         /// <returns> returns the ID of the inserted Offence</returns>
         public int SetOffence(DateTime dateTime, string description, int locationID, OffenceCategories category)
         {
-            SqlCommand query = new SqlCommand("INSERT INTO Offence (DateTime, Description, LocationID, Category) OUTPUT INSERTED.ID VALUES(@DateTime, @Description, @LocationID, @Category)");
+            SqlCommand query = new SqlCommand("INSERT INTO Offence (DateTime, Description, LocationID, Category) " +
+                "OUTPUT INSERTED.ID " +
+                "VALUES(@DateTime, @Description, @LocationID, @Category)");
             
             //set values we want to insert
             query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
@@ -63,7 +65,9 @@ namespace WijkagentWPF.database
         /// <returns>offence object</returns>
         private Offence ObjectArrayToOffenc(object[] offenceData)
         {
+            //split the datetime fields from the string
             string[] dateTimeStrings = offenceData[1].ToString().Split(DBContext.DateTimeSeparator);
+            //parse the datetime fields
             int.TryParse(dateTimeStrings[0], out int dd);
             int.TryParse(dateTimeStrings[1], out int mm);
             int.TryParse(dateTimeStrings[2], out int yyyy);
@@ -82,14 +86,12 @@ namespace WijkagentWPF.database
                 category = OffenceCategories.Null;
             }
 
-            return new Offence()
-            {
-                ID = (int)offenceData[0],
-                DateTime = new DateTime(yyyy, mm, dd, hh, min, ss),
-                Description = offenceData[2].ToString(),
-                LocationID = new LocationController().GetLocation((int)offenceData[3]),
-                Category = category
-            };
+            return new Offence(
+                (int)offenceData[0],
+                new DateTime(yyyy, mm, dd, hh, min, ss),
+                offenceData[2].ToString(),
+                new LocationController().GetLocation((int)offenceData[3]),
+                category);
         }
 
         /// <summary>

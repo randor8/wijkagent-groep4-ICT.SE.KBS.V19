@@ -44,13 +44,12 @@ namespace WijkagentTests
         public void GetSocialMediaMessages_offenceGiven_IsInstance()
         {
             //arrange
-            Offence offence = new Offence()
-            {
-                ID = 3,
-                DateTime = new DateTime().ToLocalTime(),
-                Description = "een delict..",
-                LocationID = new Location(52.501127, 6.0789937)
-            };
+            Offence offence = new Offence(3,
+                new DateTime().ToLocalTime(),
+                "een delict..",
+                new Location(0, 52.501127, 6.0789937),
+                OffenceCategories.Cybercrime);
+
             Scraper scraper = new Scraper(offence);
             //act
             Scraper.Connect();

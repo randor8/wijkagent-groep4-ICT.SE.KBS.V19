@@ -16,5 +16,14 @@ namespace WijkagentModels
         public virtual Location LocationID { get; set; }
 
         public OffenceCategories Category { get; set; }
+
+        public Offence(int id, DateTime dateTime, string description, Location locationID, OffenceCategories offenceCategories)
+        {
+            ID = id;
+            DateTime = dateTime;
+            Description = description;
+            LocationID = locationID;
+            Category = offenceCategories;
+        }
     }
 }

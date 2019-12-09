@@ -50,10 +50,7 @@ namespace WijkagentWPF.database
             if (rows.Count == 1)
             {
                 object[] row = rows[0];
-                return new Location((double)row[1], (double)row[2])
-                {
-                    ID = ID,
-                };
+                return new Location(ID, (double)row[1], (double)row[2]);
             }
             return null;
         }
