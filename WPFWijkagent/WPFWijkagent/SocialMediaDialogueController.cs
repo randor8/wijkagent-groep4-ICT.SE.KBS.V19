@@ -11,7 +11,6 @@ namespace WijkagentWPF
 {
     public class SocialMediaDialogueController
     {
-        private Scraper _scraper;
         private List<Offence> _offenceList;
         public Location Location { get; set; }
 
@@ -32,7 +31,8 @@ namespace WijkagentWPF
         /// <returns>The method returns the offence that has the same pin</returns>
         public Offence RetrieveOffence()
         {
-            Offence o = new Offence(0, DateTime.Now, "", new Location(0, 0.0, 0.1), OffenceCategories.Null);
+
+            Offence o = null;
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in _offenceList
             where OffenceItem.LocationID.Latitude == Location.Latitude 

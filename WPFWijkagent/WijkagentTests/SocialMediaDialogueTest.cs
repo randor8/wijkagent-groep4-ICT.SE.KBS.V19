@@ -12,6 +12,7 @@ namespace WijkagentTests
     [TestFixture]
     class SocialMediaDialogueTest
     {
+
         private Offence offence_1 = new Offence(
             2,
             new DateTime().ToLocalTime(),
@@ -26,7 +27,8 @@ namespace WijkagentTests
             new Location(0, 53.504127, 6.0789437), 
             OffenceCategories.Null);
 
-        Location location = new Location(0, 52.501127, 6.0789937);
+        private Location location = new Location(0, 52.501127, 6.0789937);
+
 
         /// <summary>
         /// Tests of the retrieveOffence functions finds the right offence
@@ -42,5 +44,6 @@ namespace WijkagentTests
             //Assert
             Assert.AreEqual(offence_1.ID, id);
         }
+
     }
 }

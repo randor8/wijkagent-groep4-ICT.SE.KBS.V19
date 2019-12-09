@@ -14,7 +14,7 @@ namespace WijkagentTests
         /// used in the test cases for seting the offence
         /// </summary>
         public static DateTime dateTime = new DateTime().ToLocalTime();
-        public static Location location = new Location(1.1, 2.1);
+        public static Location location = new Location(0, 1.1, 2.1);
 
         [Test]
         public void SetOffence_WithLocationAsID_ReturnsID()

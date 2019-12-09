@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using WijkagentModels;
-using WPFWijkagent;
 
 namespace WijkagentWPF
 {
@@ -12,19 +11,14 @@ namespace WijkagentWPF
     {
         public OffenceCategories categories = new OffenceCategories();
 
-        private depOffenceController Controller { get; }
-
         public Location Location { get; set; }
 
 
         //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
-        public AddOffenceDialogue(depOffenceController controller)
+        public AddOffenceDialogue()
         {
             //Initializes itself (the Window)
             InitializeComponent();
-
-            //init controller and window so these properties can be used later on
-            Controller = controller;
 
             //add all enum categories to ComboBox so they can be selected
             InitializeCategories();
@@ -58,7 +52,7 @@ namespace WijkagentWPF
 
                 if (date != null && date < DateTime.Now && wpfCBCategorie.SelectedItem != null && Location != null)
                 {
-                    Controller.SetOffenceData(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
+                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
                     this.Close();
                 }
             }
