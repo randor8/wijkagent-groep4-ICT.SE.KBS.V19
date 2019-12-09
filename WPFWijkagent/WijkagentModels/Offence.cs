@@ -14,10 +14,13 @@ namespace WijkagentModels
 
         public OffenceCategories Category { get; set; }
 
-        public Offence(DateTime dateTime, Location Location)
+        public Offence(int id, DateTime dateTime, string description, Location locationID, OffenceCategories offenceCategories)
         {
+            ID = id;
             DateTime = dateTime;
-            LocationID = Location;
+            Description = description;
+            LocationID = locationID;
+            Category = offenceCategories;
         }
 
         /// <summary>
