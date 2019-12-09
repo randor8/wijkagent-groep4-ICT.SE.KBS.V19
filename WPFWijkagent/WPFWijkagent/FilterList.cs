@@ -41,6 +41,7 @@ namespace WijkagentWPF
                 }
             } else
             {
+                UpdateStack();
                 return offences;
             }
         }
