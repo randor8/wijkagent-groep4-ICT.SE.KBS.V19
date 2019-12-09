@@ -226,5 +226,29 @@ namespace WijkagentWPF
         {
             Application.Current.Shutdown();
         }
+
+        private void ClickCheck(object sender, RoutedEventArgs e)
+        {
+            if (FilterStack.Visibility == Visibility.Visible)
+            {
+                FilterStack.Visibility = Visibility.Collapsed;
+                int marginTop = (40 + (int)FilterStack.ActualHeight);
+
+                //FilterStack.Margin = new Thickness(0, 30, 0, -marginTop);
+                wpfLBSelection.Margin = new Thickness(0, marginTop, 0, -371);
+            } else
+            {
+                FilterStack.Visibility = Visibility.Visible;
+                int marginTop = 40;
+                foreach (Button stackItems in FilterStack.Children)
+                {
+                    marginTop += (int)stackItems.ActualHeight;
+                }
+
+                //FilterStack.Margin = new Thickness(0, 30, 0, -marginTop);
+                wpfLBSelection.Margin = new Thickness(0, marginTop, 0, -371);
+            }
+            
+        }
     }
 }
