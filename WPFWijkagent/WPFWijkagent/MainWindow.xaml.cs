@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using WijkagentWPF.database;
 using System.Windows.Threading;
 
 namespace WijkagentWPF
@@ -119,7 +120,10 @@ namespace WijkagentWPF
 
             foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
             {
-                wpfCBCategoriesFilter.Items.Add(offenceItem);
+                if(offenceItem != OffenceCategories.Null)
+                {
+                    wpfCBCategoriesFilter.Items.Add(offenceItem);
+                }
             }
 
             wpfCBCategoriesFilter.SelectedIndex = 0;
@@ -180,7 +184,7 @@ namespace WijkagentWPF
             Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
 
             // create a WijkAgendModels Location and convert the WPF location to that location.
-            WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Latitude, location.Longitude);
+            WijkagentModels.Location newLocation = new WijkagentModels.Location(0, location.Latitude, location.Longitude);
 
             // try to show the dialog, catch if the date enterd is in the future                                                   
             OffenceDialogue.Location = newLocation;

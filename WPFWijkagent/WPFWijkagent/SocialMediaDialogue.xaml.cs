@@ -24,8 +24,9 @@ namespace WijkagentWPF
         public SocialMediaDialogue(Pushpin pin, List<Offence> offences)
         {
             InitializeComponent();
-            Location l = new Location(pin.Location.Latitude, pin.Location.Longitude);
+            Location l = new Location(0, pin.Location.Latitude, pin.Location.Longitude);
             _controller = new SocialMediaDialogueController(l, offences);
+
             string display = _controller.DisplayMessages(_controller.RetrieveOffence());
             SocialMediaLabel.Text = display;
         }
