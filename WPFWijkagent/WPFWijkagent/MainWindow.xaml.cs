@@ -23,6 +23,7 @@ namespace WijkagentWPF
             SetMapBackground(172, 199, 242);
             SetZoomBoundaryCheck();
             FillCategoriesCombobox();
+            FillCategoryFiltermenu();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
         }
@@ -123,6 +124,52 @@ namespace WijkagentWPF
             }
 
             wpfCBCategoriesFilter.SelectedIndex = 0;
+        }
+
+        private void FillCategoryFiltermenu()
+        {
+            CheckBox checkBoxAlles = new CheckBox()
+            {
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            }; 
+            Label labelAlles = new Label()
+            {
+                Padding = new Thickness(0, 0, 0, 0),
+                Content = "Alles tonen",
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Center
+            };
+            FilterGrid.Children.Add(checkBoxAlles);
+            FilterGrid.Children.Add(labelAlles);
+            Grid.SetColumn(checkBoxAlles, 0);
+            Grid.SetRow(checkBoxAlles, 0);
+            Grid.SetColumn(labelAlles, 1);
+            Grid.SetRow(labelAlles, 0);
+
+            OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
+            for(int i = 0; i < offenceCategories.Length; i++)
+            {
+                CheckBox checkBox = new CheckBox() 
+                { 
+                    HorizontalAlignment = HorizontalAlignment.Center, 
+                    VerticalAlignment = VerticalAlignment.Center 
+                };
+                FilterGrid.Children.Add(checkBox);
+                Grid.SetColumn(checkBox, 0);
+                Grid.SetRow(checkBox, i + 1);
+
+                Label label = new Label() 
+                { 
+                    Padding = new Thickness(0, 0, 0, 0), 
+                    Content = offenceCategories[i], 
+                    HorizontalAlignment = HorizontalAlignment.Left, 
+                    VerticalAlignment = VerticalAlignment.Center 
+                };
+                FilterGrid.Children.Add(label);
+                Grid.SetColumn(label, 1);
+                Grid.SetRow(label, i + 1);
+            }
         }
 
         /// <summary>
@@ -232,21 +279,12 @@ namespace WijkagentWPF
             if (FilterStack.Visibility == Visibility.Visible)
             {
                 FilterStack.Visibility = Visibility.Collapsed;
-                int marginTop = (40 + (int)FilterStack.ActualHeight);
-
-                //FilterStack.Margin = new Thickness(0, 30, 0, -marginTop);
-                wpfLBSelection.Margin = new Thickness(0, marginTop, 0, -371);
-            } else
+                wpfLBSelection.Margin = new Thickness(0, 30, 0, 0);
+            }
+            else
             {
                 FilterStack.Visibility = Visibility.Visible;
-                int marginTop = 40;
-                foreach (Button stackItems in FilterStack.Children)
-                {
-                    marginTop += (int)stackItems.ActualHeight;
-                }
-
-                //FilterStack.Margin = new Thickness(0, 30, 0, -marginTop);
-                wpfLBSelection.Margin = new Thickness(0, marginTop, 0, -371);
+                wpfLBSelection.Margin = new Thickness(0, FilterStack.MaxHeight, 0, 0);
             }
             
         }
