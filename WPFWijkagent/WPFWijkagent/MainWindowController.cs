@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows.Media;
 using WijkagentModels;
 using Location = WijkagentModels.Location;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
@@ -28,7 +29,17 @@ namespace WijkagentWPF
         /// <param name="location">offence location</param>
         public static void AddOffence(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
-            Offence offence = new Offence(dateTime, location) { Description = description, Category = category };
+            OffenceController offenceController = new OffenceController();
+            Offence offence = new Offence(0, dateTime, description, location, category);
+            offence.ID = offenceController.SetOffence(
+                dateTime,
+                description,
+                location,
+                category);
+
+            Scraper scraper = new Scraper(offence);
+            scraper.GetSocialMediaMessages();
+
             _offences.Add(offence);
         }
 
@@ -61,7 +72,11 @@ namespace WijkagentWPF
         /// gets all the offences from the db
         /// </summary>
         /// <returns></returns>
-        public static List<Offence> GetOffences() => _offences;
+        public static List<Offence> GetOffences()
+        {
+            _offences = new OffenceController().GetOffences();
+            return _offences;
+        }
 
         /// <summary>
         /// Clears the list offences in this controller.

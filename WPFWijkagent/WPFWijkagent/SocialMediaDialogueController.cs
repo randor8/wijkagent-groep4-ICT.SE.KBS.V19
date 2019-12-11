@@ -2,12 +2,12 @@
 using System.Linq;
 using WijkagentModels;
 using Location = WijkagentModels.Location;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
     public class SocialMediaDialogueController
     {
-        private Scraper _scraper;
         private List<Offence> _offenceList;
         public Location Location { get; set; }
 
@@ -28,6 +28,7 @@ namespace WijkagentWPF
         /// <returns>The method returns the offence that has the same pin</returns>
         public Offence RetrieveOffence()
         {
+
             Offence o = null;
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in _offenceList
@@ -40,6 +41,7 @@ namespace WijkagentWPF
             }
             return o;
         }
+
         /// <summary>
         /// This method creates a single string from all elements within the list of found SocialMediaItems 
         /// </summary>
@@ -47,8 +49,8 @@ namespace WijkagentWPF
         /// <returns>string</returns>
         public string DisplayMessages(Offence offence)
         {
-            _scraper = new Scraper(offence);
-            List<SocialMediaMessage> feed = _scraper.GetSocialMediaMessages();
+            SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+            var feed = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID);
             string display = "";
             foreach (SocialMediaMessage media in feed)
             {
