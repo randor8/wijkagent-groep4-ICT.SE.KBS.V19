@@ -116,6 +116,7 @@ namespace WijkagentWPF
         {
             CheckBox checkBoxAlles = new CheckBox()
             {
+                Name = "checkBox_Category_allesTonen",
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center
             }; 
@@ -136,11 +137,15 @@ namespace WijkagentWPF
             OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
             for(int i = 0; i < offenceCategories.Length; i++)
             {
-                CheckBox checkBox = new CheckBox() 
-                { 
+                FilterGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
+                CheckBox checkBox = new CheckBox()
+                {
+                    Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center, 
                     VerticalAlignment = VerticalAlignment.Center 
                 };
+                checkBox.Checked += CategoryCheckboxChecked;
+                checkBox.Unchecked += CategoryCheckboxUnchecked;
                 FilterGrid.Children.Add(checkBox);
                 Grid.SetColumn(checkBox, 0);
                 Grid.SetRow(checkBox, i + 1);
@@ -155,6 +160,23 @@ namespace WijkagentWPF
                 FilterGrid.Children.Add(label);
                 Grid.SetColumn(label, 1);
                 Grid.SetRow(label, i + 1);
+            }
+        }
+        private void CategoryCheckboxChecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                FilterList.AddFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name)));
+                FillOffenceList();
+            }
+        }
+
+        private void CategoryCheckboxUnchecked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox checkBox)
+            {
+                FilterList.RemoveFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name)));
+                FillOffenceList();
             }
         }
 
