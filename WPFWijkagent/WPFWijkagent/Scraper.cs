@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
+using WijkagentWPF.database;
+
 
 namespace WijkagentModels
 {
@@ -65,26 +67,29 @@ namespace WijkagentModels
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>list of social media messages </returns>
-        public List<SocialMediaMessage> GetSocialMediaMessages()
+        public void GetSocialMediaMessages()
         {
             Connect();
-            List<SocialMediaMessage> feed = new List<SocialMediaMessage>();
             Location location;
             var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
                 if (tweet.Coordinates != null)
                 {
-                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
-                }
-                else
+                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
+                } else
                 {
-                    location = new Location(Offence.LocationID.Latitude, Offence.LocationID.Longitude);
+                    location = Offence.LocationID;
                 }
-                Console.WriteLine(tweet.CreatedBy + "\n");
-                feed?.Add(new SocialMediaMessage((int)tweet.Id, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, tweet.CreatedAt, tweet.Text, location));
+                SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+                socialMediaMessageController.SetSocialMediaMessage(
+                    tweet.CreatedAt, 
+                    tweet.Text, 
+                    tweet.CreatedBy.Name, 
+                    tweet.CreatedBy.ScreenName, 
+                    location, 
+                    Offence.ID);
             }
-            return feed;
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows;
 using WijkagentModels;
-using WPFWijkagent;
 
 namespace WijkagentWPF
 {
@@ -12,19 +11,14 @@ namespace WijkagentWPF
     {
         public OffenceCategories categories = new OffenceCategories();
 
-        private OffenceController Controller { get; }
-
         public Location Location { get; set; }
 
 
         //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
-        public AddOffenceDialogue(OffenceController controller)
+        public AddOffenceDialogue()
         {
             //Initializes itself (the Window)
             InitializeComponent();
-
-            //init controller and window so these properties can be used later on
-            Controller = controller;
 
             //add all enum categories to ComboBox so they can be selected
             InitializeCategories();
@@ -37,7 +31,10 @@ namespace WijkagentWPF
             // add all categories from the OffenceCategories enum to the combobox
             foreach (OffenceCategories categories in (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories)))
             {
-                wpfCBCategorie.Items.Add(categories);
+                if (categories != OffenceCategories.Null)
+                {
+                    wpfCBCategorie.Items.Add(categories);
+                }
             }
         }
 
@@ -48,18 +45,17 @@ namespace WijkagentWPF
             if (wpfDBDatePicker.SelectedDate.HasValue && wpfTPTimePicker.Value.HasValue)
             {
                 DateTime date = new DateTime(
-                wpfDBDatePicker.SelectedDate.Value.Year,
-                wpfDBDatePicker.SelectedDate.Value.Month,
-                wpfDBDatePicker.SelectedDate.Value.Day,
-                wpfTPTimePicker.Value.Value.Hour,
-                wpfTPTimePicker.Value.Value.Minute,
-                wpfTPTimePicker.Value.Value.Second,
-                wpfTPTimePicker.Value.Value.Millisecond
-                );
+                    wpfDBDatePicker.SelectedDate.Value.Year,
+                    wpfDBDatePicker.SelectedDate.Value.Month,
+                    wpfDBDatePicker.SelectedDate.Value.Day,
+                    wpfTPTimePicker.Value.Value.Hour,
+                    wpfTPTimePicker.Value.Value.Minute,
+                    wpfTPTimePicker.Value.Value.Second,
+                    wpfTPTimePicker.Value.Value.Millisecond);
 
                 if (date != null && date < DateTime.Now && wpfCBCategorie.SelectedItem != null && Location != null)
                 {
-                    Controller.SetOffenceData(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
+                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
                     this.Close();
                 }
             }

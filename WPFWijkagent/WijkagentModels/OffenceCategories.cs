@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WijkagentModels
+﻿namespace WijkagentModels
 {
     public enum OffenceCategories
     {
@@ -15,6 +11,7 @@ namespace WijkagentModels
         Mensenhandel,
         Overvallen,
         Straatroof,
-        Milieucriminaliteit
+        Milieucriminaliteit,
+        Null
     }
 }
