@@ -29,5 +29,10 @@ namespace WijkagentWPF
             string display = _controller.DisplayMessages(_controller.RetrieveOffence());
             SocialMediaLabel.Text = display;
         }
+
+        private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }
