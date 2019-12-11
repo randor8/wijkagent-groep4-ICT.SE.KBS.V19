@@ -12,23 +12,23 @@ namespace WijkagentTests
     [TestFixture]
     class SocialMediaDialogueTest
     {
-        private Offence offence_1 = new Offence()
-        {
-            ID = 2,
-            DateTime = new DateTime().ToLocalTime(),
-            Description = "een delict..",
-            LocationID = new Location(52.501127, 6.0789937)
-        };
 
-        private Offence offence_2 = new Offence()
-        {
-            ID = 3,
-            DateTime = new DateTime().ToLocalTime(),
-            Description = "een delict..",
-            LocationID = new Location(53.504127, 6.0789437)
-        };
+        private Offence offence_1 = new Offence(
+            2,
+            new DateTime().ToLocalTime(),
+            "een delict..",
+            new Location(0, 52.501127, 6.0789937), 
+            OffenceCategories.Null);
 
-        Location location = new Location(52.501127, 6.0789937);
+        private Offence offence_2 = new Offence(
+            3,
+            new DateTime().ToLocalTime(),
+            "een delict..",
+            new Location(0, 53.504127, 6.0789437), 
+            OffenceCategories.Null);
+
+        private Location location = new Location(0, 52.501127, 6.0789937);
+
 
         /// <summary>
         /// Tests of the retrieveOffence functions finds the right offence
@@ -45,28 +45,5 @@ namespace WijkagentTests
             Assert.AreEqual(offence_1.ID, id);
         }
 
-
-
-        //[Test]
-        //public void DisplayMessages_OffencesFound_ReturnsString()
-        //{
-        //    //arrange
-        //    List<OffenceListItem> items = new List<OffenceListItem>() { new OffenceListItem(offence_1), new OffenceListItem(offence_2) };
-        //    SocialMediaDialogueController sd = new SocialMediaDialogueController(Pins, items);
-        //    //act
-        //    string result = "";
-        //    //Assert
-        //    Assert.GreaterOrEqual(0, result.Length);
-        //}
-
-        //[Test]
-        //public void MethodName_SituationGiven_ExpectedReturn()
-        //{
-        //    //arrange
-
-        //    //act
-
-        //    //Assert
-        //}
     }
 }
