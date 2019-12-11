@@ -22,9 +22,8 @@
 					<ColumnDefinition Width="130"/>
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="wpfBTNAddOffence" Grid.Column="0" Content="delict toevoegen" Click="wpfBTNAddOffence_Click"/>
-				<ComboBox x:Name="wpfCBCategoriesFilter" Grid.Column="2" SelectionChanged="wpfCBCategoriesFilter_SelectionChanged"/>
-			</Grid>
+                <Button x:Name="wpfBTNAddOffence" Grid.Column="0" Content="delict toevoegen" Click="wpfBTNAddOffence_Click"/>
+            </Grid>
 		</Border>
 
 		<!-- Main View -->

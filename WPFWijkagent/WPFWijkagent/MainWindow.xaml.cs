@@ -24,7 +24,6 @@ namespace WijkagentWPF
             InitializeComponent();
             SetMapBackground(172, 199, 242);
             SetZoomBoundaryCheck();
-            FillCategoriesCombobox();
             FillCategoryFiltermenu();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
@@ -113,24 +112,6 @@ namespace WijkagentWPF
             }
         }
 
-        /// <summary>
-        /// Fills the categories combobox
-        /// </summary>
-        private void FillCategoriesCombobox()
-        {
-            wpfCBCategoriesFilter.Items.Add("Alles tonen");
-
-            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
-            {
-                if(offenceItem != OffenceCategories.Null)
-                {
-                    wpfCBCategoriesFilter.Items.Add(offenceItem);
-                }
-            }
-
-            wpfCBCategoriesFilter.SelectedIndex = 0;
-        }
-
         private void FillCategoryFiltermenu()
         {
             CheckBox checkBoxAlles = new CheckBox()
@@ -175,27 +156,6 @@ namespace WijkagentWPF
                 Grid.SetColumn(label, 1);
                 Grid.SetRow(label, i + 1);
             }
-        }
-
-        /// <summary>
-        /// Gets called when the categories combobox selection is changed
-        /// Fills the OffenceListItems with the correct Offences
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string selection = wpfCBCategoriesFilter.SelectedItem.ToString();
-            if (selection.Equals("Alles tonen"))
-            {
-                FilterList.RemoveCategoryFilters();
-            }
-            else
-            {
-                FilterList.RemoveCategoryFilters();
-                FilterList.AddFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), selection)));
-            }
-            FillOffenceList();
         }
 
         /// <summary>
