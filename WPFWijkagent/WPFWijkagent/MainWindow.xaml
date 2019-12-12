@@ -24,6 +24,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Button x:Name="wpfBTNAddOffence" Grid.Column="0" Content="delict toevoegen" Click="wpfBTNAddOffence_Click"/>
+
                 <ComboBox x:Name="wpfCBCategoriesFilter" Grid.Column="2" SelectionChanged="wpfCBCategoriesFilter_SelectionChanged"/>
             </Grid>
         </Border>
@@ -34,6 +35,7 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="200" MaxWidth="600"/>
+
 
             </Grid.ColumnDefinitions>
             
@@ -82,6 +84,7 @@
                     <ListBox x:Name="wpfLBSelection" SelectionChanged="wpfLBSelection_SelectionChanged" VerticalAlignment="Stretch"/>
                 </Expander>
                 
+
 
             </Grid>
         </Grid>

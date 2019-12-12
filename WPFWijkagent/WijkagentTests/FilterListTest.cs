@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using WijkagentModels;
 using WijkagentWPF;
+using WijkagentWPF.Filters;
 
 namespace WijkagentTests
 {
@@ -15,14 +16,14 @@ namespace WijkagentTests
         public void Setup()
         {
             FilterList.ClearFilters();
+            CategoryFilterCollection.Instance.ShowAll();
         }
 
         [Test]
         public void AddFilter_AddCategoryFilterToEmptyList_AddsFilterToList()
         {
-            CategoryFilter cybercrimeFilter = new CategoryFilter(OffenceCategories.Cybercrime);
-            FilterList.AddFilter(cybercrimeFilter);
-            Assert.Contains(cybercrimeFilter, FilterList.GetFilters());
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
+            Assert.Contains(CategoryFilterCollection.Instance, FilterList.GetFilters());
         }
 
         [Test]
@@ -37,38 +38,39 @@ namespace WijkagentTests
         public void AddFilter_FilterListWith1DifferentFilter_AddsFilterToList()
         {
             FilterList.AddFilter(new DateFilter(DateTime));
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
             Assert.IsTrue(FilterList.GetFilters().Count == 2);
         }
 
         [Test]
         public void AddFilter_FilterListWithSameFilter_FilterNotAddedToList()
         {
-            CategoryFilter cybercrimeFilter = new CategoryFilter(OffenceCategories.Cybercrime);
-            FilterList.AddFilter(cybercrimeFilter);
-            Assert.Contains(cybercrimeFilter, FilterList.GetFilters());
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
+            DateFilter dateFilter = new DateFilter(DateTime);
+            DateFilter dateFilter1 = new DateFilter(DateTime);
+            FilterList.AddFilter(dateFilter);
+            FilterList.AddFilter(dateFilter1);
             Assert.IsTrue(FilterList.GetFilters().Count == 1);
-            Assert.AreEqual(cybercrimeFilter, FilterList.GetFilters()[0]);
+            Assert.AreEqual(dateFilter, FilterList.GetFilters()[0]);
         }
 
         [Test]
         public void RemoveFilter_ListWith2Filters_RemovedFilterNoLongerInList()
         {
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
-            CategoryFilter drugsFilter = new CategoryFilter(OffenceCategories.Drugs);
-            FilterList.AddFilter(drugsFilter);
+            DateFilter dateFilter = new DateFilter(DateTime);
+            CategoryFilterCollection.Instance.ToggleCategory(OffenceCategories.Cybercrime);
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
+            FilterList.AddFilter(dateFilter);
             Assert.IsTrue(FilterList.GetFilters().Count == 2);
-            FilterList.RemoveFilter(drugsFilter);
+            FilterList.RemoveFilter(dateFilter);
             Assert.IsTrue(FilterList.GetFilters().Count == 1);
-            Assert.IsFalse(FilterList.GetFilters().Contains(drugsFilter));
+            Assert.IsFalse(FilterList.GetFilters().Contains(dateFilter));
         }
 
         [Test]
         public void ClearFilters_ListWith2Filters_FilterListIsEmpty()
         {
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Drugs));
+            FilterList.AddFilter(new DateFilter(DateTime));
+            FilterList.AddFilter(new DateFilter(DateTime));
             FilterList.ClearFilters();
             Assert.IsEmpty(FilterList.GetFilters());
         }
@@ -78,10 +80,11 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
-                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Drugs }
+                new Offence(1, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(2, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Drugs)
             };
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
+            CategoryFilterCollection.Instance.ToggleCategory(OffenceCategories.Cybercrime);
             Assert.AreEqual(_offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime)), FilterList.ApplyFilters(_offences));
         }
 
@@ -90,12 +93,13 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
-                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Drugs },
-                new Offence(new DateTime().ToLocalTime(), new Location(1.1, 1.1)) { Category = OffenceCategories.Fraude }
+                new Offence(1, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(2, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Drugs),
+                new Offence(3, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Fraude)
             };
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Drugs));
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
+            CategoryFilterCollection.Instance.ToggleCategory(OffenceCategories.Cybercrime);
+            CategoryFilterCollection.Instance.ToggleCategory(OffenceCategories.Drugs);
             List<Offence> filtered = _offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime) || x.Category.Equals(OffenceCategories.Drugs));
             Assert.AreEqual(filtered, FilterList.ApplyFilters(_offences));
         }
@@ -105,8 +109,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(DateTime, new Location(1.1, 1.1)),
-                new Offence(DateTime.AddDays(1), new Location(1.1, 1.1))
+                new Offence(1, DateTime, "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(2, DateTime.AddDays(1), "", new Location(1, 1.1, 1.1), OffenceCategories.Drugs)
             };
             FilterList.AddFilter(new DateFilter(DateTime));
             List<Offence> filtered = _offences.FindAll(x => x.DateTime.Date.Equals(DateTime.Date));
@@ -118,11 +122,12 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(DateTime, new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
-                new Offence(DateTime.AddDays(1), new Location(1.1, 1.1)) { Category = OffenceCategories.Cybercrime },
-                new Offence(DateTime, new Location(1.1, 1.1)) { Category = OffenceCategories.Drugs }
+                new Offence(1, DateTime, "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(2, DateTime.AddDays(1), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(3, DateTime, "", new Location(1, 1.1, 1.1), OffenceCategories.Drugs)
             };
-            FilterList.AddFilter(new CategoryFilter(OffenceCategories.Cybercrime));
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
+            CategoryFilterCollection.Instance.ToggleCategory(OffenceCategories.Cybercrime);
             FilterList.AddFilter(new DateFilter(DateTime));
             List<Offence> filtered = _offences.FindAll(x => x.Category.Equals(OffenceCategories.Cybercrime) && x.DateTime.Date.Equals(DateTime.Date));
             Assert.AreEqual(filtered, FilterList.ApplyFilters(_offences));

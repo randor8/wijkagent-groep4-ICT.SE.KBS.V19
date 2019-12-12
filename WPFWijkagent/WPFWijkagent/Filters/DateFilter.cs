@@ -32,24 +32,10 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Checks whether the given filter filters on the same date.
+        /// Determines whether the given object is the same as this DateFilter.
         /// </summary>
-        /// <param name="other">Filter to compare this filter with.</param>
-        /// <returns>True if both filters filter on the same date.</returns>
-        public bool Equals([AllowNull] IFilter other)
-        {
-            if (other is DateFilter that)
-            {
-                return DateTime.Date.Equals(that.DateTime.Date);
-            }
-            return false;
-        }
-
-        /// <summary>
-        /// Checks whether the given filter filters on the same date.
-        /// </summary>
-        /// <param name="other">Filter to compare this filter with.</param>
-        /// <returns>True if both filters filter on the same date.</returns>
+        /// <param name="obj">The object to compare to this DateFilter</param>
+        /// <returns>True if the dates are the same, false otherwise.</returns>
         public override bool Equals(object obj)
         {
             if (obj is DateFilter that)
@@ -60,9 +46,9 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Generates a hashcode based on the DateTime of this filter.
+        /// Calculates a hashcode based on the DateTime.
         /// </summary>
-        /// <returns>A hashcode.</returns>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             return HashCode.Combine(DateTime);

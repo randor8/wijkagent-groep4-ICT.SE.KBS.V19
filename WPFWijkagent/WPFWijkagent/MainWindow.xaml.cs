@@ -8,6 +8,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using WijkagentWPF.database;
+using System.Windows.Threading;
+using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
 {
@@ -24,9 +27,10 @@ namespace WijkagentWPF
             InitializeComponent();
             SetMapBackground(172, 199, 242);
             SetZoomBoundaryCheck();
-            FillCategoriesCombobox();
+            FillCategoryFiltermenu();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
         }
 
         /// <summary>
@@ -113,39 +117,51 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Fills the categories combobox
+        /// Fills the Category Tab in the filtermenu.
         /// </summary>
-        private void FillCategoriesCombobox()
+        private void FillCategoryFiltermenu()
         {
-            wpfCBCategoriesFilter.Items.Add("Alles tonen");
-
-            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
+            OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
+            for(int i = 0; i < offenceCategories.Length - 1; i++)
             {
-                wpfCBCategoriesFilter.Items.Add(offenceItem);
-            }
+                FilterGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
+                CheckBox checkBox = new CheckBox()
+                {
+                    Name = offenceCategories[i].ToString(),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                checkBox.Checked += CategoryCheckboxToggle;
+                checkBox.Unchecked += CategoryCheckboxToggle;
+                FilterGrid.Children.Add(checkBox);
+                Grid.SetColumn(checkBox, 0);
+                Grid.SetRow(checkBox, i);
 
-            wpfCBCategoriesFilter.SelectedIndex = 0;
+                Label label = new Label() 
+                { 
+                    Padding = new Thickness(0, 0, 0, 0), 
+                    Content = offenceCategories[i], 
+                    HorizontalAlignment = HorizontalAlignment.Left, 
+                    VerticalAlignment = VerticalAlignment.Center 
+                };
+                FilterGrid.Children.Add(label);
+                Grid.SetColumn(label, 1);
+                Grid.SetRow(label, i);
+            }
         }
 
         /// <summary>
-        /// Gets called when the categories combobox selection is changed
-        /// Fills the OffenceListItems with the correct Offences
+        /// Toggles the Category on or off when a checkbox is clicked.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <param name="sender">The sender of the event when a checkbox is clicked.</param>
+        /// <param name="e">Parameters given by the sender of the event.</param>
+        private void CategoryCheckboxToggle(object sender, RoutedEventArgs e)
         {
-            string selection = wpfCBCategoriesFilter.SelectedItem.ToString();
-            if (selection.Equals("Alles tonen"))
+            if (sender is CheckBox checkBox)
             {
-                FilterList.RemoveCategoryFilters();
+                CategoryFilterCollection.Instance.ToggleCategory((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name));
+                FillOffenceList();
             }
-            else
-            {
-                FilterList.RemoveCategoryFilters();
-                FilterList.AddFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), selection)));
-            }
-            FillOffenceList();
         }
 
         /// <summary>
@@ -192,7 +208,7 @@ namespace WijkagentWPF
             Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
 
             // create a WijkAgendModels Location and convert the WPF location to that location.
-            WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Latitude, location.Longitude);
+            WijkagentModels.Location newLocation = new WijkagentModels.Location(0, location.Latitude, location.Longitude);
 
             // try to show the dialog, catch if the date enterd is in the future                                                   
             OffenceDialogue.Location = newLocation;
@@ -224,10 +240,16 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
             Application.Current.Shutdown();
         }
+
 
         //private void ClickCheck(object sender, routedeventargs e)
         //{
@@ -253,6 +275,7 @@ namespace WijkagentWPF
         //    }
 
         //}
+
 
 
 

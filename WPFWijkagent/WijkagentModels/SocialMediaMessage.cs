@@ -7,24 +7,25 @@ namespace WijkagentModels
         public int ID { get; set; }
         public DateTime DateTime { get; set; }
         public string Message { get; set; }
-        public virtual Location LocationID { get; set; }
-        public string Name { get; set; }
+        public string User { get; set; }
         public string Handle { get; set; }
+        public virtual Location LocationID { get; set; }
+        public Offence OffenceID { get; set; }
 
-
-        public SocialMediaMessage(int id, string user, string handle, DateTime time, string message, Location location)
+        public SocialMediaMessage(int id, DateTime dateTime, string message, string user, string handle, Location location, Offence offence = null)
         {
             ID = id;
-            Name = user;
-            Handle = $"@{handle}";
-            DateTime = time;
+            DateTime = dateTime;
             Message = message;
+            User = user;
+            Handle = handle;
             LocationID = location;
+            OffenceID = offence;
         }
 
         public override string ToString()
         {
-            return $"User: {Name}\nHandle: {Handle}\nContent: {Message}\nDate: {DateTime}";
+            return $"User: {User}\nHandle: {Handle}\nContent: {Message}\nDate: {DateTime}";
         }
     }
 }

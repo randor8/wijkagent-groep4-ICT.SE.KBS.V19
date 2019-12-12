@@ -34,20 +34,6 @@ namespace WijkagentTests
             //assert
             Assert.IsNotNull(result);
         }
-        /// <summary>
-        /// A test to control whether the function returns a list filled with results
-        /// </summary>
-        [Test]
-        public void GetSocialMediaMessages_offenceGiven_IsInstance()
-        {
-            //arrange
-            Offence offence = new Offence(DateTime.Now, new Location(52.37317168, 4.8936582));
-            Scraper s = new Scraper(offence);
-            //act
-            List<SocialMediaMessage> socials = s.GetSocialMediaMessages();
-            //assert
-            Assert.Greater(socials.Count, 0);
 
-        }
     }
 }
