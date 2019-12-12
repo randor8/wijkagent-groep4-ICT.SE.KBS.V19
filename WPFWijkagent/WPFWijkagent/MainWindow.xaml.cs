@@ -1,15 +1,11 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
-using WijkagentWPF.database;
-using System.Windows.Threading;
 using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
@@ -122,7 +118,7 @@ namespace WijkagentWPF
         private void FillCategoryFiltermenu()
         {
             OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
-            for(int i = 0; i < offenceCategories.Length - 1; i++)
+            for (int i = 0; i < offenceCategories.Length - 1; i++)
             {
                 FilterGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
                 CheckBox checkBox = new CheckBox()
@@ -137,12 +133,12 @@ namespace WijkagentWPF
                 Grid.SetColumn(checkBox, 0);
                 Grid.SetRow(checkBox, i);
 
-                Label label = new Label() 
-                { 
-                    Padding = new Thickness(0, 0, 0, 0), 
-                    Content = offenceCategories[i], 
-                    HorizontalAlignment = HorizontalAlignment.Left, 
-                    VerticalAlignment = VerticalAlignment.Center 
+                Label label = new Label()
+                {
+                    Padding = new Thickness(0, 0, 0, 0),
+                    Content = offenceCategories[i],
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center
                 };
                 FilterGrid.Children.Add(label);
                 Grid.SetColumn(label, 1);
@@ -249,36 +245,5 @@ namespace WijkagentWPF
         {
             Application.Current.Shutdown();
         }
-
-
-        //private void ClickCheck(object sender, routedeventargs e)
-        //{
-        //    if (FilterStack.visibility == visibility.visible)
-        //    {
-        //        FilterStack.visibility = visibility.collapsed;
-        //        int margintop = (40 + (int)FilterStack.actualheight);
-
-        //        //filterstack.margin = new thickness(0, 30, 0, -margintop);
-        //        wpfLBSelection.margin = new thickness(0, margintop, 0, 0);
-        //    }
-        //    else
-        //    {
-        //        FilterStack.visibility = visibility.visible;
-        //        int margintop = ((int)testlabel.actualheight * 2);
-        //        foreach (system.windows.controls.primitives.togglebutton stackitems in filterstack.children)
-        //        {
-        //            margintop += (int)testlabel.actualheight;
-        //        }
-
-        //        //filterstack.margin = new thickness(0, 30, 0, -margintop);
-        //        wpfLBSelection.margin = new thickness(0, margintop, 0, 0);
-        //    }
-
-        //}
-
-
-
-
-
     }
 }

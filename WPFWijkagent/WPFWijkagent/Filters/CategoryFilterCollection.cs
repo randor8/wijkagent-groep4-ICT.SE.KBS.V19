@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using WijkagentModels;
 
 namespace WijkagentWPF.Filters
@@ -10,7 +8,7 @@ namespace WijkagentWPF.Filters
     {
         private static CategoryFilterCollection instance;
 
-        private CategoryFilterCollection() 
+        private CategoryFilterCollection()
         {
             Categories = new Dictionary<CategoryFilter, bool>();
             foreach (OffenceCategories offenceCategorie in Enum.GetValues(typeof(OffenceCategories)))
@@ -43,11 +41,11 @@ namespace WijkagentWPF.Filters
         public void ToggleCategory(OffenceCategories category)
         {
             List<CategoryFilter> filters = new List<CategoryFilter>();
-            foreach(CategoryFilter filter in Categories.Keys)
+            foreach (CategoryFilter filter in Categories.Keys)
             {
                 filters.Add(filter);
             }
-            foreach(CategoryFilter filter in filters)
+            foreach (CategoryFilter filter in filters)
             {
                 if (filter.Category.Equals(category))
                 {
@@ -81,7 +79,7 @@ namespace WijkagentWPF.Filters
         {
             bool filtered = false;
             List<Offence> filteredList = new List<Offence>();
-            foreach(KeyValuePair<CategoryFilter, bool> category in Categories)
+            foreach (KeyValuePair<CategoryFilter, bool> category in Categories)
             {
                 if (category.Value)
                 {

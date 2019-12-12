@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using WijkagentModels;
-using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
 {
@@ -82,7 +81,7 @@ namespace WijkagentWPF
         public static List<IFilter> GetFilters()
         {
             List<IFilter> filterList = new List<IFilter>();
-            foreach(KeyValuePair<string, IFilter> filter in _filterSet)
+            foreach (KeyValuePair<string, IFilter> filter in _filterSet)
             {
                 filterList.Add(filter.Value);
             }

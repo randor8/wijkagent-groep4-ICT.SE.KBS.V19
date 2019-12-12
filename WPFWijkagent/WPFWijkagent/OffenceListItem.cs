@@ -1,6 +1,3 @@
-
-﻿using Microsoft.Maps.MapControl.WPF;
-using System.Windows.Media;
 using WijkagentModels;
 
 namespace WijkagentWPF

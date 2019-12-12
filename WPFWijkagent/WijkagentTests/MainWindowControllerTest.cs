@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 using System;
-using WijkagentModels;
 using WijkagentWPF;
 using Location = WijkagentModels.Location;
 

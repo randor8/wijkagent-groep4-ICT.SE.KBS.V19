@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
