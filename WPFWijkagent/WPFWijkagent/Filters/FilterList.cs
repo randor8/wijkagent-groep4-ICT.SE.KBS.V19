@@ -6,9 +6,9 @@ namespace WijkagentWPF
     public sealed class FilterList
     {
         /// <summary>
-        /// HashSet that holds all filters.
+        /// Dictionary that holds all filters.
         /// </summary>
-        private static HashSet<IFilter> _filterSet = new HashSet<IFilter>();
+        private static Dictionary<string, IFilter> _filterSet = new Dictionary<string, IFilter>();
 
         /// <summary>
         /// Stack used to apply the filters from the HashSet.
@@ -67,7 +67,7 @@ namespace WijkagentWPF
         /// <param name="filter">The filter that needs to be added to the FilterList.</param>
         public static void AddFilter(IFilter filter)
         {
-            _filterSet.Add(filter);
+            _filterSet.Add($"{filter.GetType()}", filter);
 
             UpdateStack();
         }
@@ -78,17 +78,8 @@ namespace WijkagentWPF
         /// <param name="filter">The filter that needs to be removed from the FilterList.</param>
         public static void RemoveFilter(IFilter filter)
         {
-            _filterSet.Remove(filter);
+            _filterSet.Remove($"{filter.GetType()}");
 
-            UpdateStack();
-        }
-
-        /// <summary>
-        /// Removes all category filters from the list.
-        /// </summary>
-        public static void RemoveCategoryFilters()
-        {
-            _filterSet.RemoveWhere(x => x is CategoryFilter);
             UpdateStack();
         }
 
@@ -98,41 +89,9 @@ namespace WijkagentWPF
         private static void UpdateStack()
         {
             FilterStack.Clear();
-            foreach (IFilter filter in _filterSet)
+            foreach (KeyValuePair<string, IFilter> filter in _filterSet)
             {
-                FilterStack.Push(filter);
-            }
-            SortStack();
-        }
-
-        /// <summary>
-        /// Sorts the filters in the FilterStack with CategoryFilters placed on the bottom of the stack.
-        /// </summary>
-        private static void SortStack()
-        {
-            if (FilterStack.Count > 0)
-            {
-                IFilter filter = FilterStack.Pop();
-                SortStack();
-                SortedInsert(filter);
-            }
-        }
-
-        /// <summary>
-        /// Recursive helper function for SortStack.
-        /// </summary>
-        /// <param name="filter"></param>
-        private static void SortedInsert(IFilter filter)
-        {
-            if (FilterStack.Count == 0 || !filter.GetType().Equals(typeof(CategoryFilter)))
-            {
-                FilterStack.Push(filter);
-            }
-            else
-            {
-                IFilter temp = FilterStack.Pop();
-                SortedInsert(filter);
-                FilterStack.Push(temp);
+                FilterStack.Push(filter.Value);
             }
         }
 
@@ -143,7 +102,10 @@ namespace WijkagentWPF
         public static List<IFilter> GetFilters()
         {
             List<IFilter> filterList = new List<IFilter>();
-            filterList.AddRange(_filterSet);
+            foreach(KeyValuePair<string, IFilter> filter in _filterSet)
+            {
+                filterList.Add(filter.Value);
+            }
             return filterList;
         }
 
