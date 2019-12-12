@@ -1,8 +1,10 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
@@ -227,28 +229,33 @@ namespace WijkagentWPF
             Application.Current.Shutdown();
         }
 
-        private void ClickCheck(object sender, RoutedEventArgs e)
-        {
-            if (FilterStack.Visibility == Visibility.Visible)
-            {
-                FilterStack.Visibility = Visibility.Collapsed;
-                int marginTop = (40 + (int)FilterStack.ActualHeight);
+        //private void ClickCheck(object sender, routedeventargs e)
+        //{
+        //    if (FilterStack.visibility == visibility.visible)
+        //    {
+        //        FilterStack.visibility = visibility.collapsed;
+        //        int margintop = (40 + (int)FilterStack.actualheight);
 
-                //FilterStack.Margin = new Thickness(0, 30, 0, -marginTop);
-                wpfLBSelection.Margin = new Thickness(0, marginTop, 0, -371);
-            } else
-            {
-                FilterStack.Visibility = Visibility.Visible;
-                int marginTop = 40;
-                foreach (Button stackItems in FilterStack.Children)
-                {
-                    marginTop += (int)stackItems.ActualHeight;
-                }
+        //        //filterstack.margin = new thickness(0, 30, 0, -margintop);
+        //        wpfLBSelection.margin = new thickness(0, margintop, 0, 0);
+        //    }
+        //    else
+        //    {
+        //        FilterStack.visibility = visibility.visible;
+        //        int margintop = ((int)testlabel.actualheight * 2);
+        //        foreach (system.windows.controls.primitives.togglebutton stackitems in filterstack.children)
+        //        {
+        //            margintop += (int)testlabel.actualheight;
+        //        }
 
-                //FilterStack.Margin = new Thickness(0, 30, 0, -marginTop);
-                wpfLBSelection.Margin = new Thickness(0, marginTop, 0, -371);
-            }
-            
-        }
+        //        //filterstack.margin = new thickness(0, 30, 0, -margintop);
+        //        wpfLBSelection.margin = new thickness(0, margintop, 0, 0);
+        //    }
+
+        //}
+
+
+
+
     }
 }
