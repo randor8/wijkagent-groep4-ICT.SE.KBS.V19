@@ -40,15 +40,12 @@
                 <ToggleButton BorderBrush="#121212" Background="#FFFFFF" x:Name="Account" VerticalAlignment="Top" Click="ClickCheck">
                     <Label x:Name="testlabel" Content="Filters" Foreground="#000000" Height="auto" Width="200"/>
                 </ToggleButton>
-                <StackPanel x:Name="FilterStack" Visibility="Collapsed" VerticalAlignment="Top" Margin="0,30,0,0" MaxHeight="250">
+                <StackPanel x:Name="FilterStack" Visibility="Collapsed" VerticalAlignment="Top" Margin="0,30,0,0" MaxHeight="230">
                     <Grid x:Name="FilterGrid">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*"/>
                             <ColumnDefinition Width="7*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="20"/>
-                        </Grid.RowDefinitions>
                     </Grid>
                 </StackPanel>
                 <ListBox x:Name="wpfLBSelection" SelectionChanged="wpfLBSelection_SelectionChanged" Margin="0,30,0,0"/>

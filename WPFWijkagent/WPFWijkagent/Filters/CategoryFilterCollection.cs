@@ -8,28 +8,60 @@ namespace WijkagentWPF.Filters
 {
     public class CategoryFilterCollection : IFilter
     {
-        public Dictionary<CategoryFilter, bool> Categories { get; set; }
+        private static CategoryFilterCollection instance;
 
-        public CategoryFilterCollection()
+        private CategoryFilterCollection() 
         {
             Categories = new Dictionary<CategoryFilter, bool>();
-            foreach(OffenceCategories offenceCategorie in Enum.GetValues(typeof(OffenceCategories))) 
+            foreach (OffenceCategories offenceCategorie in Enum.GetValues(typeof(OffenceCategories)))
             {
                 Categories.Add(new CategoryFilter(offenceCategorie), false);
             }
         }
 
+        public static CategoryFilterCollection Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new CategoryFilterCollection();
+                }
+                return instance;
+            }
+        }
+
+        private static Dictionary<CategoryFilter, bool> Categories { get; set; }
+
+        public void ToggleCategory(OffenceCategories category)
+        {
+            List<CategoryFilter> filters = new List<CategoryFilter>();
+            foreach(CategoryFilter filter in Categories.Keys)
+            {
+                filters.Add(filter);
+            }
+            foreach(CategoryFilter filter in filters)
+            {
+                if (filter.Category.Equals(category))
+                {
+                    Categories[filter] = !Categories[filter];
+                }
+            }
+        }
+
         public List<Offence> ApplyOn(List<Offence> offences)
         {
-            List<Offence> filtered = new List<Offence>();
+            bool filtered = false;
+            List<Offence> filteredList = new List<Offence>();
             foreach(KeyValuePair<CategoryFilter, bool> category in Categories)
             {
                 if (category.Value)
                 {
-                    filtered.AddRange(category.Key.ApplyOn(offences));
+                    filteredList.AddRange(category.Key.ApplyOn(offences));
+                    filtered = true;
                 }
             }
-            return filtered;
+            return filtered ? filteredList : offences;
         }
     }
 }

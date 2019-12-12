@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WijkagentModels;
+using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
 {
@@ -28,37 +29,13 @@ namespace WijkagentWPF
         {
             if (FilterStack.Count > 0)
             {
-                IFilter filter = FilterStack.Pop();
-                if (filter.GetType().Equals(typeof(CategoryFilter)))
-                {
-                    FilterStack.Push(filter);
-                    return ApplyCategoryFilter(offences);
-                }
-                else
-                {
-                    return ApplyFilters(filter.ApplyOn(offences));
-                }
+                return ApplyFilters(FilterStack.Pop().ApplyOn(offences));
             }
             else
             {
                 UpdateStack();
                 return offences;
             }
-        }
-
-        /// <summary>
-        /// Applies all CategoryFilters to the given list of offences.
-        /// </summary>
-        /// <param name="offences">The list of offences that needs to be filtered.</param>
-        /// <returns>A list of offences belonging to one of the categories.</returns>
-        private static List<Offence> ApplyCategoryFilter(List<Offence> offences)
-        {
-            List<Offence> filtered = new List<Offence>();
-            while (FilterStack.Count > 0 && FilterStack.Pop() is CategoryFilter categoryFilter)
-            {
-                filtered.AddRange(categoryFilter.ApplyOn(offences));
-            }
-            return filtered;
         }
 
         /// <summary>

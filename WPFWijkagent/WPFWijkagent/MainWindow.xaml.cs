@@ -8,6 +8,7 @@ using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.database;
 using System.Windows.Threading;
+using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
 {
@@ -27,6 +28,7 @@ namespace WijkagentWPF
             FillCategoryFiltermenu();
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
         }
 
         /// <summary>
@@ -114,41 +116,21 @@ namespace WijkagentWPF
 
         private void FillCategoryFiltermenu()
         {
-            CheckBox checkBoxAlles = new CheckBox()
-            {
-                Name = "checkBox_Category_allesTonen",
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center
-            }; 
-            Label labelAlles = new Label()
-            {
-                Padding = new Thickness(0, 0, 0, 0),
-                Content = "Alles tonen",
-                HorizontalAlignment = HorizontalAlignment.Left,
-                VerticalAlignment = VerticalAlignment.Center
-            };
-            FilterGrid.Children.Add(checkBoxAlles);
-            FilterGrid.Children.Add(labelAlles);
-            Grid.SetColumn(checkBoxAlles, 0);
-            Grid.SetRow(checkBoxAlles, 0);
-            Grid.SetColumn(labelAlles, 1);
-            Grid.SetRow(labelAlles, 0);
-
             OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
-            for(int i = 0; i < offenceCategories.Length; i++)
+            for(int i = 0; i < offenceCategories.Length - 1; i++)
             {
                 FilterGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
                 CheckBox checkBox = new CheckBox()
                 {
                     Name = offenceCategories[i].ToString(),
-                    HorizontalAlignment = HorizontalAlignment.Center, 
-                    VerticalAlignment = VerticalAlignment.Center 
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center
                 };
-                checkBox.Checked += CategoryCheckboxChecked;
-                checkBox.Unchecked += CategoryCheckboxUnchecked;
+                checkBox.Checked += CategoryCheckboxToggle;
+                checkBox.Unchecked += CategoryCheckboxToggle;
                 FilterGrid.Children.Add(checkBox);
                 Grid.SetColumn(checkBox, 0);
-                Grid.SetRow(checkBox, i + 1);
+                Grid.SetRow(checkBox, i);
 
                 Label label = new Label() 
                 { 
@@ -159,23 +141,15 @@ namespace WijkagentWPF
                 };
                 FilterGrid.Children.Add(label);
                 Grid.SetColumn(label, 1);
-                Grid.SetRow(label, i + 1);
-            }
-        }
-        private void CategoryCheckboxChecked(object sender, RoutedEventArgs e)
-        {
-            if (sender is CheckBox checkBox)
-            {
-                FilterList.AddFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name)));
-                FillOffenceList();
+                Grid.SetRow(label, i);
             }
         }
 
-        private void CategoryCheckboxUnchecked(object sender, RoutedEventArgs e)
+        private void CategoryCheckboxToggle(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox checkBox)
             {
-                FilterList.RemoveFilter(new CategoryFilter((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name)));
+                CategoryFilterCollection.Instance.ToggleCategory((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name));
                 FillOffenceList();
             }
         }

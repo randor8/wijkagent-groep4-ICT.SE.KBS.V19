@@ -30,4 +30,5 @@ namespace WijkagentWPF
             filteredOffences.AddRange(filterQuery);
             return filteredOffences;
         }
+    }
 }
