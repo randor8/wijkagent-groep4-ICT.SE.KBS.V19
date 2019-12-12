@@ -30,5 +30,28 @@ namespace WijkagentWPF
             filteredOffences.AddRange(filterQuery);
             return filteredOffences;
         }
+
+        /// <summary>
+        /// Determines whether the given object is the same as this DateFilter.
+        /// </summary>
+        /// <param name="obj">The object to compare to this DateFilter</param>
+        /// <returns>True if the dates are the same, false otherwise.</returns>
+        public override bool Equals(object obj)
+        {
+            if (obj is DateFilter that)
+            {
+                return DateTime.Date.Equals(that.DateTime.Date);
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Calculates a hashcode based on the DateTime.
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(DateTime);
+        }
     }
 }

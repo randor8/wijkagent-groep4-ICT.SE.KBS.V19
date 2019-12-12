@@ -31,8 +31,15 @@ namespace WijkagentWPF.Filters
             }
         }
 
+        /// <summary>
+        /// Dictionary containing CategoryFilters as key and whether they are turn on as value.
+        /// </summary>
         private static Dictionary<CategoryFilter, bool> Categories { get; set; }
 
+        /// <summary>
+        /// Toggles a CategoryFilter on or off. 
+        /// </summary>
+        /// <param name="category">The category of the CategoryFilter to toggle.</param>
         public void ToggleCategory(OffenceCategories category)
         {
             List<CategoryFilter> filters = new List<CategoryFilter>();
@@ -49,6 +56,27 @@ namespace WijkagentWPF.Filters
             }
         }
 
+        /// <summary>
+        /// Turns all filters off.
+        /// </summary>
+        public void ShowAll()
+        {
+            List<CategoryFilter> filters = new List<CategoryFilter>();
+            foreach (CategoryFilter filter in Categories.Keys)
+            {
+                filters.Add(filter);
+            }
+            foreach (CategoryFilter filter in filters)
+            {
+                Categories[filter] = false;
+            }
+        }
+
+        /// <summary>
+        /// Applies all CategoryFilters in the collection to the given list of offences.
+        /// </summary>
+        /// <param name="offences">The list of offences to filter.</param>
+        /// <returns>A list of offences meeting the requirements set by the filters.</returns>
         public List<Offence> ApplyOn(List<Offence> offences)
         {
             bool filtered = false;

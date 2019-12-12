@@ -6,7 +6,7 @@ using WijkagentModels;
 
 namespace WijkagentWPF
 {
-    public class CategoryFilter : IFilter
+    public class CategoryFilter
     {
         public OffenceCategories Category { get; }
 

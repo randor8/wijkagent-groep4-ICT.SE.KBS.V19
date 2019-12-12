@@ -44,7 +44,10 @@ namespace WijkagentWPF
         /// <param name="filter">The filter that needs to be added to the FilterList.</param>
         public static void AddFilter(IFilter filter)
         {
-            _filterSet.Add($"{filter.GetType()}", filter);
+            if (!_filterSet.ContainsKey($"{filter.GetType()}"))
+            {
+                _filterSet.Add($"{filter.GetType()}", filter);
+            }
 
             UpdateStack();
         }

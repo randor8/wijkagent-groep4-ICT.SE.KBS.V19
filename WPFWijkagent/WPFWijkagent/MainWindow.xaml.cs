@@ -114,6 +114,9 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Fills the Category Tab in the filtermenu.
+        /// </summary>
         private void FillCategoryFiltermenu()
         {
             OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
@@ -145,6 +148,11 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Toggles the Category on or off when a checkbox is clicked.
+        /// </summary>
+        /// <param name="sender">The sender of the event when a checkbox is clicked.</param>
+        /// <param name="e">Parameters given by the sender of the event.</param>
         private void CategoryCheckboxToggle(object sender, RoutedEventArgs e)
         {
             if (sender is CheckBox checkBox)
@@ -230,11 +238,21 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
             Application.Current.Shutdown();
         }
 
+        /// <summary>
+        /// Shows the filtermenu when collapsed and collapses the filtermenu when visible.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Parameters given by the sender.</param>
         private void ClickCheck(object sender, RoutedEventArgs e)
         {
             if (FilterStack.Visibility == Visibility.Visible)
