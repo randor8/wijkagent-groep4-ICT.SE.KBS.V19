@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using WijkagentModels;
+using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
 {
@@ -94,7 +95,8 @@ namespace WijkagentWPF
         public static void ClearFilters()
         {
             _filterSet.Clear();
-
+            AddFilter(CategoryFilterCollection.Instance);
+            CategoryFilterCollection.Instance.ShowAll();
             UpdateStack();
         }
     }

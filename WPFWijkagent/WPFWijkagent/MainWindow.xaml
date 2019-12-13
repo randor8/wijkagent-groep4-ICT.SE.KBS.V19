@@ -43,19 +43,22 @@
                             <TextBlock FontSize="15" VerticalAlignment="Center">Filters</TextBlock>
                         </DockPanel>
                     </Expander.Header>
-                    <Expander Margin="3,0,0,0">
-                        <Expander.Header>
-                            <DockPanel Width="175">
-                                <TextBlock FontSize="13" VerticalAlignment="Center">Categorieën</TextBlock>
-                            </DockPanel>
-                        </Expander.Header>
-                        <Grid x:Name="FilterGrid">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="7*"/>
-                            </Grid.ColumnDefinitions>
-                        </Grid>
-                    </Expander>
+                    <StackPanel>
+                        <Expander Margin="3,0,0,0">
+                            <Expander.Header>
+                                <DockPanel Width="175">
+                                    <TextBlock FontSize="13" VerticalAlignment="Center">Categorieën</TextBlock>
+                                </DockPanel>
+                            </Expander.Header>
+                            <Grid x:Name="FilterGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </Expander>
+                        <Button x:Name="wpfBTNResetFilters" Margin="0,5,5,5" HorizontalAlignment="Right" Content="Reset" Click="wpfBTNResetFilters_Click"/>
+                    </StackPanel>
                 </Expander>
                 <Expander IsExpanded="True">
                     <Expander.Header>

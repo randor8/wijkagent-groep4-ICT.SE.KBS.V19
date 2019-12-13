@@ -1,6 +1,7 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -234,6 +235,30 @@ namespace WijkagentWPF
                 Offence removed = e.RemovedItems[i] as Offence;
                 removed.GetPushpin().Background = MainWindowController.ColorDefault;
             }
+        }
+
+        /// <summary>
+        /// Reset all category checkboxes in the filter expander
+        /// </summary>
+        private void ResetCategoryCheckbox()
+        {
+            foreach (CheckBox item in FilterGrid.Children.OfType<CheckBox>())
+            {
+                item.IsChecked = false;
+            }
+        }
+        /// <summary>
+        /// On click button reset all filters
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void wpfBTNResetFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ResetCategoryCheckbox();
+            FilterList.ClearFilters();
+            FillOffenceList();
+
+
         }
 
         /// <summary>
