@@ -5,6 +5,7 @@ using System.Windows.Media;
 using WijkagentModels;
 using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
+using System.Linq;
 
 namespace WijkagentWPF
 {
@@ -38,7 +39,7 @@ namespace WijkagentWPF
                 category);
 
             Scraper scraper = new Scraper(offence);
-            scraper.GetSocialMediaMessages();
+            scraper.SetSocialMediaMessages();
 
             _offences.Add(offence);
         }
@@ -94,6 +95,25 @@ namespace WijkagentWPF
         {
             _offences = new OffenceController().GetOffences();
             return _offences;
+        }
+
+        /// <summary>
+        /// The method executes a LINQ search on the List items and finds the offencelistItem with the same pin. 
+        /// </summary>
+        /// <returns>The method returns the offence that has the same pin</returns>
+        public static Offence RetrieveOffence(double latitude, double longitude)
+        {
+            Offence o = null;
+            IEnumerable<Offence> offenceQuerry =
+            from OffenceItem in _offences
+            where OffenceItem.LocationID.Latitude == latitude
+            && OffenceItem.LocationID.Longitude == longitude
+            select OffenceItem;
+            foreach (var item in offenceQuerry)
+            {
+                o = item;
+            }
+            return o;
         }
 
         /// <summary>
