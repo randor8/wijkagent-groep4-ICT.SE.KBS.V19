@@ -8,15 +8,6 @@ namespace WijkagentWPF.Filters
     {
         private static CategoryFilterCollection instance;
 
-        private CategoryFilterCollection()
-        {
-            Categories = new Dictionary<CategoryFilter, bool>();
-            foreach (OffenceCategories offenceCategorie in Enum.GetValues(typeof(OffenceCategories)))
-            {
-                Categories.Add(new CategoryFilter(offenceCategorie), false);
-            }
-        }
-
         public static CategoryFilterCollection Instance
         {
             get
@@ -26,6 +17,15 @@ namespace WijkagentWPF.Filters
                     instance = new CategoryFilterCollection();
                 }
                 return instance;
+            }
+        }
+
+        private CategoryFilterCollection()
+        {
+            Categories = new Dictionary<CategoryFilter, bool>();
+            foreach (OffenceCategories offenceCategorie in Enum.GetValues(typeof(OffenceCategories)))
+            {
+                Categories.Add(new CategoryFilter(offenceCategorie), false);
             }
         }
 
