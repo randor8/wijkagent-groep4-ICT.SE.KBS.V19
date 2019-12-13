@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using WijkagentModels;
 using Location = WijkagentModels.Location;
@@ -92,7 +93,7 @@ namespace WijkagentWPF
         /// <returns></returns>
         public static List<Offence> GetOffences()
         {
-            _offences = new OffenceController().GetOffences();
+            _offences = new OffenceController().GetOffences().OrderByDescending(f => f.DateTime).ToList();
             return _offences;
         }
 
