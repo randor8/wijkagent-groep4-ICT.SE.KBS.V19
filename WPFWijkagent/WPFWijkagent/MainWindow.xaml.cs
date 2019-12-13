@@ -6,8 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
-using WijkagentWPF.database;
-using System.Windows.Threading;
 
 namespace WijkagentWPF
 {
@@ -21,20 +19,19 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+            App.LoadSession();
+
             InitializeComponent();
-            SetMapBackground(172, 199, 242);
-            SetZoomBoundaryCheck();
             FillCategoriesCombobox();
             FillOffenceList();
-            wpfMapMain.MouseLeftButtonDown += AddPin;
-        }
 
-        /// <summary>
-        /// Sets the zoom boundary check on the map in the main window.
-        /// </summary>
-        public void SetZoomBoundaryCheck()
-        {
+            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
             wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
+            wpfMapMain.MouseLeftButtonDown += AddPin;
+
+            // Setting map values loaded by the App
+            wpfMapMain.Center = App.MapLocation;
+            wpfMapMain.ZoomLevel = App.MapZoom;
         }
 
         /// <summary>
@@ -49,21 +46,11 @@ namespace WijkagentWPF
             if (wpfMapMain.ZoomLevel < maxZoom)
             {
                 wpfMapMain.ZoomLevel = maxZoom;
-            } else if (wpfMapMain.ZoomLevel > minZoom)
+            }
+            else if (wpfMapMain.ZoomLevel > minZoom)
             {
                 wpfMapMain.ZoomLevel = minZoom;
             }
-        }
-
-        /// <summary>
-        /// Sets the background color of the map to the color composed of the given rgb values.
-        /// </summary>
-        /// <param name="r">Red channel value.</param>
-        /// <param name="g">Green channel value.</param>
-        /// <param name="b">Blue channel value.</param>
-        public void SetMapBackground(byte r, byte g, byte b)
-        {
-            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
         }
 
         /// <summary>
@@ -218,6 +205,7 @@ namespace WijkagentWPF
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            App.SaveSession(wpfMapMain.Center, wpfMapMain.ZoomLevel);
             Application.Current.Shutdown();
         }
     }
