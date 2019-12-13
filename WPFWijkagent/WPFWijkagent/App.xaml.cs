@@ -1,5 +1,4 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
-using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 
