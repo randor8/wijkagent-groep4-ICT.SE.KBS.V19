@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using WijkagentModels;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
+using WijkagentModels;
 
 namespace WijkagentWPF.database
 {
@@ -30,7 +28,7 @@ namespace WijkagentWPF.database
             query.Parameters.Add("@Longitude", System.Data.SqlDbType.Float);
             query.Parameters["@Latitude"].Value = latitude;
             query.Parameters["@Longitude"].Value = longitude;
-            
+
             return _dbContext.ExecuteInsertQuery(query);
         }
 
@@ -44,7 +42,7 @@ namespace WijkagentWPF.database
             SqlCommand query = new SqlCommand("SELECT ID, Latitude, Longitude FROM Location WHERE ID = @ID");
             query.Parameters.Add("@ID", System.Data.SqlDbType.Int);
             query.Parameters["@ID"].Value = ID;
-            List<object[]>  rows = _dbContext.ExecuteSelectQuery(query);
+            List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
 
 
             if (rows.Count == 1)

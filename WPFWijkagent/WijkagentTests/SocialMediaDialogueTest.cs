@@ -1,8 +1,6 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using WijkagentModels;
 using WijkagentWPF;
 using Location = WijkagentModels.Location;
@@ -17,14 +15,14 @@ namespace WijkagentTests
             2,
             new DateTime().ToLocalTime(),
             "een delict..",
-            new Location(0, 52.501127, 6.0789937), 
+            new Location(0, 52.501127, 6.0789937),
             OffenceCategories.Null);
 
         private Offence offence_2 = new Offence(
             3,
             new DateTime().ToLocalTime(),
             "een delict..",
-            new Location(0, 53.504127, 6.0789437), 
+            new Location(0, 53.504127, 6.0789437),
             OffenceCategories.Null);
 
         private Location location = new Location(0, 52.501127, 6.0789937);

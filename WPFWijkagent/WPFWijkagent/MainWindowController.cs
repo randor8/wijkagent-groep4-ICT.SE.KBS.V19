@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Media;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -44,30 +44,12 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Get all offences from a specific category
+        /// Applies all filters contained in the FilterList to the offences.
         /// </summary>
-        /// <param name="categoryFilter"></param>
-        /// <param name="offences"></param>
         /// <returns></returns>
-        public static List<Offence> GetOffencesByCategory(string categoryFilter)
+        public static List<Offence> FilterOffences()
         {
-            List<Offence> filteredOffences = new List<Offence>();
-            if (categoryFilter == "Alles tonen")
-            {
-                return _offences;
-            }
-            else
-            {
-                foreach (Offence offence in _offences)
-                {
-                    if (offence.Category.ToString() == categoryFilter)
-                    {
-                        filteredOffences.Add(offence);
-                    }
-                }
-            }
-
-            return filteredOffences;
+            return FilterList.ApplyFilters(_offences);
         }
 
         public static Pushpin GetPushpin(this Offence value)
