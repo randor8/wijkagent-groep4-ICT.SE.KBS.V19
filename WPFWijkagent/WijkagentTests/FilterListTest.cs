@@ -49,8 +49,8 @@ namespace WijkagentTests
             DateFilter dateFilter1 = new DateFilter(DateTime);
             FilterList.AddFilter(dateFilter);
             FilterList.AddFilter(dateFilter1);
-            Assert.IsTrue(FilterList.GetFilters().Count == 1);
-            Assert.AreEqual(dateFilter, FilterList.GetFilters()[0]);
+            Assert.AreEqual(2, FilterList.GetFilters().Count);
+            Assert.AreEqual(dateFilter, FilterList.GetFilters()[1]);
         }
 
         [Test]
@@ -67,12 +67,12 @@ namespace WijkagentTests
         }
 
         [Test]
-        public void ClearFilters_ListWith2Filters_FilterListIsEmpty()
+        public void ClearFilters_ListWith2Filters_FilterListWithOnlyCategoryFilterCollection()
         {
             FilterList.AddFilter(new DateFilter(DateTime));
             FilterList.AddFilter(new DateFilter(DateTime));
             FilterList.ClearFilters();
-            Assert.IsEmpty(FilterList.GetFilters());
+            Assert.AreEqual(1, FilterList.GetFilters().Count);
         }
 
         [Test]
