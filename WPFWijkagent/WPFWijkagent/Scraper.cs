@@ -37,14 +37,14 @@ namespace WijkagentModels
                 Until = new DateTime(
                     offence.DateTime.Year,
                     offence.DateTime.Month, 
-                    offence.DateTime.Day,
-                    offence.DateTime.Hour + 1,
-                    offence.DateTime.Minute,
-                    offence.DateTime.Second),
+                    offence.DateTime.Day + 1),
                 Since = new DateTime(
                     offence.DateTime.Year,
                     offence.DateTime.Month, 
-                    offence.DateTime.Day - 1)
+                    offence.DateTime.Day,
+                    offence.DateTime.Hour - 1,
+                    offence.DateTime.Minute,
+                    offence.DateTime.Second)
             };
         }
 
