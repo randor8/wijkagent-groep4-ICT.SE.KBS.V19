@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -76,18 +75,19 @@ namespace WijkagentModels
             {
                 if (tweet.Coordinates != null)
                 {
-                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
-                } else
+                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+                }
+                else
                 {
                     location = Offence.LocationID;
                 }
                 SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
                 socialMediaMessageController.SetSocialMediaMessage(
-                    tweet.CreatedAt, 
-                    tweet.Text, 
-                    tweet.CreatedBy.Name, 
-                    tweet.CreatedBy.ScreenName, 
-                    location, 
+                    tweet.CreatedAt,
+                    tweet.Text,
+                    tweet.CreatedBy.Name,
+                    tweet.CreatedBy.ScreenName,
+                    location,
                     Offence.ID);
             }
         }

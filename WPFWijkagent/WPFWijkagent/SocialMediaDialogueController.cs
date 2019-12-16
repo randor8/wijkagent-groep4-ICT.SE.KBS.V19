@@ -1,11 +1,8 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -35,7 +32,7 @@ namespace WijkagentWPF
             Offence o = null;
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in _offenceList
-            where OffenceItem.LocationID.Latitude == Location.Latitude 
+            where OffenceItem.LocationID.Latitude == Location.Latitude
             && OffenceItem.LocationID.Longitude == Location.Longitude
             select OffenceItem;
             foreach (var item in offenceQuerry)

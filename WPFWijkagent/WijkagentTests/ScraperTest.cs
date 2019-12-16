@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 
 namespace WijkagentTests
 {
