@@ -21,12 +21,12 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
             App.LoadSession();
 
             InitializeComponent();
             FillCategoryFiltermenu();
             FillOffenceList();
-            FilterList.AddFilter(CategoryFilterCollection.Instance);
 
             wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
             wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
@@ -114,7 +114,8 @@ namespace WijkagentWPF
                 {
                     Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    IsChecked = App.IsFilterActive(offenceCategories[i].ToString())
                 };
                 checkBox.Checked += CategoryCheckboxToggle;
                 checkBox.Unchecked += CategoryCheckboxToggle;
