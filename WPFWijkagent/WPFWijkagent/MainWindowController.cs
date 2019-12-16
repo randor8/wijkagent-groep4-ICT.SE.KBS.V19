@@ -87,6 +87,23 @@ namespace WijkagentWPF
         };
 
         /// <summary>
+        /// This function returns the Offence associated with the given pushpin.
+        /// </summary>
+        /// <param name="pushpin">the pushpin to search</param>
+        /// <returns>the offence</returns>
+        public static Offence GetOffence(this Pushpin pushpin)
+        {
+            foreach (Offence offence in _pushpins.Keys)
+            {
+                if (_pushpins[offence].Equals(pushpin))
+                {
+                    return offence;
+                }
+            }
+            return null; // This should not be able to happen.
+        }
+
+        /// <summary>
         /// gets all the offences from the db
         /// </summary>
         /// <returns></returns>
