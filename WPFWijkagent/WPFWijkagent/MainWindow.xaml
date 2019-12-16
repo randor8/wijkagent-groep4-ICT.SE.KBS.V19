@@ -57,6 +57,30 @@
                                 </Grid.ColumnDefinitions>
                             </Grid>
                         </Expander>
+                        <Expander Margin="3,0,0,0">
+                            <Expander.Header>
+                                <DockPanel Width="175">
+                                    <TextBlock FontSize="13" VerticalAlignment="Center">Datum</TextBlock>
+                                </DockPanel>
+                            </Expander.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <RadioButton Grid.Column="0" Grid.Row="0" Margin="3, 0, 0, 0">Enkel</RadioButton>
+                                <RadioButton Grid.Column="1" Grid.Row="0" Margin="3, 0, 0, 0">Bereik</RadioButton>
+                                <Label Grid.Column="0" Grid.Row="1">Van</Label>
+                                <DatePicker x:Name="DatePickerFrom" Grid.Column="1" Grid.Row="1"/>
+                                <Label Grid.Column="0" Grid.Row="2">T/m</Label>
+                                <DatePicker x:Name="DatePickerTo" Grid.Column="1" Grid.Row="2"/>
+                            </Grid>
+                        </Expander>
                         <Button x:Name="wpfBTNResetFilters" Margin="0,5,5,5" HorizontalAlignment="Right" Content="Reset" Click="wpfBTNResetFilters_Click"/>
                     </StackPanel>
                 </Expander>
