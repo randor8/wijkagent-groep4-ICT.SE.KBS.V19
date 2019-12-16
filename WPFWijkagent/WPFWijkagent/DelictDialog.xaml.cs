@@ -1,4 +1,5 @@
-﻿using Microsoft.Maps.MapControl.WPF;
+
+using Microsoft.Maps.MapControl.WPF;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using PdfSharp.Pdf;
@@ -13,6 +14,7 @@ using WijkagentModels;
 using WijkagentWPF.database;
 using Location = WijkagentModels.Location;
 
+
 namespace WijkagentWPF
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace WijkagentWPF
     /// </summary>
     public partial class DelictDialog : Window
     {
-        private DelictDialogController _controller;
+        private readonly DelictDialogController _controller;
 
         private Offence _offence;
 
@@ -33,10 +35,10 @@ namespace WijkagentWPF
         public DelictDialog(Pushpin pin, List<Offence> offences)
         {
             InitializeComponent();
-            Location l = new Location(0, pin.Location.Latitude, pin.Location.Longitude);
-            _controller = new DelictDialogController(l, offences);
-            _offence = _controller.RetrieveOffence();
-            _controller.DisplayMessages(_controller.RetrieveOffence(), wpfLVMessages);
+            _controller = new DelictDialogController();
+
+            wpfDelict.DataContext = offence;
+            _controller.DisplayMessages(offence, wpfLVMessages);
         }
 
         public void PrintOffenceFile()

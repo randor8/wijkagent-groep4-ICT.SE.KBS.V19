@@ -25,7 +25,6 @@ namespace WijkagentWPF.database
         /// <returns> returns the ID of the inserted Offence</returns>
         public int SetOffence(DateTime dateTime, string description, Location location, OffenceCategories category)
         {
-
             int locationID = new LocationController().SetLocation(location.Latitude, location.Longitude);
             return SetOffence(dateTime, description, locationID, category);
         }
@@ -132,6 +131,5 @@ namespace WijkagentWPF.database
 
             return offences;
         }
-
     }
 }

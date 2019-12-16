@@ -15,7 +15,6 @@ namespace WijkagentWPF
     public partial class MainWindow : Window
     {
         private bool _addModeActivated = false;
-        DelictDialog social;
 
         public MainWindow()
         {
@@ -75,8 +74,7 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            social = new DelictDialog((Pushpin)sender, MainWindowController.GetOffences());
-            social.Show();
+            new DelictDialog((sender as Pushpin).GetOffence()).Show();
         }
 
         /// <summary>
