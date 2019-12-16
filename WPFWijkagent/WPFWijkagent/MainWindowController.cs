@@ -90,7 +90,7 @@ namespace WijkagentWPF
         /// <summary>
         /// gets all the offences from the db
         /// </summary>
-        /// <returns>List of offences</returns>
+        /// <returns>List of offences ordered by date</returns>
         public static List<Offence> GetOffences()
         {
             _offences = new OffenceController().GetOffences().OrderByDescending(f => f.DateTime).ToList();
