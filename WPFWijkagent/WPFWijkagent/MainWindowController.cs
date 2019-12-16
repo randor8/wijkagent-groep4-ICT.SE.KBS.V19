@@ -71,12 +71,22 @@ namespace WijkagentWPF
             return filteredOffences;
         }
 
+        /// <summary>
+        /// Gets the pushpin of the offence
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Pushpin GetPushpin(this Offence value)
         {
             if (!_pushpins.ContainsKey(value)) _pushpins.Add(value, CreatePushpin(value));
             return _pushpins[value];
         }
 
+        /// <summary>
+        /// Creates a pushpin
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns></returns>
         private static Pushpin CreatePushpin(Offence offence) => new Pushpin
         {
             Location = new Microsoft.Maps.MapControl.WPF.Location
