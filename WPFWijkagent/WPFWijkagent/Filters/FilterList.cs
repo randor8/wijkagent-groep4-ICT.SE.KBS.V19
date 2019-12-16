@@ -4,7 +4,7 @@ using WijkagentWPF.Filters;
 
 namespace WijkagentWPF
 {
-    public sealed class FilterList
+    public static class FilterList
     {
         /// <summary>
         /// Dictionary that holds all filters.
@@ -15,10 +15,6 @@ namespace WijkagentWPF
         /// Stack used to apply the filters from the HashSet.
         /// </summary>
         private static Stack<IFilter> FilterStack { get; set; } = new Stack<IFilter>();
-
-        static FilterList() { }
-
-        private FilterList() { }
 
         /// <summary>
         /// Applies all filters in the filterlist to the list of offences recursively.
