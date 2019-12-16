@@ -8,6 +8,9 @@
 		Closed="Window_Closed"
         Title="MainWindow" Height="450" Width="800">
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="23"/>
 			<RowDefinition Height="1*"/>

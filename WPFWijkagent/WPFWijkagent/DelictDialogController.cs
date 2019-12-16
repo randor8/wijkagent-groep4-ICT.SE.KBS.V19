@@ -9,20 +9,20 @@ using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
-    public class SocialMediaDialogueController
+    public class DelictDialogController
     {
-        private List<Offence> _offenceList;
-        public Location Location { get; set; }
+        private readonly List<Offence> _offenceList;
+        private readonly Location _location;
 
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
         /// </summary>
         /// <param name="pin"></param>
         /// <param name="offenceListItems"></param>
-        public SocialMediaDialogueController(Location location, List<Offence> offences)
+        public DelictDialogController(Location location, List<Offence> offences)
         {
             _offenceList = offences;
-            Location = location;
+            _location = location;
         }
 
         /// <summary>
@@ -31,12 +31,11 @@ namespace WijkagentWPF
         /// <returns>The method returns the offence that has the same pin</returns>
         public Offence RetrieveOffence()
         {
-
             Offence o = null;
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in _offenceList
-            where OffenceItem.LocationID.Latitude == Location.Latitude 
-            && OffenceItem.LocationID.Longitude == Location.Longitude
+            where OffenceItem.LocationID.Latitude == _location.Latitude 
+            && OffenceItem.LocationID.Longitude == _location.Longitude
             select OffenceItem;
             foreach (var item in offenceQuerry)
             {
@@ -50,16 +49,10 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>string</returns>
-        public string DisplayMessages(Offence offence)
+        public void DisplayMessages(Offence offence, System.Windows.Controls.ListView wpfLVMessages)
         {
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            var feed = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID);
-            string display = "";
-            foreach (SocialMediaMessage media in feed)
-            {
-                display += $"\n{media.ToString()}\n ";
-            }
-            return display;
+            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID);
         }
     }
 }

@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 using WijkagentModels;
 
 namespace WijkagentWPF.database
 {
     public class SocialMediaMessageController
     {
-
         private DBContext _dbContext { get; set; }
 
         public SocialMediaMessageController()
