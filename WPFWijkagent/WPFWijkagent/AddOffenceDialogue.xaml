@@ -5,15 +5,18 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="delict toevoegen" Height="217" Width="340">
+        Title="delict toevoegen" Height="284" Width="385">
     <Grid>
-        <Label Content="Categorie" HorizontalAlignment="Left" Margin="28,15,0,0" VerticalAlignment="Top"/>
-        <Label Content="Omschrijving" HorizontalAlignment="Left" Margin="10,46,0,0" VerticalAlignment="Top"/>
-        <Label Content="Datum/tijd" HorizontalAlignment="Left" Margin="22,109,0,0" VerticalAlignment="Top"/>
-		<Button x:Name="wpfBTNToevoegen" Content="toevoegen" HorizontalAlignment="Left" Margin="256,147,0,0" VerticalAlignment="Top" Click="wpfBTNToevoegen_Click"/>
-        <ComboBox x:Name="wpfCBCategorie" HorizontalAlignment="Left" Margin="116,19,0,0" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="wpfTBOmschrijving" HorizontalAlignment="Left" Margin="116,46,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="201" Height="64" Grid.ColumnSpan="2"/>
-        <wpfx:TimePicker x:Name="wpfTPTimePicker" Height="24" HorizontalAlignment="Left" Margin="239,115,0,0" VerticalAlignment="Top" Width="78" />
-        <DatePicker x:Name="wpfDBDatePicker" HorizontalAlignment="Left" Margin="116,115,0,0" VerticalAlignment="Top" Width="123"/>
+        <Label Content="Categorie" HorizontalAlignment="Left" Margin="52,44,0,0" VerticalAlignment="Top"/>
+        <Label Content="Omschrijving" HorizontalAlignment="Left" Margin="53,92,0,0" VerticalAlignment="Top"/>
+        <Label Content="Datum/tijd" HorizontalAlignment="Left" Margin="53,189,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="wpfBTNToevoegen" Content="toevoegen" HorizontalAlignment="Left" Margin="264,233,0,0" VerticalAlignment="Top" Click="wpfBTNToevoegen_Click" Width="78"/>
+        <ComboBox x:Name="wpfCBCategorie" HorizontalAlignment="Left" Margin="141,46,0,0" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="wpfTBOmschrijving" HorizontalAlignment="Left" Margin="141,92,0,0" Text="" TextWrapping="Wrap" VerticalAlignment="Top" Width="201" Height="64"/>
+        <wpfx:TimePicker x:Name="wpfTPTimePicker" Height="24" HorizontalAlignment="Left" Margin="264,189,0,0" VerticalAlignment="Top" Width="78" />
+        <DatePicker x:Name="wpfDBDatePicker" HorizontalAlignment="Left" Margin="141,189,0,0" VerticalAlignment="Top" Width="123"/>
+        <Label x:Name="wpfLErrorMsg" Content="Controleer de ingevulde gegevens alstublieft." HorizontalAlignment="Left" Margin="54,13,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="wpfLErrorMsgOmschrijving" Content="Vul alstublieft een omschijving in." HorizontalAlignment="Left" Margin="138,66,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="wpfLErrorMsgDatumTijd" Content="Selecteer een datum/tijd in het verleden." HorizontalAlignment="Left" Margin="137,161,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
