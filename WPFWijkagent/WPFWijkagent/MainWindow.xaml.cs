@@ -21,21 +21,20 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
+            App.LoadSession();
+
             InitializeComponent();
-            SetMapBackground(172, 199, 242);
-            SetZoomBoundaryCheck();
             FillCategoryFiltermenu();
             FillOffenceList();
-            wpfMapMain.MouseLeftButtonDown += AddPin;
-            FilterList.AddFilter(CategoryFilterCollection.Instance);
-        }
 
-        /// <summary>
-        /// Sets the zoom boundary check on the map in the main window.
-        /// </summary>
-        public void SetZoomBoundaryCheck()
-        {
+            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
             wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
+            wpfMapMain.MouseLeftButtonDown += AddPin;
+
+            // Setting map values loaded by the App
+            wpfMapMain.Center = App.MapLocation;
+            wpfMapMain.ZoomLevel = App.MapZoom;
         }
 
         /// <summary>
@@ -55,17 +54,6 @@ namespace WijkagentWPF
             {
                 wpfMapMain.ZoomLevel = minZoom;
             }
-        }
-
-        /// <summary>
-        /// Sets the background color of the map to the color composed of the given rgb values.
-        /// </summary>
-        /// <param name="r">Red channel value.</param>
-        /// <param name="g">Green channel value.</param>
-        /// <param name="b">Blue channel value.</param>
-        public void SetMapBackground(byte r, byte g, byte b)
-        {
-            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(r, g, b));
         }
 
         /// <summary>
@@ -126,7 +114,8 @@ namespace WijkagentWPF
                 {
                     Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    IsChecked = App.IsFilterActive(offenceCategories[i].ToString())
                 };
                 checkBox.Checked += CategoryCheckboxToggle;
                 checkBox.Unchecked += CategoryCheckboxToggle;
@@ -268,6 +257,7 @@ namespace WijkagentWPF
         /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
+            App.SaveSession(wpfMapMain.Center, wpfMapMain.ZoomLevel);
             Application.Current.Shutdown();
         }
     }
