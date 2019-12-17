@@ -11,8 +11,9 @@ namespace WijkagentModels
         public string Handle { get; set; }
         public virtual Location LocationID { get; set; }
         public Offence OffenceID { get; set; }
+        public long TwitterID { get; set; }
 
-        public SocialMediaMessage(int id, DateTime dateTime, string message, string user, string handle, Location location, Offence offence = null)
+        public SocialMediaMessage(int id, DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null)
         {
             ID = id;
             DateTime = dateTime;
@@ -21,11 +22,12 @@ namespace WijkagentModels
             Handle = handle;
             LocationID = location;
             OffenceID = offence;
+            TwitterID = twitterID;
         }
 
         public override string ToString()
         {
-            return $"User: {User}\nHandle: {Handle}\nContent: {Message}\nDate: {DateTime}";
+            return $"\ngebruiker naam: {User}\ntwitter naam: {Handle}\nomschrijving: {Message}\ndatum en tijd: {DateTime.ToString("MM/dd/yyyy H:mm")} ";
         }
     }
 }
