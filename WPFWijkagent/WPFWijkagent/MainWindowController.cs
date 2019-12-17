@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.database;
@@ -52,12 +53,22 @@ namespace WijkagentWPF
             return FilterList.ApplyFilters(_offences);
         }
 
+        /// <summary>
+        /// Gets the pushpin of the offence
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Pushpin GetPushpin(this Offence value)
         {
             if (!_pushpins.ContainsKey(value)) _pushpins.Add(value, CreatePushpin(value));
             return _pushpins[value];
         }
 
+        /// <summary>
+        /// Creates a pushpin
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns></returns>
         private static Pushpin CreatePushpin(Offence offence) => new Pushpin
         {
             Location = new Microsoft.Maps.MapControl.WPF.Location
@@ -71,10 +82,10 @@ namespace WijkagentWPF
         /// <summary>
         /// gets all the offences from the db
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of offences ordered by date descending</returns>
         public static List<Offence> GetOffences()
         {
-            _offences = new OffenceController().GetOffences();
+            _offences = new OffenceController().GetOffences().OrderByDescending(f => f.DateTime).ToList();
             return _offences;
         }
 
