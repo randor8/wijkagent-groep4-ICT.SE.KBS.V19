@@ -83,7 +83,7 @@ namespace WijkagentWPF
                 of.GetPushpin().MouseDown += Pushpin_MouseDown;
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-            offences = offences.OrderByDescending(x => x.DateTime).ToList();
+
             wpfLBSelection.ItemsSource = offences;
             wpfLBSelection.Items.Refresh();
         }
