@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using WijkagentModels;
+﻿using WijkagentModels;
 using WijkagentWPF.database;
-using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -18,7 +15,6 @@ namespace WijkagentWPF
         {
             _offence = offence;
         }
-
 
         /// <summary>
         /// This method creates a single string from all elements within the list of found SocialMediaItems 
