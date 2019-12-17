@@ -27,21 +27,23 @@ namespace WijkagentWPF
         private Offence _offence;
 
         string path = Path.GetTempPath() + "PrintDelict.pdf";
+        private System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
+        private PrintDialog pDialog = new PrintDialog();
 
         private Font printFont;
         private StreamReader streamToPrint;
         static string filePath;
 
-        public DelictDialog(Pushpin pin, List<Offence> offences)
+        public DelictDialog(Offence offence)
         {
             InitializeComponent();
             _controller = new DelictDialogController();
-
+            _offence = offence;
             wpfDelict.DataContext = offence;
             _controller.DisplayMessages(offence, wpfLVMessages);
         }
 
-        public void PrintOffenceFile()
+        public void PrintOffenceFile(string printer)
         {
             string text = "";
             if (File.Exists(path))
@@ -49,7 +51,7 @@ namespace WijkagentWPF
                 File.Delete(path);
             }
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            socialMediaMessageController.GetOffenceSocialMediaMessages(_controller.RetrieveOffence().ID).ForEach(x => text += socialMediaMessageController.GetSocialMediaMessage(x.ID) + "\n");
+            socialMediaMessageController.GetOffenceSocialMediaMessages(_offence.ID).ForEach(x => text += socialMediaMessageController.GetSocialMediaMessage(x.ID) + "\n");
 
             // Create a new PDF document
             PdfDocument document = new PdfDocument();
@@ -75,7 +77,7 @@ namespace WijkagentWPF
             document.Save(path);
             // ...and start a viewer.
 
-            Printing();
+            Printing(printer);
 
         }
 
@@ -111,8 +113,9 @@ namespace WijkagentWPF
         }
 
         // Print the file.
-        public void Printing()
+        public void Printing(string printer)
         {
+
             try
             {
 
@@ -120,9 +123,9 @@ namespace WijkagentWPF
                 try
                 {
                     printFont = new Font("Arial", 10);
-                    PrintDocument pd = new PrintDocument();
+
                     pd.PrintPage += new PrintPageEventHandler(pd_PrintPage);
-                    /*pd.PrinterSettings.PrinterName = printer;*/
+                    pd.PrinterSettings.PrinterName = printer;
                     // Print the document.
                     pd.Print();
                 }
@@ -140,17 +143,17 @@ namespace WijkagentWPF
         private void wpfBPrint_Click(object sender, RoutedEventArgs e)
         {
             // Create the print dialog object and set options
-            PrintDialog pDialog = new PrintDialog();
+            
+            PrinterSettings pSettings = new PrinterSettings();
             pDialog.PageRangeSelection = PageRangeSelection.AllPages;
             pDialog.UserPageRangeEnabled = true;
 
             // Display the dialog. This returns true if the user presses the Print button.
             Nullable<Boolean> print = pDialog.ShowDialog();
-            /*var settings = pDialog.Printer*/
+            //var settings = pDialog.PrinterSettings.PrinterName;
             if (print == true)
             {
-                
-                PrintOffenceFile();
+                PrintOffenceFile(pSettings.PrinterName);
             }
             
         }

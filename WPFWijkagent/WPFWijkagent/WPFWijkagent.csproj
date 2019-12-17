@@ -9,6 +9,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <COMReference Include="{215d64d2-031c-33c7-96e3-61794cd1ee61}">
+      <Guid>215d64d2-031c-33c7-96e3-61794cd1ee61</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>4</VersionMinor>
+      <WrapperTool>tlbimp</WrapperTool>
+    </COMReference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="PdfSharp" Version="1.50.5147" />
     <PackageReference Include="SSH.NET" Version="2016.1.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
