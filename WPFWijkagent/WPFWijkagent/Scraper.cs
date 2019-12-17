@@ -73,7 +73,7 @@ namespace WijkagentModels
         /// <summary>
         /// Checks and sets a specific value to the DB and adds a Social Media Message
         /// </summary>
-        /// <param name="tweet"></param>
+        /// <param name="tweet">tweetenvi tweet object</param>
         private void SetSocialMediaMessage(ITweet tweet)
         {
             int locationId = Offence.LocationID.ID;
