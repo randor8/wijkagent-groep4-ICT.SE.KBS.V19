@@ -29,7 +29,7 @@ namespace WijkagentModels
             Offence = offence;
             _searchParameters = new SearchTweetsParameters(" ")
             {
-                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
@@ -75,11 +75,11 @@ namespace WijkagentModels
             {
                 if (tweet.Coordinates != null)
                 {
-                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
                 }
                 else
                 {
-                    location = Offence.LocationID;
+                    location = Offence.Location;
                 }
                 SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
                 socialMediaMessageController.SetSocialMediaMessage(

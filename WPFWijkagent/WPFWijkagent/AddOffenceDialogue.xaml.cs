@@ -15,18 +15,16 @@ namespace WijkagentWPF
 
 
         //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
-        public AddOffenceDialogue()
+        public AddOffenceDialogue(Location location)
         {
+            Location = location;
             //Initializes itself (the Window)
             InitializeComponent();
 
             //add all enum categories to ComboBox so they can be selected
             InitializeCategories();
 
-            //hide error messages
-            wpfLErrorMsg.Visibility = Visibility.Hidden;
-            wpfLErrorMsg.Visibility = Visibility.Hidden;
-            wpfLErrorMsg.Visibility = Visibility.Hidden;
+            ErrorMessagesVisibility();
         }
 
 
@@ -43,6 +41,20 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// sets visibility for the error messages
+        /// hides all messages by default
+        /// </summary>
+        /// <param name="omschrijving">hide omschijving error field?</param>
+        /// <param name="datTime">hide datetime error field?</param>
+        /// <param name="general">hide general error field?</param>
+        private void ErrorMessagesVisibility(bool description = true, bool datTime = true, bool general = true)
+        {
+            wpfLErrorMsg.Visibility = general ? Visibility.Hidden : Visibility.Visible;
+            wpfLErrorMsgDatumTijd.Visibility = datTime ? Visibility.Hidden : Visibility.Visible;
+            wpfLErrorMsgOmschrijving.Visibility = description ? Visibility.Hidden : Visibility.Visible;
+        }
+
 
         /// <summary>
         /// checks for validity of the submitted form and submits it if valid
@@ -51,47 +63,36 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         private void wpfBTNToevoegen_Click(object sender, RoutedEventArgs e)
         {
-            //reset all fields
-            wpfLErrorMsg.Visibility = Visibility.Hidden;
-            wpfLErrorMsg.Visibility = Visibility.Hidden;
-            wpfLErrorMsg.Visibility = Visibility.Hidden;
+            bool descriptionPresent = wpfTBOmschrijving.Text.Length > 0;
+            OffenceCategories offenceCategories = OffenceCategories.Null;
+            
+            ErrorMessagesVisibility();
 
+            //is datetime filled in?
             if (wpfDBDatePicker.SelectedDate.HasValue && wpfTPTimePicker.Value.HasValue)
             {
-                DateTime date = new DateTime(
-                    wpfDBDatePicker.SelectedDate.Value.Year,
-                    wpfDBDatePicker.SelectedDate.Value.Month,
-                    wpfDBDatePicker.SelectedDate.Value.Day,
-                    wpfTPTimePicker.Value.Value.Hour,
-                    wpfTPTimePicker.Value.Value.Minute,
-                    wpfTPTimePicker.Value.Value.Second,
-                    wpfTPTimePicker.Value.Value.Millisecond);
-                OffenceCategories offenceCategories = OffenceCategories.Null;
+                DateTime date = wpfDBDatePicker.SelectedDate.Value,
+                         time = wpfTPTimePicker.Value.Value,
+                         dateTime = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
+                bool dateValid = dateTime != null && dateTime < DateTime.Now;
 
-                //is everything valid?
-                if (date != null && date < DateTime.Now && Location != null && wpfTBOmschrijving.Text.Length <= 0)
+                //is datetime and 'omschrijving' valid?
+                if (dateValid && descriptionPresent)
                 {
                     //set category if selected
                     if (wpfCBCategorie.SelectedItem != null)
                     {
                         offenceCategories = (OffenceCategories)wpfCBCategorie.SelectedItem;
                     }
-                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, offenceCategories, date, Location);
+                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, offenceCategories, dateTime, Location);
                     this.Close();
 
                 } else {
-                    //display needed errors
-                    wpfLErrorMsg.Visibility = Visibility.Visible;
-                    
-                    if (date == null || date > DateTime.Now && Location != null)
-                    {
-                        wpfLErrorMsgDatumTijd.Visibility = Visibility.Visible;
-                    }
-                    if (wpfTBOmschrijving.Text.Length <= 0)
-                    {
-                        wpfLErrorMsgOmschrijving.Visibility = Visibility.Visible;
-                    }
+                    ErrorMessagesVisibility(descriptionPresent, dateValid, false);
                 }
+            } else
+            {
+                ErrorMessagesVisibility(descriptionPresent, false, false);
             }
         }
     }
