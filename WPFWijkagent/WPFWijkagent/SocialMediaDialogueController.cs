@@ -1,11 +1,8 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {

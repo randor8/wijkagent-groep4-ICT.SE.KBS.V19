@@ -1,9 +1,9 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
 using System.Linq;
 
@@ -45,38 +45,30 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Get all offences from a specific category
+        /// Applies all filters contained in the FilterList to the offences.
         /// </summary>
-        /// <param name="categoryFilter"></param>
-        /// <param name="offences"></param>
         /// <returns></returns>
-        public static List<Offence> GetOffencesByCategory(string categoryFilter)
+        public static List<Offence> FilterOffences()
         {
-            List<Offence> filteredOffences = new List<Offence>();
-            if (categoryFilter == "Alles tonen")
-            {
-                return _offences;
-            }
-            else
-            {
-                foreach (Offence offence in _offences)
-                {
-                    if (offence.Category.ToString() == categoryFilter)
-                    {
-                        filteredOffences.Add(offence);
-                    }
-                }
-            }
-
-            return filteredOffences;
+            return FilterList.ApplyFilters(_offences);
         }
 
+        /// <summary>
+        /// Gets the pushpin of the offence
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Pushpin GetPushpin(this Offence value)
         {
             if (!_pushpins.ContainsKey(value)) _pushpins.Add(value, CreatePushpin(value));
             return _pushpins[value];
         }
 
+        /// <summary>
+        /// Creates a pushpin
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns></returns>
         private static Pushpin CreatePushpin(Offence offence) => new Pushpin
         {
             Location = new Microsoft.Maps.MapControl.WPF.Location
@@ -90,10 +82,11 @@ namespace WijkagentWPF
         /// <summary>
         /// gets all the offences from the db
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of offences ordered by date descending</returns>
         public static List<Offence> GetOffences()
         {
             _offences = new OffenceController().GetOffences();
+
             return _offences;
         }
 
