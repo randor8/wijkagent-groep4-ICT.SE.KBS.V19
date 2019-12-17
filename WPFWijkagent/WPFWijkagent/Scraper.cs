@@ -36,7 +36,7 @@ namespace WijkagentModels
                 Until = new DateTime(
                     offence.DateTime.Year,
                     offence.DateTime.Month, 
-                    offence.DateTime.Day+1),
+                    offence.DateTime.Day + 1),
                 Since = new DateTime(
                     offence.DateTime.Year,
                     offence.DateTime.Month, 
