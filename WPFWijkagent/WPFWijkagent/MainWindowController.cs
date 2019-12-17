@@ -85,7 +85,8 @@ namespace WijkagentWPF
         /// <returns>List of offences ordered by date descending</returns>
         public static List<Offence> GetOffences()
         {
-            _offences = new OffenceController().GetOffences().OrderByDescending(f => f.DateTime).ToList();
+            _offences = new OffenceController().GetOffences();
+
             return _offences;
         }
 
