@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 using WijkagentModels;
 
 namespace WijkagentWPF.database
@@ -113,7 +112,7 @@ namespace WijkagentWPF.database
             }
             return null;
         }
-        
+
         /// <summary>
         /// gets the specified SocialMediaMessages associated to the offence from the db
         /// </summary>
