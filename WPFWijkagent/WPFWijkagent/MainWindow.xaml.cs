@@ -255,26 +255,100 @@ namespace WijkagentWPF
         private void wpfBTNResetFilters_Click(object sender, RoutedEventArgs e)
         {
             ResetCategoryCheckbox();
+            DatePickerSingle.SelectedDate = null;
+            DatePickerFrom.SelectedDate = null;
+            DatePickerTo.SelectedDate = null;
             FilterList.ClearFilters();
             FillOffenceList();
         }
 
-        private void FilterOnDate(object sender, RoutedEventArgs e)
+        private void ToggleDateFilter(object sender, RoutedEventArgs e)
         {
-            if (DateRangePanel != null && SingleDatePanel != null)
+            if (sender is RadioButton radioButton)
             {
-                DateRangePanel.Visibility = Visibility.Collapsed;
-                SingleDatePanel.Visibility = Visibility.Visible;
+                Visibility singleDateVisibility;
+                Visibility dateRangeVisiblity;
+                if (radioButton.Name.Equals("SingleDate"))
+                {
+                    singleDateVisibility = Visibility.Visible;
+                    dateRangeVisiblity = Visibility.Collapsed;
+
+                    FilterList.RemoveFilter($"{typeof(DateRangeFilter)}");
+                    AddSingleDateFilter(DatePickerSingle);
+                } else
+                {
+                    singleDateVisibility = Visibility.Collapsed;
+                    dateRangeVisiblity = Visibility.Visible;
+                    
+                    FilterList.RemoveFilter($"{typeof(DateFilter)}");
+                    AddDateRangeFilter(DatePickerFrom, DatePickerTo);
+                }
+                if (DateRangePanel != null && SingleDatePanel != null)
+                {
+                    SingleDatePanel.Visibility = singleDateVisibility;
+                    DateRangePanel.Visibility = dateRangeVisiblity;
+                }
+                if (wpfLBSelection != null)
+                {
+                    FillOffenceList();
+                }
             }
         }
 
-        private void FilterOnDateRange(object sender, RoutedEventArgs e)
+        private void DateRangeFilterChanged(object sender, RoutedEventArgs e)
         {
-            if (SingleDatePanel != null && DateRangePanel != null)
+            if (sender is DatePicker from)
             {
-                SingleDatePanel.Visibility = Visibility.Collapsed;
-                DateRangePanel.Visibility = Visibility.Visible;
+                DatePicker to;
+                if (from.Name.Equals("DatePickerFrom"))
+                {
+                    to = DatePickerTo;
+                } else
+                {
+                    to = DatePickerFrom;
+                    from = DatePickerTo;
+                }
+                if (AddDateRangeFilter(from, to))
+                {
+                    FillOffenceList();
+                }
             }
+        }
+
+        private bool AddDateRangeFilter(DatePicker DatePickerFrom, DatePicker DatePickerTo)
+        {
+            if (DatePickerFrom != null && DatePickerFrom.SelectedDate.HasValue && DatePickerTo != null && DatePickerTo.SelectedDate.HasValue)
+            {
+                DateTime DateFrom = new DateTime(DatePickerFrom.SelectedDate.Value.Year, DatePickerFrom.SelectedDate.Value.Month, DatePickerFrom.SelectedDate.Value.Day);
+                DateTime DateTo = new DateTime(DatePickerTo.SelectedDate.Value.Year, DatePickerTo.SelectedDate.Value.Month, DatePickerTo.SelectedDate.Value.Day);
+                DateRangeFilter filter = new DateRangeFilter(DateFrom, DateTo);
+                FilterList.AddFilter(filter);
+                return true;
+            }
+            return false;
+        }
+
+        private void SingleDateFilterChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is DatePicker datePicker)
+            {
+                if (AddSingleDateFilter(datePicker))
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        private bool AddSingleDateFilter(DatePicker datePicker)
+        {
+            if (datePicker != null && datePicker.SelectedDate.HasValue)
+            {
+                DateTime date = new DateTime(datePicker.SelectedDate.Value.Year, datePicker.SelectedDate.Value.Month, datePicker.SelectedDate.Value.Day);
+                DateFilter filter = new DateFilter(date);
+                FilterList.AddFilter(filter);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
