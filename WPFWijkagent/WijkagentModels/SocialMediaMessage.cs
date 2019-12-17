@@ -27,7 +27,7 @@ namespace WijkagentModels
 
         public override string ToString()
         {
-            return $"\ngebruiker naam: {User}\ntwitter naam: {Handle}\nomschrijving: {Message}\ndatum en tijd: {DateTime.ToString("MM/dd/yyyy H:mm")} ";
+            return $"\ngebruiker naam: {User}\ntwitter naam: {Handle}\nomschrijving: {Message}\ndatum en tijd: {DateTime.ToString("dd/MM/yyyy H:mm")} ";
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.database;
 using System.Linq;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
