@@ -63,23 +63,34 @@
                                     <TextBlock FontSize="13" VerticalAlignment="Center">Datum</TextBlock>
                                 </DockPanel>
                             </Expander.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                </Grid.RowDefinitions>
-                                <RadioButton Grid.Column="0" Grid.Row="0" Margin="3, 0, 0, 0">Enkel</RadioButton>
-                                <RadioButton Grid.Column="1" Grid.Row="0" Margin="3, 0, 0, 0">Bereik</RadioButton>
-                                <Label Grid.Column="0" Grid.Row="1">Van</Label>
-                                <DatePicker x:Name="DatePickerFrom" Grid.Column="1" Grid.Row="1"/>
-                                <Label Grid.Column="0" Grid.Row="2">T/m</Label>
-                                <DatePicker x:Name="DatePickerTo" Grid.Column="1" Grid.Row="2"/>
-                            </Grid>
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                    <RadioButton Checked="FilterOnDate" GroupName="DateRadioButtons" Margin="3, 0, 0, 0">Enkel</RadioButton>
+                                    <RadioButton Checked="FilterOnDateRange" GroupName="DateRadioButtons" IsChecked="True" Margin="3, 0, 0, 0">Bereik</RadioButton>
+                                </StackPanel>
+                                <Grid x:Name="SingleDatePanel" Visibility="Collapsed">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0">Op</Label>
+                                    <DatePicker x:Name="DatePickerSingle" Grid.Column="1"/>
+                                </Grid>
+                                <Grid x:Name="DateRangePanel">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0">Van</Label>
+                                    <DatePicker x:Name="DatePickerFrom" Grid.Column="1" Grid.Row="0"/>
+                                    <Label Grid.Column="0" Grid.Row="1">T/m</Label>
+                                    <DatePicker x:Name="DatePickerTo" Grid.Column="1" Grid.Row="1"/>
+                                </Grid>
+                            </DockPanel>
                         </Expander>
                         <Button x:Name="wpfBTNResetFilters" Margin="0,5,5,5" HorizontalAlignment="Right" Content="Reset" Click="wpfBTNResetFilters_Click"/>
                     </StackPanel>

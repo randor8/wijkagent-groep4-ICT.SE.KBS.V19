@@ -257,8 +257,24 @@ namespace WijkagentWPF
             ResetCategoryCheckbox();
             FilterList.ClearFilters();
             FillOffenceList();
+        }
 
+        private void FilterOnDate(object sender, RoutedEventArgs e)
+        {
+            if (DateRangePanel != null && SingleDatePanel != null)
+            {
+                DateRangePanel.Visibility = Visibility.Collapsed;
+                SingleDatePanel.Visibility = Visibility.Visible;
+            }
+        }
 
+        private void FilterOnDateRange(object sender, RoutedEventArgs e)
+        {
+            if (SingleDatePanel != null && DateRangePanel != null)
+            {
+                SingleDatePanel.Visibility = Visibility.Collapsed;
+                DateRangePanel.Visibility = Visibility.Visible;
+            }
         }
 
         /// <summary>
