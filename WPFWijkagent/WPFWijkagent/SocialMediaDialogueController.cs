@@ -1,10 +1,4 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using WijkagentModels;
-using Location = WijkagentModels.Location;
+﻿using WijkagentModels;
 using WijkagentWPF.database;
 
 namespace WijkagentWPF
@@ -21,7 +15,6 @@ namespace WijkagentWPF
         {
             _offence = offence;
         }
-
 
         /// <summary>
         /// This method creates a single string from all elements within the list of found SocialMediaItems 
