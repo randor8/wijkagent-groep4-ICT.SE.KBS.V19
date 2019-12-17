@@ -17,6 +17,8 @@ namespace WijkagentModels
 
         private SearchTweetsParameters _searchParameters;
 
+        private SearchTweetsParameters _witnessSearch;
+
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
         private static readonly string customerKey = "qwR0YaAerXPeXtrT99scdSnU1";
@@ -30,12 +32,18 @@ namespace WijkagentModels
             Offence = offence;
             _searchParameters = new SearchTweetsParameters(" ")
             {
-                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
                 Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day - 1)
             };
+        }
+
+        public void WitnessScraper(Offence offence)
+        {
+            string hashtag = "Delict" + offence.ID.ToString();
+            _witnessSearch = new SearchTweetsParameters(hashtag);
         }
 
         // containing Test Methods to test network Connectivity
@@ -76,19 +84,53 @@ namespace WijkagentModels
             {
                 if (tweet.Coordinates != null)
                 {
-                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
+                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
                 } else
                 {
-                    location = Offence.LocationID;
+                    location = Offence.Location;
                 }
                 SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
                 socialMediaMessageController.SetSocialMediaMessage(
+                    new SocialMediaMessage(
                     tweet.CreatedAt, 
                     tweet.Text, 
                     tweet.CreatedBy.Name, 
                     tweet.CreatedBy.ScreenName, 
                     location, 
-                    Offence.ID);
+                    Offence)
+                    );
+            }
+        }
+
+        /// <summary>
+        /// Gets the tweets with the hashtag for that offence
+        /// </summary>
+        public void GetWitnessMessages()
+        {
+            Connect();
+            Location location;
+            var tweets = Search.SearchTweets(_witnessSearch);
+            foreach (var tweet in tweets)
+            {
+                if (tweet.Coordinates != null)
+                {
+                    location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+                }
+                else
+                {
+                    location = Offence.Location;
+                }
+                SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+                socialMediaMessageController.SetSocialMediaMessage(
+                    new SocialMediaMessage(
+                    tweet.CreatedAt,
+                    tweet.Text,
+                    tweet.CreatedBy.Name,
+                    tweet.CreatedBy.ScreenName,
+                    location,
+                    Offence,
+                    1)
+                    );
             }
         }
     }

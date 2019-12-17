@@ -15,37 +15,25 @@ namespace WijkagentWPF.database
         }
 
         /// <summary>
-        /// inserts the socialmedia message and location in the db
-        /// </summary>
-        /// <param name="dateTime">datetime for the media message</param>
-        /// <param name="message">media 'message' part</param>
-        /// <param name="user">media message username</param>
-        /// <param name="handle">media message hande (@ name)</param>
-        /// <param name="location">location for this message</param>
-        /// <param name="offenceID">associated id</param>
-        /// <returns>returns the inserted id that has been added</returns>
-        public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, int offenceID)
-        {
-            int locationID = new LocationController().SetLocation(location.Latitude, location.Longitude);
-            return SetSocialMediaMessage(dateTime, message, user, handle, locationID, offenceID);
-        }
-
-        /// <summary>
         /// inserts the socialmedia message in the db
         /// </summary>
-        /// <param name="dateTime">datetime for the media message</param>
-        /// <param name="message">media 'message' part</param>
-        /// <param name="user">media message username</param>
-        /// <param name="handle">media message hande (@ name)</param>
-        /// <param name="locationID">locationID for this message</param>
-        /// <param name="offenceID">associated id</param>
+        /// <param name="socialMediaMessage">SocialMediaMessage object</param>
         /// <returns>returns the inserted id that has been added</returns>
-        public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, int locationID, int offenceID)
+        public int SetSocialMediaMessage(SocialMediaMessage socialMediaMessage)
         {
+            //when no location id reference is present.
+            if (socialMediaMessage.Location.ID == 0)
+            {
+                socialMediaMessage.Location.ID = new LocationController().SetLocation(
+                    new Location(
+                    socialMediaMessage.Location.Latitude,
+                    socialMediaMessage.Location.Longitude));
+            }
+
             SqlCommand query = new SqlCommand("" +
-                "INSERT INTO SocialMediaMessage (DateTime, Message, Username, Handle, locationID, OffenceID) " +
+                "INSERT INTO SocialMediaMessage (DateTime, Message, Username, Handle, locationID, MediaType, OffenceID) " +
                 "OUTPUT INSERTED.ID " +
-                "VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID)");
+                "VALUES(@DateTime, @message, @user, @handle, @LocationID, @MediaType, @OffenceID)");
 
             //prepare values in statement 
             query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
@@ -54,12 +42,15 @@ namespace WijkagentWPF.database
             query.Parameters.Add("@handle", System.Data.SqlDbType.VarChar);
             query.Parameters.Add("@LocationID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
-            query.Parameters["@DateTime"].Value = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            query.Parameters["@message"].Value = message;
-            query.Parameters["@user"].Value = user;
-            query.Parameters["@handle"].Value = handle;
-            query.Parameters["@LocationID"].Value = locationID;
-            query.Parameters["@OffenceID"].Value = offenceID;
+            query.Parameters.Add("@MediaType", System.Data.SqlDbType.Int);
+
+            query.Parameters["@DateTime"].Value = socialMediaMessage.DateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            query.Parameters["@message"].Value = socialMediaMessage.Message;
+            query.Parameters["@user"].Value = socialMediaMessage.User;
+            query.Parameters["@handle"].Value = socialMediaMessage.Handle;
+            query.Parameters["@LocationID"].Value = socialMediaMessage.Location.ID;
+            query.Parameters["@OffenceID"].Value = socialMediaMessage.Offence.ID;
+            query.Parameters["@MediaType"].Value = socialMediaMessage.Type;
 
             return _dbContext.ExecuteInsertQuery(query);
         }
@@ -83,13 +74,13 @@ namespace WijkagentWPF.database
             int.TryParse(dateTimeStrings[5], out int ss);
 
             return new SocialMediaMessage(
-                (int)socialMediaMessageData[0],
                 new DateTime(yyyy, mm, dd, hh, min, ss),
                 socialMediaMessageData[2].ToString(),
                 socialMediaMessageData[3].ToString(),
                 socialMediaMessageData[4].ToString(),
                 new LocationController().GetLocation((int)socialMediaMessageData[5]),
-                new OffenceController().GetOffence((int)socialMediaMessageData[6]));
+                new OffenceController().GetOffence((int)socialMediaMessageData[6]),
+                (int)socialMediaMessageData[0]);
         }
 
         /// <summary>

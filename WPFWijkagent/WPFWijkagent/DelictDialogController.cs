@@ -34,8 +34,8 @@ namespace WijkagentWPF
             Offence o = null;
             IEnumerable<Offence> offenceQuerry =
             from OffenceItem in _offenceList
-            where OffenceItem.LocationID.Latitude == _location.Latitude 
-            && OffenceItem.LocationID.Longitude == _location.Longitude
+            where OffenceItem.Location.Latitude == _location.Latitude 
+            && OffenceItem.Location.Longitude == _location.Longitude
             select OffenceItem;
             foreach (var item in offenceQuerry)
             {
