@@ -72,7 +72,7 @@ namespace WijkagentWPF
                 of.GetPushpin().MouseDown += Pushpin_MouseDown;
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-
+            offences = offences.OrderByDescending(x => x.DateTime).ToList();
             wpfLBSelection.ItemsSource = offences;
             wpfLBSelection.Items.Refresh();
         }
@@ -84,7 +84,11 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            social = new SocialMediaDialogue((Pushpin)sender, MainWindowController.GetOffences());
+            Pushpin pin = (Pushpin)sender;
+            social = new SocialMediaDialogue( 
+                MainWindowController.RetrieveOffence(
+                    pin.Location.Latitude, 
+                    pin.Location.Longitude));
             social.Show();
         }
 
