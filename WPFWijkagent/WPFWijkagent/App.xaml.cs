@@ -13,11 +13,14 @@ namespace WijkagentWPF
         private static Dictionary<string, ASession> _sessions = new Dictionary<string, ASession>();
         public const string SessionFile = "./Session.cfg";
 
+        /// <summary>
+        /// Stores a session object combined with its key.
+        /// </summary>
+        /// <param name="session">The ASession to be stored.</param>
         public static void RegisterSession(ASession session) => _sessions.Add(session.Key, session);
 
         /// <summary>
-        /// This function loads the configuration file and reads it contents.
-        /// It loops over all lines and checks if the keys are recognised, the values of these keys are stored in attributes.
+        /// Reads the session file and runs found ASessions to load values.
         /// </summary>
         public static void LoadSession()
         {
@@ -36,8 +39,7 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// This function stores some attributes of the application to a config file.
-        /// These values can later be used when the application is loaded.
+        /// Runs all stored ASessions and writes away.
         /// </summary>
         public static void SaveSession()
         {
