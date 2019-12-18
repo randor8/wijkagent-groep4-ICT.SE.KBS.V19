@@ -40,9 +40,7 @@ namespace WijkagentWPF
         /// This function stores some attributes of the application to a config file.
         /// These values can later be used when the application is loaded.
         /// </summary>
-        /// <param name="center">The location to be stored to the config</param>
-        /// <param name="zoom">The zoom level to be stored to the config</param>
-        public static void SaveSession(Location center, double zoom)
+        public static void SaveSession()
         {
             using var writer = File.CreateText(SessionFile);
 

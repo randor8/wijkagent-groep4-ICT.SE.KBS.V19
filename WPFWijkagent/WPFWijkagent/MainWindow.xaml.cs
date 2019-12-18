@@ -256,7 +256,7 @@ namespace WijkagentWPF
         /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
-            App.SaveSession(wpfMapMain.Center, wpfMapMain.ZoomLevel);
+            App.SaveSession();
             Application.Current.Shutdown();
         }
     }
