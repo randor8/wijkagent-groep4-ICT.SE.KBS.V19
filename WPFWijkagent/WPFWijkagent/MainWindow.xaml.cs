@@ -275,11 +275,12 @@ namespace WijkagentWPF
 
                     FilterList.RemoveFilter($"{typeof(DateRangeFilter)}");
                     AddSingleDateFilter(DatePickerSingle);
-                } else
+                }
+                else
                 {
                     singleDateVisibility = Visibility.Collapsed;
                     dateRangeVisiblity = Visibility.Visible;
-                    
+
                     FilterList.RemoveFilter($"{typeof(DateFilter)}");
                     AddDateRangeFilter(DatePickerFrom, DatePickerTo);
                 }
@@ -303,10 +304,11 @@ namespace WijkagentWPF
                 if (from.Name.Equals("DatePickerFrom"))
                 {
                     to = DatePickerTo;
-                } else
+                }
+                else
                 {
-                    to = DatePickerFrom;
-                    from = DatePickerTo;
+                    to = from;
+                    from = DatePickerFrom;
                 }
                 if (AddDateRangeFilter(from, to))
                 {

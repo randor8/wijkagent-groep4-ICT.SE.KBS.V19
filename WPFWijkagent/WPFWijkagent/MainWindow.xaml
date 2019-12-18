@@ -4,9 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+		xmlns:local="clr-namespace:WijkagentWPF"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
 		mc:Ignorable="d"
 		Closed="Window_Closed"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:DefaultEndDateConverter x:Key="DateConverter"/>
+    </Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="23"/>
@@ -86,9 +91,9 @@
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
                                     <Label Grid.Column="0" Grid.Row="0">Van</Label>
-                                    <DatePicker x:Name="DatePickerFrom" SelectedDateChanged="DateRangeFilterChanged" Grid.Column="1" Grid.Row="0"/>
+                                    <DatePicker x:Name="DatePickerFrom" SelectedDateChanged="DateRangeFilterChanged" DisplayDateEnd="{Binding SelectedDate, ElementName=DatePickerTo, Converter={StaticResource DateConverter}}" Grid.Column="1" Grid.Row="0"/>
                                     <Label Grid.Column="0" Grid.Row="1">T/m</Label>
-                                    <DatePicker x:Name="DatePickerTo" SelectedDateChanged="DateRangeFilterChanged" Grid.Column="1" Grid.Row="1"/>
+                                    <DatePicker x:Name="DatePickerTo" SelectedDateChanged="DateRangeFilterChanged" DisplayDateStart="{Binding SelectedDate, ElementName=DatePickerFrom}" DisplayDateEnd="{x:Static sys:DateTime.Today}" Grid.Column="1" Grid.Row="1"/>
                                 </Grid>
                             </DockPanel>
                         </Expander>
