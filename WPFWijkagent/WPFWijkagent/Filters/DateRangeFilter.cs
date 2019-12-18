@@ -16,6 +16,11 @@ namespace WijkagentWPF.Filters
             To = to;
         }
 
+        /// <summary>
+        /// Applies this filter to the given list of offences.
+        /// </summary>
+        /// <param name="offences">The list of offences that needs to be filtered.</param>
+        /// <returns>A list of offences that lie between the dates of the filter</returns>
         public List<Offence> ApplyOn(List<Offence> offences)
         {
             IEnumerable<Offence> filterQuery =
@@ -27,11 +32,16 @@ namespace WijkagentWPF.Filters
             return filteredOffences;
         }
 
+        /// <summary>
+        /// Determines whether the given object is the same as this DateRangeFilter.
+        /// </summary>
+        /// <param name="obj">The object to compare to this DateRangeFilter</param>
+        /// <returns>True if the both the start and end dates are the same, false otherwise.</returns>
         public override bool Equals(object obj)
         {
             if (obj is DateRangeFilter that)
             {
-                if (From.Date.Equals(that.From.Date) && To.Date.Equals(that.From.Date))
+                if (From.Date.Equals(that.From.Date) && To.Date.Equals(that.To.Date))
                 {
                     return true;
                 }

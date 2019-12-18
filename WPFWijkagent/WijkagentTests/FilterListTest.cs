@@ -60,9 +60,9 @@ namespace WijkagentTests
             CategoryFilterCollection.Instance.ToggleCategory(OffenceCategories.Cybercrime);
             FilterList.AddFilter(CategoryFilterCollection.Instance);
             FilterList.AddFilter(dateFilter);
-            Assert.IsTrue(FilterList.GetFilters().Count == 2);
-            FilterList.RemoveFilter(dateFilter);
-            Assert.IsTrue(FilterList.GetFilters().Count == 1);
+            Assert.AreEqual(2, FilterList.GetFilters().Count);
+            FilterList.RemoveFilter($"{typeof(DateFilter)}");
+            Assert.AreEqual(1, FilterList.GetFilters().Count);
             Assert.IsFalse(FilterList.GetFilters().Contains(dateFilter));
         }
 
