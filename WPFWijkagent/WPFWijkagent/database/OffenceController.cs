@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Text;
 using WijkagentModels;
 
 namespace WijkagentWPF.database
@@ -42,7 +41,7 @@ namespace WijkagentWPF.database
             SqlCommand query = new SqlCommand("INSERT INTO Offence (DateTime, Description, LocationID, Category) " +
                 "OUTPUT INSERTED.ID " +
                 "VALUES(@DateTime, @Description, @LocationID, @Category)");
-            
+
             //set values we want to insert
             query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
             query.Parameters.Add("@Description", System.Data.SqlDbType.VarChar);

@@ -1,11 +1,9 @@
-﻿using System;
+﻿using Renci.SshNet;
+using Renci.SshNet.Common;
+using System;
 using System.Collections.Generic;
-using System.Text;
-using WijkagentModels;
 using System.Configuration;
 using System.Data.SqlClient;
-using Renci.SshNet;
-using Renci.SshNet.Common;
 
 namespace WijkagentWPF
 {
@@ -30,7 +28,7 @@ namespace WijkagentWPF
         /// seperator to use when spliting datetime fields from db
         /// </summary>
         public static char[] DateTimeSeparator = new char[] { ' ', '-', ':' };
-        
+
         /// <summary>
         /// database errors wil be stored here
         /// </summary>
@@ -76,20 +74,22 @@ namespace WijkagentWPF
             {
                 _client.Connect();
                 _client.AddForwardedPort(_port);
-            
+
                 _port.Exception += delegate (object sender, ExceptionEventArgs e)
                 {
                     SSHStatus = "no portforward can be made on the server!";
                     DBContext.CloseSshConnection();
                 };
-            
+
                 _port.Start();
 
-            } catch(SshConnectionException)
+            }
+            catch (SshConnectionException)
             {
                 SSHStatus = "no ssh connection can be made to the ubuntu server please inform the system admin.";
                 DBContext.CloseSshConnection();
-            } catch(ObjectDisposedException)
+            }
+            catch (ObjectDisposedException)
             {
                 SSHStatus = "the ssh connection to the ubuntu server has been disposed and cannot be used";
                 DBContext.CloseSshConnection();
@@ -135,14 +135,15 @@ namespace WijkagentWPF
                 //save the error and give empty result set
                 DBStatus = sqlEX.Message;
                 return new List<Object[]>();
-            } finally
+            }
+            finally
             {
                 // always close the database
                 SQLStatement.Dispose();
                 _connection.Close();
             }
         }
-        
+
         /// <summary>
         /// executes a query and returns the inserted last column(id)
         /// </summary>
@@ -154,7 +155,7 @@ namespace WijkagentWPF
             {
                 _connection.Open();
                 SQLStatement.Connection = _connection;
-            
+
                 int id = (int)SQLStatement.ExecuteScalar();
 
                 return id;
@@ -164,14 +165,15 @@ namespace WijkagentWPF
                 //save the error and give useles result
                 DBStatus = sqlEX.Message;
                 return 0;
-            } finally
+            }
+            finally
             {
                 // always close the database
                 SQLStatement.Dispose();
                 _connection.Close();
             }
         }
-        
+
         /// <summary>
         /// executes a query and returns the modified rows count
         /// </summary>
@@ -193,7 +195,8 @@ namespace WijkagentWPF
                 //save the error and give useles result
                 DBStatus = sqlEX.Message;
                 return 0;
-            } finally
+            }
+            finally
             {
                 SQLStatement.Dispose();
                 _connection.Close();

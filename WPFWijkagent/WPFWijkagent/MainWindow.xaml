@@ -1,4 +1,4 @@
-﻿<Window x:Class="WijkagentWPF.MainWindow"
+<Window x:Class="WijkagentWPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -25,9 +25,8 @@
 					<ColumnDefinition Width="130"/>
 				</Grid.ColumnDefinitions>
 
-				<Button x:Name="wpfBTNAddOffence" Grid.Column="0" Content="delict toevoegen" Click="wpfBTNAddOffence_Click"/>
-				<ComboBox x:Name="wpfCBCategoriesFilter" Grid.Column="2" SelectionChanged="wpfCBCategoriesFilter_SelectionChanged"/>
-			</Grid>
+                <Button x:Name="wpfBTNAddOffence" Grid.Column="0" Content="delict toevoegen" Click="wpfBTNAddOffence_Click"/>
+            </Grid>
 		</Border>
 
 		<!-- Main View -->
@@ -39,8 +38,40 @@
 			</Grid.ColumnDefinitions>
 
 			<m:Map Name="wpfMapMain" Grid.Column="0" CredentialsProvider="hUHSkFctqIZxDGheLGzM~w_1EmZXx2jkY-VBJ3XnTpA~AtZz1tFyFEfKQPU1_BncdDQxN_JDH0KQv45dXSgQv1EawjBy3xGcY3Vgm__4OFeu" Center="52.499620, 6.079510" ZoomLevel="15"/>
-			<GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="LightGray" ShowsPreview="True" Width="5"/>
-			<ListBox x:Name="wpfLBSelection" Grid.Column="2" SelectionChanged="wpfLBSelection_SelectionChanged"/>
-		</Grid>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Background="LightGray" ShowsPreview="True" Width="5"/>
+            <DockPanel Grid.Column="2">
+                <Expander DockPanel.Dock="Top">
+                    <Expander.Header>
+                        <DockPanel Width="175">
+                            <TextBlock FontSize="15" VerticalAlignment="Center">Filters</TextBlock>
+                        </DockPanel>
+                    </Expander.Header>
+                    <StackPanel>
+                        <Expander Margin="3,0,0,0">
+                            <Expander.Header>
+                                <DockPanel Width="175">
+                                    <TextBlock FontSize="13" VerticalAlignment="Center">Categorieën</TextBlock>
+                                </DockPanel>
+                            </Expander.Header>
+                            <Grid x:Name="FilterGrid">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </Expander>
+                        <Button x:Name="wpfBTNResetFilters" Margin="0,5,5,5" HorizontalAlignment="Right" Content="Reset" Click="wpfBTNResetFilters_Click"/>
+                    </StackPanel>
+                </Expander>
+                <Expander IsExpanded="True">
+                    <Expander.Header>
+                        <DockPanel Width="175">
+                            <TextBlock FontSize="15" VerticalAlignment="Center">Delicten</TextBlock>
+                        </DockPanel>
+                    </Expander.Header>
+                    <ListBox x:Name="wpfLBSelection" SelectionChanged="wpfLBSelection_SelectionChanged"/>
+                </Expander>
+            </DockPanel>
+        </Grid>
 	</Grid>
 </Window>
