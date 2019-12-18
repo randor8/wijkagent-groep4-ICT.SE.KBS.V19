@@ -1,8 +1,7 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using WijkagentModels;
-using WijkagentWPF.Filters;
+using WijkagentWPF.Session;
 using Location = Microsoft.Maps.MapControl.WPF.Location;
 
 namespace WijkagentWPF
@@ -12,40 +11,10 @@ namespace WijkagentWPF
     /// </summary>
     public partial class App : Application
     {
+        private static Dictionary<string, ASession> _sessions = new Dictionary<string, ASession>();
         public const string SessionFile = "./Session.cfg";
-        private static double _centerX = 52.499620, _centerY = 6.079510;
 
-        public const char Separator = '|';
-        public const string SessionMapPos = "MapCenter";
-        public const string SessionMapZoom = "MapZoom";
-        public const string SessionFilterCategories = "FilterCategory";
-
-        public static Location MapLocation
-        {
-            get => new Location
-            {
-                Longitude = _centerX,
-                Latitude = _centerY
-            };
-        }
-
-        public static double MapZoom { get; private set; }
-
-        /// <summary>
-        /// Checks if the given category exists in the CategoryFilterCOllection and if it has been toggled.
-        /// If toggled it returns true.
-        /// </summary>
-        /// <param name="category"></param>
-        /// <returns></returns>
-        public static bool IsFilterActive(string category)
-        {
-            var filters = CategoryFilterCollection.Categories;
-
-            foreach (CategoryFilter filter in filters.Keys)
-                if (filter.Category.ToString().Equals(category) && filters[filter])
-                    return true;
-            return false;
-        }
+        public static void RegisterSession(ASession session) => _sessions.Add(session.Key, session);
 
         /// <summary>
         /// This function loads the configuration file and reads it contents.
@@ -61,24 +30,10 @@ namespace WijkagentWPF
             while ((line = reader.ReadLine()) != null) // checking if we hit the eof, if not; use
             {
                 var parts = line.Split(':', 2); // Splits the line, max 2 parts
-                switch (parts[0]) // Check what config key has been read
-                {
-                    case SessionMapPos:
-                        var locationParts = parts[1].Split(Separator, 2); // Splitting value into longitude and latitude
-                        _centerX = double.Parse(locationParts[0]);
-                        _centerY = double.Parse(locationParts[1]);
-                        continue;
-                    case SessionMapZoom:
-                        MapZoom = double.Parse(parts[1]);
-                        continue;
-                    case SessionFilterCategories:
-                        if (parts[1].Length == 0) continue;
-                        var categories = parts[1].Split(Separator);
-                        foreach (string category in categories)
-                            CategoryFilterCollection.Instance.ToggleCategory((OffenceCategories)Enum.Parse(typeof(OffenceCategories), category));
-                        continue;
-                }
+                if (_sessions.ContainsKey(parts[0])) _sessions[parts[0]].Load(parts[1]);
             }
+
+            reader.Close();
         }
 
         /// <summary>
@@ -91,33 +46,10 @@ namespace WijkagentWPF
         {
             using var writer = File.CreateText(SessionFile);
 
-            #region SaveMap
-            WriteSetting(writer, SessionMapPos, $"{center.Longitude}{Separator}{center.Latitude}");
-            WriteSetting(writer, SessionMapZoom, $"{zoom}");
-            #endregion
-
-            #region SaveCategories
-            var categoryString = "";
-            var categoryFilters = CategoryFilterCollection.Categories;
-            foreach (var cat in categoryFilters.Keys)
-            {
-                if (categoryFilters[cat] == false) continue;
-
-                if (categoryString.Length > 0) categoryString += Separator;
-                categoryString += cat.Category;
-            }
-            WriteSetting(writer, SessionFilterCategories, categoryString);
-            #endregion
+            foreach (string key in _sessions.Keys)
+                writer.WriteLine($"{key}:{_sessions[key].Save()}");
 
             writer.Close();
         }
-
-        /// <summary>
-        /// Write a setting to the file.
-        /// </summary>
-        /// <param name="writer"></param>
-        /// <param name="setting"></param>
-        /// <param name="value"></param>
-        private static void WriteSetting(StreamWriter writer, string setting, string value) => writer.WriteLine($"{setting}:{value}");
     }
 }
