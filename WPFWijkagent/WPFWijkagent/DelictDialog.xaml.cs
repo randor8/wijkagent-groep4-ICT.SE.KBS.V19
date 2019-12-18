@@ -13,8 +13,6 @@ namespace WijkagentWPF
     {
         private DelictDialogController _controller;
 
-        private WitnessController _witnessController;
-
         private Offence _offence;
 
         public DelictDialog(Pushpin pin, List<Offence> offences)
@@ -24,6 +22,7 @@ namespace WijkagentWPF
             _controller = new DelictDialogController(l, offences);
             _offence = _controller.RetrieveOffence();
             _controller.DisplayMessages(_controller.RetrieveOffence(), wpfLVMessages);
+            _controller.DisplayWitnessMessages(_controller.RetrieveOffence(), WitnessMessages);
         }
 
         private void wpfBPrint_Click(object sender, RoutedEventArgs e)

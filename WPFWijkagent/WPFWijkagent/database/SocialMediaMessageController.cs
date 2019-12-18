@@ -108,11 +108,14 @@ namespace WijkagentWPF.database
         /// </summary>
         /// <param name="ID">Offence id you need</param>
         /// <returns>related socialmediamessages in a list</returns>
-        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(int offenceID)
+        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(int offenceID, int mediaType = 0)
         {
             SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID " +
-                "FROM SocialMediaMessage WHERE OffenceID = @OffenceID");
+                "FROM SocialMediaMessage WHERE OffenceID = @OffenceID AND MediaType = @MediaType");
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters.Add("@MediaType", System.Data.SqlDbType.Int);
+
+            query.Parameters["@MediaType"].Value = mediaType;
             query.Parameters["@OffenceID"].Value = offenceID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
             List<SocialMediaMessage> socialMediaMessages = new List<SocialMediaMessage>();

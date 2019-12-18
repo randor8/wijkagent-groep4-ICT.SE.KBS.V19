@@ -54,6 +54,12 @@ namespace WijkagentWPF
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
             wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID);
         }
+
+        public void DisplayWitnessMessages(Offence offence, System.Windows.Controls.ListView WitnessMessages)
+        {
+            SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+            WitnessMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID, 1);
+        }
     }
 }
 

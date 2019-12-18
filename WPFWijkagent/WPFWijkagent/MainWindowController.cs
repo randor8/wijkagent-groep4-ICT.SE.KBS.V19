@@ -36,7 +36,6 @@ namespace WijkagentWPF
 
             Scraper scraper = new Scraper(offence);
             scraper.GetSocialMediaMessages();
-
             _offences.Add(offence);
         }
 

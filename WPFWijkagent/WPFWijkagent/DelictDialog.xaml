@@ -80,48 +80,50 @@
                     </Grid.RowDefinitions>
                     <Button x:Name="btn_oproep" Content="Roep getuigen op" Width="120" HorizontalAlignment="Right" Click="btn_oproep_Click"/>
 
-                    <ListView Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView x:Name="WitnessMessages" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Width="780">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Gebruiker"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="Twitter naam"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Omschrijving"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text=" : "/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text=" : "/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
+
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Handle}" Cursor="Hand" />
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DateTime, StringFormat='d-M-y hh:mm'}"/>
+                                    <Button Grid.Row="4" Grid.Column="0" Content="contact getuige" Width="120" HorizontalAlignment="Right"></Button>
+
+                                    <Image Grid.Column="3"  Grid.RowSpan="4" HorizontalAlignment="Right"  Height="80"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                             </Style>
                         </ListBox.ItemContainerStyle>
-                        <ListViewItem>
-                            <Grid Width="780">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="auto"/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                    <RowDefinition Height="auto"/>
-                                </Grid.RowDefinitions>
-
-                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Gebruiker"/>
-                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Twitter naam"/>
-                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Omschrijving"/>
-                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
-
-                                <TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
-                                <TextBlock Grid.Row="1" Grid.Column="1" Text=" : "/>
-                                <TextBlock Grid.Row="2" Grid.Column="1" Text=" : "/>
-                                <TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
-
-                                <TextBlock Grid.Row="0" Grid.Column="2" Text="Henk de Jong"/>
-                                <TextBlock Grid.Row="1" Grid.Column="2" Text="henk.de.jong.47" Cursor="Hand" />
-                                <TextBlock Grid.Row="2" Grid.Column="2" Text="@WijkagentApplicatie Ik heb een foto van de dader! #Delict1186"  TextWrapping="Wrap"/>
-                                <TextBlock Grid.Row="3" Grid.Column="2" Text="11/12/2019 17:59"/>
-                                <Button Grid.Row="4" Grid.Column="0" Content="contact getuige" Width="120" HorizontalAlignment="Right"></Button>
-
-                                <Image Grid.Column="3"  Grid.RowSpan="4" HorizontalAlignment="Right"  Height="80"/>
-                            </Grid>
-                        </ListViewItem>
                     </ListView>
                 </Grid>
             </TabItem>
