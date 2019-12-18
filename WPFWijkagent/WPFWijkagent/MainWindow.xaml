@@ -78,7 +78,7 @@
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
-                                    <Label Grid.Column="0">Op</Label>
+                                    <Label Grid.Column="0">Datum</Label>
                                     <DatePicker x:Name="DatePickerSingle" SelectedDateChanged="SingleDateFilterChanged" Grid.Column="1"/>
                                 </Grid>
                                 <Grid x:Name="DateRangePanel">
@@ -90,9 +90,9 @@
                                         <RowDefinition Height="auto"/>
                                         <RowDefinition Height="auto"/>
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Column="0" Grid.Row="0">Van</Label>
+                                    <Label Grid.Column="0" Grid.Row="0">Begindatum</Label>
                                     <DatePicker x:Name="DatePickerFrom" SelectedDateChanged="DateRangeFilterChanged" DisplayDateEnd="{Binding SelectedDate, ElementName=DatePickerTo, Converter={StaticResource DateConverter}}" Grid.Column="1" Grid.Row="0"/>
-                                    <Label Grid.Column="0" Grid.Row="1">T/m</Label>
+                                    <Label Grid.Column="0" Grid.Row="1">Einddatum</Label>
                                     <DatePicker x:Name="DatePickerTo" SelectedDateChanged="DateRangeFilterChanged" DisplayDateStart="{Binding SelectedDate, ElementName=DatePickerFrom}" DisplayDateEnd="{x:Static sys:DateTime.Today}" Grid.Column="1" Grid.Row="1"/>
                                 </Grid>
                             </DockPanel>
