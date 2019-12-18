@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows;
 using WijkagentWPF.Session;
-using Location = Microsoft.Maps.MapControl.WPF.Location;
 
 namespace WijkagentWPF
 {
