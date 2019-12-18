@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.Filters;
+using WijkagentWPF.Session;
 
 namespace WijkagentWPF
 {
@@ -22,19 +23,19 @@ namespace WijkagentWPF
         public MainWindow()
         {
             FilterList.AddFilter(CategoryFilterCollection.Instance);
-            App.LoadSession();
-
             InitializeComponent();
-            FillCategoryFiltermenu();
-            FillOffenceList();
+
+            App.RegisterSession(new SessionMapLocation(wpfMapMain));
+            App.RegisterSession(new SessionMapZoom(wpfMapMain));
+            App.RegisterSession(new SessionFilterCategories());
+            App.LoadSession();
 
             wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
             wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
             wpfMapMain.MouseLeftButtonDown += AddPin;
 
-            // Setting map values loaded by the App
-            wpfMapMain.Center = App.MapLocation;
-            wpfMapMain.ZoomLevel = App.MapZoom;
+            FillCategoryFiltermenu();
+            FillOffenceList();
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace WijkagentWPF
                     Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
-                    IsChecked = App.IsFilterActive(offenceCategories[i].ToString())
+                    IsChecked = SessionFilterCategories.IsFilterActive(offenceCategories[i].ToString())
                 };
                 checkBox.Checked += CategoryCheckboxToggle;
                 checkBox.Unchecked += CategoryCheckboxToggle;
@@ -250,8 +251,6 @@ namespace WijkagentWPF
             ResetCategoryCheckbox();
             FilterList.ClearFilters();
             FillOffenceList();
-
-
         }
 
         /// <summary>
@@ -261,7 +260,7 @@ namespace WijkagentWPF
         /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
-            App.SaveSession(wpfMapMain.Center, wpfMapMain.ZoomLevel);
+            App.SaveSession();
             Application.Current.Shutdown();
         }
     }
