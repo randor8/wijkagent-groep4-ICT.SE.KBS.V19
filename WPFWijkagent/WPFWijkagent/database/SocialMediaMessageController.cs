@@ -24,11 +24,12 @@ namespace WijkagentWPF.database
         /// <param name="handle">media message hande (@ name)</param>
         /// <param name="location">location for this message</param>
         /// <param name="offenceID">associated id</param>
+        /// <param name="twitterId">associated TwitterId</param>
         /// <returns>returns the inserted id that has been added</returns>
-        public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, int offenceID)
+        public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, int offenceID, long twitterId)
         {
-            int locationID = new LocationController().SetLocation(location.Latitude, location.Longitude);
-            return SetSocialMediaMessage(dateTime, message, user, handle, locationID, offenceID);
+            int locationID = new LocationController().SetLocation(location);
+            return SetSocialMediaMessage(dateTime, message, user, handle, locationID, offenceID, twitterId);
         }
 
         /// <summary>
@@ -40,13 +41,14 @@ namespace WijkagentWPF.database
         /// <param name="handle">media message hande (@ name)</param>
         /// <param name="locationID">locationID for this message</param>
         /// <param name="offenceID">associated id</param>
+        /// <param name="twitterId">associated TwitterId</param>
         /// <returns>returns the inserted id that has been added</returns>
-        public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, int locationID, int offenceID)
+        public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, int locationID, int offenceID, long twitterId)
         {
             SqlCommand query = new SqlCommand("" +
-                "INSERT INTO SocialMediaMessage (DateTime, Message, Username, Handle, locationID, OffenceID) " +
+                "INSERT INTO SocialMediaMessage (DateTime, Message, Username, Handle, locationID, OffenceID, TwitterID) " +
                 "OUTPUT INSERTED.ID " +
-                "VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID)");
+                "VALUES(@DateTime, @message, @user, @handle, @LocationID, @OffenceID, @TwitterID)");
 
             //prepare values in statement 
             query.Parameters.Add("@DateTime", System.Data.SqlDbType.DateTime);
@@ -55,12 +57,14 @@ namespace WijkagentWPF.database
             query.Parameters.Add("@handle", System.Data.SqlDbType.VarChar);
             query.Parameters.Add("@LocationID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters.Add("@TwitterID", System.Data.SqlDbType.BigInt);
             query.Parameters["@DateTime"].Value = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
             query.Parameters["@message"].Value = message;
             query.Parameters["@user"].Value = user;
             query.Parameters["@handle"].Value = handle;
             query.Parameters["@LocationID"].Value = locationID;
             query.Parameters["@OffenceID"].Value = offenceID;
+            query.Parameters["@TwitterID"].Value = twitterId;
 
             return _dbContext.ExecuteInsertQuery(query);
         }
@@ -90,6 +94,7 @@ namespace WijkagentWPF.database
                 socialMediaMessageData[3].ToString(),
                 socialMediaMessageData[4].ToString(),
                 new LocationController().GetLocation((int)socialMediaMessageData[5]),
+                (long) socialMediaMessageData[7], 
                 new OffenceController().GetOffence((int)socialMediaMessageData[6]));
         }
 
@@ -98,12 +103,12 @@ namespace WijkagentWPF.database
         /// </summary>
         /// <param name="ID">SocialMediaMessage id you need</param>
         /// <returns>the new SocialMediaMessage object requested</returns>
-        public SocialMediaMessage GetSocialMediaMessage(int ID)
+        public SocialMediaMessage GetSocialMediaMessage(long tweetID)
         {
-            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID " +
-                "FROM SocialMediaMessage WHERE ID = @ID");
-            query.Parameters.Add("@ID", System.Data.SqlDbType.Int);
-            query.Parameters["@ID"].Value = ID;
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
+                "FROM SocialMediaMessage WHERE TwitterID = @TwitterID");
+            query.Parameters.Add("@TwitterID", System.Data.SqlDbType.BigInt);
+            query.Parameters["@TwitterID"].Value = tweetID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
 
             if (rows.Count == 1)
@@ -120,7 +125,7 @@ namespace WijkagentWPF.database
         /// <returns>related socialmediamessages in a list</returns>
         public List<SocialMediaMessage> GetOffenceSocialMediaMessages(int offenceID)
         {
-            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID " +
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
                 "FROM SocialMediaMessage WHERE OffenceID = @OffenceID");
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
             query.Parameters["@OffenceID"].Value = offenceID;
