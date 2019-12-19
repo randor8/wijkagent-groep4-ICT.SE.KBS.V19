@@ -28,6 +28,7 @@ namespace WijkagentWPF
             App.RegisterSession(new SessionMapLocation(wpfMapMain));
             App.RegisterSession(new SessionMapZoom(wpfMapMain));
             App.RegisterSession(new SessionFilterCategories());
+            App.RegisterSession(new SessionFilterSingleDate(DatePickerSingle));
             App.LoadSession();
 
             wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
@@ -120,7 +121,7 @@ namespace WijkagentWPF
                     Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Margin = new Thickness(2.5, 0, 0, 0)
+                    Margin = new Thickness(2.5, 0, 0, 0),
                     IsChecked = SessionFilterCategories.IsFilterActive(offenceCategories[i].ToString())
                 };
                 checkBox.Checked += CategoryCheckboxToggle;

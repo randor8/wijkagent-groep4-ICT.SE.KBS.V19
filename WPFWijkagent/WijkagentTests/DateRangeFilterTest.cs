@@ -41,8 +41,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(1, DateTime.AddDays(-5), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
-                new Offence(2, DateTime.AddDays(-1), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime)
+                new Offence(DateTime.AddDays(-5), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(DateTime.AddDays(-1), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime)
             };
             DateRangeFilter filter = new DateRangeFilter(DateTime.AddDays(-4), DateTime.AddDays(-2));
             Assert.AreEqual(_offences.FindAll(x => x.DateTime.Date >= DateTime.AddDays(-4) && x.DateTime.Date <= DateTime.AddDays(-2)), filter.ApplyOn(_offences));
@@ -53,8 +53,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(1, DateTime.AddDays(-3), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
-                new Offence(2, DateTime.AddDays(-1), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime)
+                new Offence(DateTime.AddDays(-3), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(DateTime.AddDays(-1), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime)
             };
             DateRangeFilter filter = new DateRangeFilter(DateTime.AddDays(-4), DateTime.AddDays(-2));
             Assert.AreEqual(_offences.FindAll(x => x.DateTime.Date >= DateTime.AddDays(-4) && x.DateTime.Date <= DateTime.AddDays(-2)), filter.ApplyOn(_offences));
@@ -65,8 +65,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(1, DateTime.AddDays(-3), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
-                new Offence(2, DateTime.AddDays(-2), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime)
+                new Offence(DateTime.AddDays(-3), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(DateTime.AddDays(-2), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime)
             };
             DateRangeFilter filter = new DateRangeFilter(DateTime.AddDays(-4), DateTime.AddDays(-2));
             Assert.AreEqual(_offences.FindAll(x => x.DateTime.Date >= DateTime.AddDays(-4) && x.DateTime.Date <= DateTime.AddDays(-2)), filter.ApplyOn(_offences));

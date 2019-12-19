@@ -1,9 +1,38 @@
 ﻿using System;
+using System.Windows.Controls;
 using WijkagentModels;
 using WijkagentWPF.Filters;
 
 namespace WijkagentWPF.Session
 {
+    public class SessionFilterSingleDate : ASession
+    {
+        protected readonly DatePicker _datePicker;
+        public SessionFilterSingleDate(DatePicker datePicker) : base("FilterSingleDate")
+        {
+            _datePicker = datePicker;
+        }
+
+        public override void Load(string input)
+        {
+            if (input.Length == 0) return;
+            var date = input.Split(Separator);
+            DateTime dateTime = new DateTime(int.Parse(date[0]), int.Parse(date[1]), int.Parse(date[2]));
+            _datePicker.SelectedDate = dateTime;
+        }
+
+        public override string Save()
+        {
+            string dateString = "";
+            DateFilter filter = (DateFilter)FilterList.GetFilters().Find(_ => _ is DateFilter);
+            if (filter != null)
+            {
+                dateString += filter.DateTime.Date.ToString();
+            }
+            return dateString;
+        }
+    }
+
     public class SessionFilterCategories : ASession
     {
         public SessionFilterCategories() : base("FilterCategory") { }
