@@ -14,8 +14,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(1, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
-                new Offence(2, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Drugs)
+                new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1), OffenceCategories.Drugs)
             };
             CategoryFilter filter = new CategoryFilter(OffenceCategories.Cybercrime);
             filter.ApplyOn(_offences);
@@ -27,8 +27,8 @@ namespace WijkagentTests
         {
             List<Offence> _offences = new List<Offence>
             {
-                new Offence(1, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Cybercrime),
-                new Offence(2, new DateTime().ToLocalTime(), "", new Location(1, 1.1, 1.1), OffenceCategories.Drugs)
+                new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1), OffenceCategories.Cybercrime),
+                new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1), OffenceCategories.Drugs)
             };
             CategoryFilter filter = new CategoryFilter(OffenceCategories.Cybercrime);
             List<Offence> filtered = filter.ApplyOn(_offences);
