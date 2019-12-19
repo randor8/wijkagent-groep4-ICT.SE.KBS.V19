@@ -10,11 +10,11 @@ namespace WijkagentTests
     {
         private static Location[] Locations =
         {
-            new Location(0, 1.1, 1.1),
-            new Location(0, 1.1, 1.1),
-            new Location(0, 1.1, 1.2),
-            new Location(0, 1.2, 1.1),
-            new Location(0, 1.2, 1.2)
+            new Location(1.1, 1.1),
+            new Location(1.1, 1.1),
+            new Location(1.1, 1.2),
+            new Location(1.2, 1.1),
+            new Location(1.2, 1.2)
         };
 
         public static IEnumerable<TestCaseData> EqualsCases

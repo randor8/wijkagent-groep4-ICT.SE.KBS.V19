@@ -19,10 +19,10 @@ namespace WijkagentModels
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
-        private readonly string customerKey = ConfigurationManager.AppSettings.Get("customerKey");
-        private readonly string customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
-        private readonly string accesToken = ConfigurationManager.AppSettings.Get("accesToken");
-        private readonly string accesTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
+        private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
+        private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
+        private readonly string _accessToken = ConfigurationManager.AppSettings.Get("accesToken");
+        private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
         public Scraper(Offence offence)
@@ -30,7 +30,7 @@ namespace WijkagentModels
             Offence = offence;
             _searchParameters = new SearchTweetsParameters(" ")
             {
-                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(
@@ -52,7 +52,7 @@ namespace WijkagentModels
         /// </summary>
         private  void Connect()
         {
-            Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
+            Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
         }
 
         /// <summary>
@@ -75,13 +75,13 @@ namespace WijkagentModels
         /// <param name="tweet">tweetenvi tweet object</param>
         private void SetSocialMediaMessage(ITweet tweet)
         {
-            int locationId = Offence.LocationID.ID;
+            int locationId = Offence.Location.ID;
             LocationController locationController = new LocationController();
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
 
             if (tweet.Coordinates != null)
             {
-                locationId = locationController.SetLocation(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+                locationId = locationController.SetLocation(new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
             }
             socialMediaMessageController.SetSocialMediaMessage(
                 tweet.CreatedAt,

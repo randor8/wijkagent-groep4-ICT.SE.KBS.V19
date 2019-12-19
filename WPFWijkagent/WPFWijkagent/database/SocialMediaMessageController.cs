@@ -27,7 +27,7 @@ namespace WijkagentWPF.database
         /// <returns>returns the inserted id that has been added</returns>
         public int SetSocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, int offenceID, long twitterId)
         {
-            int locationID = new LocationController().SetLocation(location.Latitude, location.Longitude);
+            int locationID = new LocationController().SetLocation(location);
             return SetSocialMediaMessage(dateTime, message, user, handle, locationID, offenceID, twitterId);
         }
 

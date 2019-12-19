@@ -10,9 +10,9 @@ namespace WijkagentTests
     {
         private static Offence[] offences =
         {
-            new Offence(1, new DateTime().ToLocalTime(), "", new Location(0, 1.1, 1.1), OffenceCategories.Null),
-            new Offence(2, new DateTime().ToLocalTime(), "", new Location(0, 1.1, 1.1), OffenceCategories.Null),
-            new Offence(3, new DateTime().ToLocalTime(), "", new Location(0, 1.1, 1.1), OffenceCategories.Null)
+            new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1, 1), OffenceCategories.Null, 1),
+            new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1, 2), OffenceCategories.Null, 2),
+            new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1, 3), OffenceCategories.Null, 3)
         };
 
         public static IEnumerable<TestCaseData> EqualsCases

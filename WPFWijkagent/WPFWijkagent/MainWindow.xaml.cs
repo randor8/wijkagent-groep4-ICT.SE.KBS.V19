@@ -160,49 +160,42 @@ namespace WijkagentWPF
             {
                 wpfBTNAddOffence.Content = "delict toevoegen";
                 Mouse.OverrideCursor = Cursors.Arrow;
-                _addModeActivated = false;
             }
             else
             {
                 wpfBTNAddOffence.Content = "Annuleer";
                 Mouse.OverrideCursor = Cursors.Cross;
-                _addModeActivated = true;
             }
+            _addModeActivated = !_addModeActivated;
+        }
+
+        private WijkagentModels.Location GetLocationFromClick(MouseButtonEventArgs e)
+        {
+            // Get the mouse click coordinates
+            Point mousePosition = e.GetPosition(this);
+            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
+            return new WijkagentModels.Location(location.Latitude, location.Longitude);
         }
 
         /// <summary>
-        /// open the dialog when clicked on the map and AddMode is activiated
+        /// shows the dialog (if we are in add mode) and resets the screen
         /// </summary>
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
-            //create nieuw offencedialogue when clicked on map
-            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue();
             if (!_addModeActivated)
             {
                 return;
             }
 
-            Mouse.OverrideCursor = Cursors.Arrow;
-            // Disables the default mouse double-click action.
+            //show dialog and reset screen 
+            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(GetLocationFromClick(e));
             e.Handled = true;
-
-            // Determin the location to place the pushpin at on the map.
-
-            // Get the mouse click coordinates
-            Point mousePosition = e.GetPosition(this);
-            // Convert the mouse coordinates to a locatoin on the map
-            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
-
-            // create a WijkAgendModels Location and convert the WPF location to that location.
-            WijkagentModels.Location newLocation = new WijkagentModels.Location(0, location.Latitude, location.Longitude);
-
-            // try to show the dialog, catch if the date enterd is in the future                                                   
-            OffenceDialogue.Location = newLocation;
+            Mouse.OverrideCursor = Cursors.Arrow;
+            wpfBTNAddOffence.Content = "delict toevoegen";
+            _addModeActivated = false;
 
             OffenceDialogue.ShowDialog();
             FillOffenceList();
-            wpfBTNAddOffence.Content = "delict toevoegen";
-            _addModeActivated = false;
         }
 
         /// <summary>
