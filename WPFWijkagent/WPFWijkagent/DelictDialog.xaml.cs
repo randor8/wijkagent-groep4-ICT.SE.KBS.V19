@@ -70,7 +70,7 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// 
+        /// Click on print button
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
