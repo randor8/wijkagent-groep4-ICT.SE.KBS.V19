@@ -35,5 +35,15 @@ namespace WijkagentTests
             Assert.IsNotNull(result);
         }
 
+        [Test]
+        public void SentDirectMessage_IDisCorrect_returnsTrue()
+        {
+            //arrange
+            //act
+            bool result = Scraper.SendDirectMessage(1206933407655243778);
+            //asset
+            Assert.IsTrue(result);
+        }
+
     }
 }

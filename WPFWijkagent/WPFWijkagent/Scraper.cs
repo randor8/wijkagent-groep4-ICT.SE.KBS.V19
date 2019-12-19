@@ -91,5 +91,12 @@ namespace WijkagentModels
                     Offence.ID);
             }
         }
+
+        public static bool SendDirectMessage(long id)
+        {
+            Connect();
+            IMessage message = Message.PublishMessage("Test message", id);
+            return message != null; 
+        }
     }
 }
