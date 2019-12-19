@@ -15,13 +15,16 @@ namespace WijkagentWPF
 
 
         //Create the AddOffenceDialogue. this method initializes all the components used by the AddOffenceDialogue
-        public AddOffenceDialogue()
+        public AddOffenceDialogue(Location location)
         {
+            Location = location;
             //Initializes itself (the Window)
             InitializeComponent();
 
             //add all enum categories to ComboBox so they can be selected
             InitializeCategories();
+
+            ErrorMessagesVisibility();
         }
 
 
@@ -38,26 +41,58 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// sets visibility for the error messages
+        /// hides all messages by default
+        /// </summary>
+        /// <param name="omschrijving">hide omschijving error field?</param>
+        /// <param name="datTime">hide datetime error field?</param>
+        /// <param name="general">hide general error field?</param>
+        private void ErrorMessagesVisibility(bool description = true, bool datTime = true, bool general = true)
+        {
+            wpfLErrorMsg.Visibility = general ? Visibility.Hidden : Visibility.Visible;
+            wpfLErrorMsgDatumTijd.Visibility = datTime ? Visibility.Hidden : Visibility.Visible;
+            wpfLErrorMsgOmschrijving.Visibility = description ? Visibility.Hidden : Visibility.Visible;
+        }
 
-        // when 'toevoegen' is clicked. Add Offence to the Controllers offence data and refresh the list of main window.
+
+        /// <summary>
+        /// checks for validity of the submitted form and submits it if valid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void wpfBTNToevoegen_Click(object sender, RoutedEventArgs e)
         {
+            bool descriptionPresent = wpfTBOmschrijving.Text.Length > 0;
+            OffenceCategories offenceCategories = OffenceCategories.Null;
+            
+            ErrorMessagesVisibility();
+
+            //is datetime filled in?
             if (wpfDBDatePicker.SelectedDate.HasValue && wpfTPTimePicker.Value.HasValue)
             {
-                DateTime date = new DateTime(
-                    wpfDBDatePicker.SelectedDate.Value.Year,
-                    wpfDBDatePicker.SelectedDate.Value.Month,
-                    wpfDBDatePicker.SelectedDate.Value.Day,
-                    wpfTPTimePicker.Value.Value.Hour,
-                    wpfTPTimePicker.Value.Value.Minute,
-                    wpfTPTimePicker.Value.Value.Second,
-                    wpfTPTimePicker.Value.Value.Millisecond);
+                DateTime date = wpfDBDatePicker.SelectedDate.Value,
+                         time = wpfTPTimePicker.Value.Value,
+                         dateTime = new DateTime(date.Year, date.Month, date.Day, time.Hour, time.Minute, time.Second);
+                bool dateValid = dateTime != null && dateTime < DateTime.Now;
 
-                if (date != null && date < DateTime.Now && wpfCBCategorie.SelectedItem != null && Location != null)
+                //is datetime and 'omschrijving' valid?
+                if (dateValid && descriptionPresent)
                 {
-                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, (OffenceCategories)wpfCBCategorie.SelectedItem, date, Location);
+                    //set category if selected
+                    if (wpfCBCategorie.SelectedItem != null)
+                    {
+                        offenceCategories = (OffenceCategories)wpfCBCategorie.SelectedItem;
+                    }
+                    MainWindowController.AddOffence(wpfTBOmschrijving.Text, offenceCategories, dateTime, Location);
                     this.Close();
+
+                } else {
+                    ErrorMessagesVisibility(descriptionPresent, dateValid, false);
                 }
+            } else
+            {
+                ErrorMessagesVisibility(descriptionPresent, false, false);
             }
         }
     }

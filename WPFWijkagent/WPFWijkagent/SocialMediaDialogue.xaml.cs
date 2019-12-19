@@ -17,7 +17,6 @@ namespace WijkagentWPF
         {
             InitializeComponent();
             _controller = new SocialMediaDialogueController(offence);
-
             string display = _controller.DisplayMessages();
             SocialMediaLabel.Text = display;
         }

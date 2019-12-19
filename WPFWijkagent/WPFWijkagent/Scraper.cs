@@ -30,7 +30,7 @@ namespace WijkagentModels
             Offence = offence;
             _searchParameters = new SearchTweetsParameters(" ")
             {
-                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(
@@ -75,13 +75,13 @@ namespace WijkagentModels
         /// <param name="tweet">tweetenvi tweet object</param>
         private void SetSocialMediaMessage(ITweet tweet)
         {
-            int locationId = Offence.LocationID.ID;
+            int locationId = Offence.Location.ID;
             LocationController locationController = new LocationController();
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
 
             if (tweet.Coordinates != null)
             {
-                locationId = locationController.SetLocation(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+                locationId = locationController.SetLocation(new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
             }
             socialMediaMessageController.SetSocialMediaMessage(
                 tweet.CreatedAt,

@@ -31,12 +31,8 @@ namespace WijkagentWPF
         public static void AddOffence(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
             OffenceController offenceController = new OffenceController();
-            Offence offence = new Offence(0, dateTime, description, location, category);
-            offence.ID = offenceController.SetOffence(
-                dateTime,
-                description,
-                location,
-                category);
+            Offence offence = new Offence(dateTime, description, location, category);
+            offence.ID = offenceController.SetOffence(offence);
 
             Scraper scraper = new Scraper(offence);
             scraper.SetSocialMediaMessages();
@@ -73,8 +69,8 @@ namespace WijkagentWPF
         {
             Location = new Microsoft.Maps.MapControl.WPF.Location
             {
-                Latitude = offence.LocationID.Latitude,
-                Longitude = offence.LocationID.Longitude
+                Latitude = offence.Location.Latitude,
+                Longitude = offence.Location.Longitude
             },
             Background = ColorDefault
         };
@@ -99,8 +95,8 @@ namespace WijkagentWPF
             Offence offence = null;
             IEnumerable<Offence> offenceQuerry =
                 from OffenceItem in _offences
-                where OffenceItem.LocationID.Latitude == latitude
-                && OffenceItem.LocationID.Longitude == longitude
+                where OffenceItem.Location.Latitude == latitude
+                && OffenceItem.Location.Longitude == longitude
                 select OffenceItem;
             offence = offenceQuerry.First(); 
             return offence;
