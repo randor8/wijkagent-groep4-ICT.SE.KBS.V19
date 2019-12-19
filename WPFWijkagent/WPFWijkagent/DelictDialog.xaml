@@ -55,10 +55,10 @@
 					<ListView.ItemTemplate>
 						<DataTemplate>
 							<StackPanel Orientation="Vertical">
+								<TextBlock Text="{Binding Path=DateTime, StringFormat='Datum en tijd: {0:d-M-y hh:mm}'}"/>
 								<TextBlock Text="{Binding Path=User, StringFormat='Gebruiker: {0}'}"/>
 								<TextBlock Text="{Binding Path=Handle, StringFormat='Twitter naam: {0}'}"/>
 								<TextBlock Text="{Binding Path=Message, StringFormat='Omschrijving: {0}'}"/>
-								<TextBlock Text="{Binding Path=DateTime, StringFormat='Datum en tijd: {0:d-M-y hh:mm}'}"/>
 								<TextBlock/>
 							</StackPanel>
 						</DataTemplate>
