@@ -126,7 +126,8 @@ namespace WijkagentWPF
                 {
                     Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(2.5, 0, 0, 0)
                 };
                 checkBox.Checked += CategoryCheckboxToggle;
                 checkBox.Unchecked += CategoryCheckboxToggle;
@@ -139,8 +140,10 @@ namespace WijkagentWPF
                     Padding = new Thickness(0, 0, 0, 0),
                     Content = offenceCategories[i],
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0)
                 };
+                label.MouseUp += (sender, e) => checkBox.IsChecked = !checkBox.IsChecked;
                 FilterGrid.Children.Add(label);
                 Grid.SetColumn(label, 1);
                 Grid.SetRow(label, i);
