@@ -5,6 +5,7 @@ using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.database;
 using Location = WijkagentModels.Location;
+using System.Linq;
 
 namespace WijkagentWPF
 {
@@ -76,6 +77,26 @@ namespace WijkagentWPF
         {
             _offences = new OffenceController().GetOffences();
             return _offences;
+        }
+
+        /// <summary>
+        /// The method executes a LINQ search on the List items and finds the offencelistItem with the same pin. 
+        /// </summary>
+        /// <returns>The method returns the offence that has the same pin</returns>
+        public static Offence RetrieveOffence(Location location)
+        {
+
+            Offence o = null;
+            IEnumerable<Offence> offenceQuerry =
+            from OffenceItem in _offences
+                where OffenceItem.LocationID.Latitude == location.Latitude
+                && OffenceItem.LocationID.Longitude == location.Longitude
+                select OffenceItem;
+            foreach (var item in offenceQuerry)
+            {
+                o = item;
+            }
+            return o;
         }
 
         /// <summary>

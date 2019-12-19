@@ -12,13 +12,12 @@ namespace WijkagentWPF
     public partial class SocialMediaDialogue : Window
     {
         private SocialMediaDialogueController _controller;
-        public SocialMediaDialogue(Pushpin pin, List<Offence> offences)
+        public SocialMediaDialogue(Location location, Offence offence)
         {
             InitializeComponent();
-            Location l = new Location(0, pin.Location.Latitude, pin.Location.Longitude);
-            _controller = new SocialMediaDialogueController(l, offences);
+            _controller = new SocialMediaDialogueController(location, offence);
 
-            string display = _controller.DisplayMessages(_controller.RetrieveOffence());
+            string display = _controller.DisplayMessages();
             SocialMediaLabel.Text = display;
         }
     }

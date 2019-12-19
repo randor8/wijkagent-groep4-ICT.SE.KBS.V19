@@ -44,7 +44,6 @@ namespace WijkagentWPF.database
             query.Parameters["@ID"].Value = ID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
 
-
             if (rows.Count == 1)
             {
                 object[] row = rows[0];

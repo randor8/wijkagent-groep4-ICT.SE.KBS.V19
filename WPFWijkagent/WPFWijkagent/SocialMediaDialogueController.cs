@@ -8,7 +8,7 @@ namespace WijkagentWPF
 {
     public class SocialMediaDialogueController
     {
-        private List<Offence> _offenceList;
+        private Offence _offence { get; set; }
         public Location Location { get; set; }
 
         /// <summary>
@@ -16,45 +16,29 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="pin"></param>
         /// <param name="offenceListItems"></param>
-        public SocialMediaDialogueController(Location location, List<Offence> offences)
+        public SocialMediaDialogueController(Location location, Offence offence)
         {
-            _offenceList = offences;
+            _offence = offence;
             Location = location;
         }
 
-        /// <summary>
-        /// The method executes a LINQ search on the List items and finds the offencelistItem with the same pin. 
-        /// </summary>
-        /// <returns>The method returns the offence that has the same pin</returns>
-        public Offence RetrieveOffence()
-        {
-
-            Offence o = null;
-            IEnumerable<Offence> offenceQuerry =
-            from OffenceItem in _offenceList
-            where OffenceItem.LocationID.Latitude == Location.Latitude
-            && OffenceItem.LocationID.Longitude == Location.Longitude
-            select OffenceItem;
-            foreach (var item in offenceQuerry)
-            {
-                o = item;
-            }
-            return o;
-        }
 
         /// <summary>
         /// This method creates a single string from all elements within the list of found SocialMediaItems 
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>string</returns>
-        public string DisplayMessages(Offence offence)
+        public string DisplayMessages()
         {
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            var feed = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID);
+            var feed = socialMediaMessageController.GetOffenceSocialMediaMessages(_offence.ID);
             string display = "";
-            foreach (SocialMediaMessage media in feed)
+            if (feed.Count > 0)
             {
-                display += $"\n{media.ToString()}\n ";
+                foreach (SocialMediaMessage media in feed)
+                {
+                    display += $"\n{media.ToString()}\n ";
+                }
             }
             return display;
         }

@@ -86,9 +86,8 @@ namespace WijkagentWPF
                 _connection.Open();
                 SQLStatement.Connection = _connection;
                 SQLStatement.CommandTimeout = 4;
-                int id = (int)SQLStatement.ExecuteScalar();
+                return (int)SQLStatement.ExecuteScalar();
 
-                return id;
             }
             catch (SqlException sqlEX)
             {
@@ -117,9 +116,8 @@ namespace WijkagentWPF
                 _connection.Open();
                 SQLStatement.Connection = _connection;
                 SQLStatement.CommandTimeout = 4;
-                int rows = SQLStatement.ExecuteNonQuery();
 
-                return rows;
+                return SQLStatement.ExecuteNonQuery();
             }
             catch (SqlException sqlEX)
             {
