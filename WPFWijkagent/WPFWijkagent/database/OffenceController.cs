@@ -15,30 +15,16 @@ namespace WijkagentWPF.database
         }
 
         /// <summary>
-        /// saves an offence and its associated location
+        /// saves an offence and its location when location.id == 0
         /// </summary>
-        /// <param name="dateTime">offence datetime </param>
-        /// <param name="description">offence description</param>
-        /// <param name="location">location object associated</param>
-        /// <param name="category">offence categorie (enum)</param>
+        /// <param name="offence">offence obj that needs saving</param>
         /// <returns> returns the ID of the inserted Offence</returns>
-        public int SetOffence(DateTime dateTime, string description, Location location, OffenceCategories category)
+        public int SetOffence(Offence offence)
         {
-
-            int locationID = new LocationController().SetLocation(location.Latitude, location.Longitude);
-            return SetOffence(dateTime, description, locationID, category);
-        }
-
-        /// <summary>
-        /// saves an offence 
-        /// </summary>
-        /// <param name="dateTime">offence datetime </param>
-        /// <param name="description">offence description</param>
-        /// <param name="location">location object associated</param>
-        /// <param name="category">offence categorie (enum)</param>
-        /// <returns> returns the ID of the inserted Offence</returns>
-        public int SetOffence(DateTime dateTime, string description, int locationID, OffenceCategories category)
-        {
+            if (offence.Location.ID == 0)
+            {
+                offence.Location.ID = new LocationController().SetLocation(offence.Location);
+            }
             SqlCommand query = new SqlCommand("INSERT INTO Offence (DateTime, Description, LocationID, Category) " +
                 "OUTPUT INSERTED.ID " +
                 "VALUES(@DateTime, @Description, @LocationID, @Category)");
@@ -49,10 +35,10 @@ namespace WijkagentWPF.database
             query.Parameters.Add("@LocationID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@Category", System.Data.SqlDbType.VarChar);
 
-            query.Parameters["@DateTime"].Value = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
-            query.Parameters["@Description"].Value = description;
-            query.Parameters["@LocationID"].Value = locationID;
-            query.Parameters["@Category"].Value = category.ToString();
+            query.Parameters["@DateTime"].Value = offence.DateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            query.Parameters["@Description"].Value = offence.Description;
+            query.Parameters["@LocationID"].Value = offence.Location.ID;
+            query.Parameters["@Category"].Value = offence.Category.ToString();
 
             return _dbContext.ExecuteInsertQuery(query);
         }
@@ -86,11 +72,11 @@ namespace WijkagentWPF.database
             }
 
             return new Offence(
-                (int)offenceData[0],
                 new DateTime(yyyy, mm, dd, hh, min, ss),
                 offenceData[2].ToString(),
                 new LocationController().GetLocation((int)offenceData[3]),
-                category);
+                category,
+                (int)offenceData[0]);
         }
 
         /// <summary>

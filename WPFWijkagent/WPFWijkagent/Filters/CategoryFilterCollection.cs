@@ -32,7 +32,7 @@ namespace WijkagentWPF.Filters
         /// <summary>
         /// Dictionary containing CategoryFilters as key and whether they are turn on as value.
         /// </summary>
-        private static Dictionary<CategoryFilter, bool> Categories { get; set; }
+        public static Dictionary<CategoryFilter, bool> Categories { get; private set; }
 
         /// <summary>
         /// Toggles a CategoryFilter on or off. 

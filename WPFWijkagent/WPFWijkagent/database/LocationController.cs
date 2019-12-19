@@ -20,14 +20,14 @@ namespace WijkagentWPF.database
         /// <param name="latitude">location latitude</param>
         /// <param name="longitude">location longitude</param>
         /// <returns>the id of the inserted location</returns>
-        public int SetLocation(double latitude, double longitude)
+        public int SetLocation(Location location)
         {
             SqlCommand query = new SqlCommand("INSERT INTO Location (Latitude, Longitude) OUTPUT INSERTED.ID VALUES(@Latitude, @Longitude)");
 
             query.Parameters.Add("@Latitude", System.Data.SqlDbType.Float);
             query.Parameters.Add("@Longitude", System.Data.SqlDbType.Float);
-            query.Parameters["@Latitude"].Value = latitude;
-            query.Parameters["@Longitude"].Value = longitude;
+            query.Parameters["@Latitude"].Value = location.Latitude;
+            query.Parameters["@Longitude"].Value = location.Longitude;
 
             return _dbContext.ExecuteInsertQuery(query);
         }
@@ -47,7 +47,7 @@ namespace WijkagentWPF.database
             if (rows.Count == 1)
             {
                 object[] row = rows[0];
-                return new Location(ID, (double)row[1], (double)row[2]);
+                return new Location((double)row[1], (double)row[2], ID);
             }
             return null;
         }

@@ -1,27 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using WijkagentModels;
+﻿using WijkagentModels;
 using WijkagentWPF.database;
-using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
     public class SocialMediaDialogueController
     {
         private Offence _offence { get; set; }
-        public Location Location { get; set; }
 
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
         /// </summary>
-        /// <param name="pin"></param>
-        /// <param name="offenceListItems"></param>
-        public SocialMediaDialogueController(Location location, Offence offence)
+        /// <param name="offence"></param>
+        public SocialMediaDialogueController(Offence offence)
         {
             _offence = offence;
-            Location = location;
         }
-
 
         /// <summary>
         /// This method creates a single string from all elements within the list of found SocialMediaItems 
@@ -31,14 +24,14 @@ namespace WijkagentWPF
         public string DisplayMessages()
         {
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            var feed = socialMediaMessageController.GetOffenceSocialMediaMessages(_offence.ID);
+            Scraper scraper = new Scraper(_offence);
             string display = "";
-            if (feed.Count > 0)
+
+            scraper.UpdateSocialMediaMessages();
+            var feed = socialMediaMessageController.GetOffenceSocialMediaMessages(_offence.ID);
+            foreach (SocialMediaMessage media in feed)
             {
-                foreach (SocialMediaMessage media in feed)
-                {
-                    display += $"\n{media.ToString()}\n ";
-                }
+                display += $"\n{media.ToString()}\n ";
             }
             return display;
         }

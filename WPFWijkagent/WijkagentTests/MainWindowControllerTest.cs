@@ -9,7 +9,7 @@ namespace WijkagentTests
     public class MainWindowControllerTest
     {
         private static DateTime _dateTime = new DateTime().ToLocalTime();
-        private static Location _location = new Location(0, 1.1, 1.1);
+        private static Location _location = new Location(1.1, 1.1);
 
         [SetUp]
         public void SetUp()
