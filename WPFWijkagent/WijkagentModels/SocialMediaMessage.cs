@@ -12,8 +12,9 @@ namespace WijkagentModels
         public virtual Location Location { get; set; }
         public Offence Offence { get; set; }
         public int Type { get; set; }
+        public long TwitterID { get; set; }
 
-        public SocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, Offence offence = null, int type = 0, int id = 0)
+        public SocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null, int type = 0, int id = 0)
         {
             ID = id;
             DateTime = dateTime;
@@ -23,11 +24,12 @@ namespace WijkagentModels
             Location = location;
             Type = type;
             Offence = offence;
+            TwitterID = twitterID;
         }
 
         public override string ToString()
         {
-            return $"\nGebruiker: {User}\nTwitter Naam: {Handle}\nomschrijving: {Message}\ndatum en tijd: {DateTime.ToShortDateString()} ";
+            return $"\ngebruiker naam: {User}\ntwitter naam: {Handle}\nomschrijving: {Message}\ndatum en tijd: {DateTime.ToString("dd/MM/yyyy H:mm")} ";
         }
     }
 }

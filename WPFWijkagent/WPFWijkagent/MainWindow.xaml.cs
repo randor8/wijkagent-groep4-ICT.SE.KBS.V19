@@ -1,11 +1,14 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using WijkagentWPF.Filters;
+using WijkagentWPF.Session;
 
 namespace WijkagentWPF
 {
@@ -19,13 +22,20 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
             InitializeComponent();
-            FillCategoriesCombobox();
-            FillOffenceList();
 
-            wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries; // Sets the zoom boundary check on the map in the main window.
-            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242)); // Sets the background color of the map to the color composed of the given rgb values.
+            App.RegisterSession(new SessionMapLocation(wpfMapMain));
+            App.RegisterSession(new SessionMapZoom(wpfMapMain));
+            App.RegisterSession(new SessionFilterCategories());
+            App.LoadSession();
+
+            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
+            wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
             wpfMapMain.MouseLeftButtonDown += AddPin;
+
+            FillCategoryFiltermenu();
+            FillOffenceList();
         }
 
         /// <summary>
@@ -56,14 +66,14 @@ namespace WijkagentWPF
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             RemoveMouseDownEvents();
             wpfMapMain.Children.Clear();
-            List<Offence> offences = MainWindowController.GetOffencesByCategory(wpfCBCategoriesFilter.SelectedItem.ToString());
+            List<Offence> offences = MainWindowController.FilterOffences();
 
             offences.ForEach(of =>
             {
                 of.GetPushpin().MouseDown += Pushpin_MouseDown;
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-
+            offences = offences.OrderByDescending(x => x.DateTime).ToList();
             wpfLBSelection.ItemsSource = offences;
             wpfLBSelection.Items.Refresh();
         }
@@ -75,7 +85,11 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            social = new DelictDialog((Pushpin)sender, MainWindowController.GetOffences());
+            Pushpin pin = (Pushpin)sender;
+            social = new DelictDialog(pin,
+                MainWindowController.RetrieveOffence(
+                    pin.Location.Latitude,
+                    pin.Location.Longitude));
             social.Show();
         }
 
@@ -94,32 +108,52 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Fills the categories combobox
+        /// Fills the Category Tab in the filtermenu.
         /// </summary>
-        private void FillCategoriesCombobox()
+        private void FillCategoryFiltermenu()
         {
-            wpfCBCategoriesFilter.Items.Add("Alles tonen");
-
-            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
+            OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
+            for (int i = 0; i < offenceCategories.Length - 1; i++)
             {
-                if (offenceItem != OffenceCategories.Null)
+                FilterGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
+                CheckBox checkBox = new CheckBox()
                 {
-                    wpfCBCategoriesFilter.Items.Add(offenceItem);
-                }
-            }
+                    Name = offenceCategories[i].ToString(),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    IsChecked = SessionFilterCategories.IsFilterActive(offenceCategories[i].ToString())
+                };
+                checkBox.Checked += CategoryCheckboxToggle;
+                checkBox.Unchecked += CategoryCheckboxToggle;
+                FilterGrid.Children.Add(checkBox);
+                Grid.SetColumn(checkBox, 0);
+                Grid.SetRow(checkBox, i);
 
-            wpfCBCategoriesFilter.SelectedIndex = 0;
+                Label label = new Label()
+                {
+                    Padding = new Thickness(0, 0, 0, 0),
+                    Content = offenceCategories[i],
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+                FilterGrid.Children.Add(label);
+                Grid.SetColumn(label, 1);
+                Grid.SetRow(label, i);
+            }
         }
 
         /// <summary>
-        /// Gets called when the categories combobox selection is changed
-        /// Fills the OffenceListItems with the correct Offences
+        /// Toggles the Category on or off when a checkbox is clicked.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <param name="sender">The sender of the event when a checkbox is clicked.</param>
+        /// <param name="e">Parameters given by the sender of the event.</param>
+        private void CategoryCheckboxToggle(object sender, RoutedEventArgs e)
         {
-            FillOffenceList();
+            if (sender is CheckBox checkBox)
+            {
+                CategoryFilterCollection.Instance.ToggleCategory((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name));
+                FillOffenceList();
+            }
         }
 
         /// <summary>
@@ -132,49 +166,42 @@ namespace WijkagentWPF
             {
                 wpfBTNAddOffence.Content = "delict toevoegen";
                 Mouse.OverrideCursor = Cursors.Arrow;
-                _addModeActivated = false;
             }
             else
             {
                 wpfBTNAddOffence.Content = "Annuleer";
                 Mouse.OverrideCursor = Cursors.Cross;
-                _addModeActivated = true;
             }
+            _addModeActivated = !_addModeActivated;
+        }
+
+        private WijkagentModels.Location GetLocationFromClick(MouseButtonEventArgs e)
+        {
+            // Get the mouse click coordinates
+            Point mousePosition = e.GetPosition(this);
+            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
+            return new WijkagentModels.Location(location.Latitude, location.Longitude);
         }
 
         /// <summary>
-        /// open the dialog when clicked on the map and AddMode is activiated
+        /// shows the dialog (if we are in add mode) and resets the screen
         /// </summary>
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
-            //create nieuw offencedialogue when clicked on map
-            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue();
             if (!_addModeActivated)
             {
                 return;
             }
 
-            Mouse.OverrideCursor = Cursors.Arrow;
-            // Disables the default mouse double-click action.
+            //show dialog and reset screen 
+            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(GetLocationFromClick(e));
             e.Handled = true;
-
-            // Determin the location to place the pushpin at on the map.
-
-            // Get the mouse click coordinates
-            Point mousePosition = e.GetPosition(this);
-            // Convert the mouse coordinates to a locatoin on the map
-            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
-
-            // create a WijkAgendModels Location and convert the WPF location to that location.
-            WijkagentModels.Location newLocation = new WijkagentModels.Location(location.Latitude, location.Longitude);
-
-            // try to show the dialog, catch if the date enterd is in the future                                                   
-            OffenceDialogue.Location = newLocation;
+            Mouse.OverrideCursor = Cursors.Arrow;
+            wpfBTNAddOffence.Content = "delict toevoegen";
+            _addModeActivated = false;
 
             OffenceDialogue.ShowDialog();
             FillOffenceList();
-            wpfBTNAddOffence.Content = "delict toevoegen";
-            _addModeActivated = false;
         }
 
         /// <summary>
@@ -198,8 +225,36 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Reset all category checkboxes in the filter expander
+        /// </summary>
+        private void ResetCategoryCheckbox()
+        {
+            foreach (CheckBox item in FilterGrid.Children.OfType<CheckBox>())
+            {
+                item.IsChecked = false;
+            }
+        }
+        /// <summary>
+        /// On click button reset all filters
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void wpfBTNResetFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ResetCategoryCheckbox();
+            FilterList.ClearFilters();
+            FillOffenceList();
+        }
+
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
+            App.SaveSession();
             Application.Current.Shutdown();
         }
     }

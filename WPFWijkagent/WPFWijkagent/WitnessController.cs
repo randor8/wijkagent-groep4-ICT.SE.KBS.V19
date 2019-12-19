@@ -36,7 +36,8 @@ namespace WijkagentWPF
         /// </summary>
         public void SendTweet()
         {
-            Scraper.Connect();
+            Scraper scraper = new Scraper(_Offence);
+            scraper.Connect();
             Tweet.PublishTweet(CreateWitnessMessage());
         }
     }

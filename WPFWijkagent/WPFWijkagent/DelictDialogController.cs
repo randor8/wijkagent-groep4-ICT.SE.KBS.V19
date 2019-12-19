@@ -1,47 +1,20 @@
-﻿using Microsoft.Maps.MapControl.WPF;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
     public class DelictDialogController
     {
-        private readonly List<Offence> _offenceList;
-        private readonly Location _location;
 
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
         /// </summary>
-        /// <param name="pin"></param>
         /// <param name="offenceListItems"></param>
-        public DelictDialogController(Location location, List<Offence> offences)
+        public DelictDialogController()
         {
-            _offenceList = offences;
-            _location = location;
-        }
-
-        /// <summary>
-        /// The method executes a LINQ search on the List items and finds the offencelistItem with the same pin. 
-        /// </summary>
-        /// <returns>The method returns the offence that has the same pin</returns>
-        public Offence RetrieveOffence()
-        {
-            Offence o = null;
-            IEnumerable<Offence> offenceQuerry =
-            from OffenceItem in _offenceList
-            where OffenceItem.Location.Latitude == _location.Latitude 
-            && OffenceItem.Location.Longitude == _location.Longitude
-            select OffenceItem;
-            foreach (var item in offenceQuerry)
-            {
-                o = item;
-            }
-            return o;
+            
         }
 
         /// <summary>

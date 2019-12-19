@@ -15,14 +15,14 @@ namespace WijkagentWPF
 
         private Offence _offence;
 
-        public DelictDialog(Pushpin pin, List<Offence> offences)
+        public DelictDialog(Pushpin pin, Offence offence)
         {
             InitializeComponent();
             Location l = new Location(pin.Location.Latitude, pin.Location.Longitude);
-            _controller = new DelictDialogController(l, offences);
-            _offence = _controller.RetrieveOffence();
-            _controller.DisplayMessages(_controller.RetrieveOffence(), wpfLVMessages);
-            _controller.DisplayWitnessMessages(_controller.RetrieveOffence(), WitnessMessages);
+            _controller = new DelictDialogController();
+            _controller.DisplayMessages(offence, wpfLVMessages);
+            _controller.DisplayWitnessMessages(offence, WitnessMessages);
+            _offence = offence;
         }
 
         private void wpfBPrint_Click(object sender, RoutedEventArgs e)
