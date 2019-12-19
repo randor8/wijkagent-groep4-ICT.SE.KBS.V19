@@ -52,7 +52,7 @@ namespace WijkagentModels
         /// </summary>
         private  void Connect()
         {
-            Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
+            Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
         }
 
         /// <summary>
