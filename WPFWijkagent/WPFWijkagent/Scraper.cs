@@ -22,7 +22,7 @@ namespace WijkagentModels
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
         private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
         private readonly string _accessToken = ConfigurationManager.AppSettings.Get("accesToken");
-        private readonly string accesTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
+        private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
         public Scraper(Offence offence)
