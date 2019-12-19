@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows;
 using WijkagentWPF.Session;
@@ -11,7 +12,8 @@ namespace WijkagentWPF
     public partial class App : Application
     {
         private static Dictionary<string, ASession> _sessions = new Dictionary<string, ASession>();
-        public const string SessionFile = "./Session.cfg";
+        public static readonly string ApplicationFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wijkagent");
+        public static readonly string SessionFile = "./Session.cfg";
 
         /// <summary>
         /// Stores a session object combined with its key.
@@ -24,9 +26,10 @@ namespace WijkagentWPF
         /// </summary>
         public static void LoadSession()
         {
-            if (!File.Exists(SessionFile)) return;
+            string file = Path.Combine(ApplicationFolder, SessionFile);
+            if (!File.Exists(file)) return;
 
-            using var reader = File.OpenText(SessionFile);
+            using var reader = File.OpenText(file);
             string line;
 
             while ((line = reader.ReadLine()) != null) // checking if we hit the eof, if not; use
@@ -43,7 +46,8 @@ namespace WijkagentWPF
         /// </summary>
         public static void SaveSession()
         {
-            using var writer = File.CreateText(SessionFile);
+            Directory.CreateDirectory(ApplicationFolder); // Making sure the folder exists
+            using var writer = File.CreateText(Path.Combine(ApplicationFolder, SessionFile));
 
             foreach (string key in _sessions.Keys)
                 writer.WriteLine($"{key}:{_sessions[key].Save()}");
