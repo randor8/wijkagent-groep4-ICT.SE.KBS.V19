@@ -21,7 +21,7 @@ namespace WijkagentModels
         #region Keys&Tokens
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
         private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
-        private readonly string accesToken = ConfigurationManager.AppSettings.Get("accesToken");
+        private readonly string _accessToken = ConfigurationManager.AppSettings.Get("accesToken");
         private readonly string accesTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
