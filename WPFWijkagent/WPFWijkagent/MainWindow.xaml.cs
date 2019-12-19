@@ -28,6 +28,9 @@ namespace WijkagentWPF
             FillOffenceList();
             wpfMapMain.MouseLeftButtonDown += AddPin;
             FilterList.AddFilter(CategoryFilterCollection.Instance);
+
+            //add  showmessage method to logger
+            Logger.Log.ErrorToScreenEvent += ErrorEventHandler;
         }
 
         /// <summary>
@@ -269,6 +272,12 @@ namespace WijkagentWPF
         private void Window_Closed(object sender, EventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        public void ErrorEventHandler(object sender, string message)
+        {
+            //check wich object then set the appropriate message.
+            MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
         }
     }
 }

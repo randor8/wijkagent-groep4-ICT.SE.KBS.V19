@@ -3,11 +3,12 @@ using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
+using WijkagentModels;
+using Tweetinvi.Exceptions;
 
-
-namespace WijkagentModels
+namespace WijkagentWPF
 {
-    /// <summary>
+    /// <summary>W
     /// The class is responsible for fetching twitter messages and converting them to social Media Messages
     /// </summary>
     public class Scraper
@@ -37,28 +38,23 @@ namespace WijkagentModels
             };
         }
 
-        // containing Test Methods to test network Connectivity
-        #region Test
-        public static string GetUsername()
+        /// <summary>
+        /// connects to twitter api and catches auth errors
+        /// </summary>
+        public void Connect()
         {
-            Console.WriteLine($"{DateTime.Now} Bot started");
-            Connect();
-            string data = User.GetAuthenticatedUser().ToString();
-            return data;
-        }
-
-        public static object GetUser()
-        {
-            Console.WriteLine($"{DateTime.Now} Bot started");
-            var exp = Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
-            return exp;
-        }
-        #endregion
-
-        // bassfunctie om de connectie te maken tussen de API en het autorizeren
-        public static void Connect()
-        {
-            Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
+            ExceptionHandler.SwallowWebExceptions = false;
+            try
+            {
+                Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
+                //throws error when not authenticated correctly
+                User.GetAuthenticatedUser();
+            }
+            catch (TwitterException)
+            {
+                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                Logger.Log.ErrorEventHandler(this);
+            }
         }
 
         /// <summary>
@@ -69,13 +65,14 @@ namespace WijkagentModels
         public void GetSocialMediaMessages()
         {
             Connect();
-            Location location;
+            
+            WijkagentModels.Location location;
             var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
                 if (tweet.Coordinates != null)
                 {
-                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+                    location = new WijkagentModels.Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
                 }
                 else
                 {
