@@ -46,7 +46,7 @@ namespace WijkagentWPF
 
             } else if(sender is Scraper)
             {
-                ErrorToScreenEvent?.Invoke(sender, APIErrorMessage);
+                ErrorToScreenEvent?.Invoke(sender, _APIErrorMessage);
             }
         }
 
