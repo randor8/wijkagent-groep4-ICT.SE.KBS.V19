@@ -22,6 +22,9 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+
+            //add  showmessage method to logger
+            Logger.Log.ErrorToScreenEvent += ErrorEventHandler;
             FilterList.AddFilter(CategoryFilterCollection.Instance);
             InitializeComponent();
 
@@ -88,6 +91,7 @@ namespace WijkagentWPF
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Pushpin pin = (Pushpin)sender;
+
             social = new SocialMediaDialogue( 
                 MainWindowController.RetrieveOffence(
                     pin.Location.Latitude, 
@@ -381,6 +385,17 @@ namespace WijkagentWPF
         {
             App.SaveSession();
             Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// displays errors from the logger
+        /// </summary>
+        /// <param name="sender">the object that send the error</param>
+        /// <param name="message">messgae to display</param>
+        public void ErrorEventHandler(object sender, string message)
+        {
+            //check wich object then set the appropriate message.
+            MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace WijkagentWPF
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
         /// </summary>
-        /// <param name="offenceListItems"></param>
+        /// <param name="offence"></param>
         public SocialMediaDialogueController(Offence offence)
         {
             _offence = offence;
