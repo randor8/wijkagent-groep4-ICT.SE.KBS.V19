@@ -9,7 +9,7 @@ namespace WijkagentWPF
         /// <summary>
         /// singleton instance
         /// </summary>
-        private static Logger logger = null;
+        private static Logger _logger = null;
         private Logger()
         {
 
