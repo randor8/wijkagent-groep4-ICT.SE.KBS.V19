@@ -42,7 +42,7 @@ namespace WijkagentWPF
         {
             if (sender is DBContext)
             {
-                ErrorToScreenEvent?.Invoke(sender, DBErrorMessage);
+                ErrorToScreenEvent?.Invoke(sender, _DBErrorMessage);
 
             } else if(sender is Scraper)
             {
