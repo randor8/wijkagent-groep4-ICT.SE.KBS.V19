@@ -80,7 +80,7 @@
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Label Grid.Column="0">Datum</Label>
-                                    <DatePicker x:Name="DatePickerSingle" SelectedDateChanged="SingleDateFilterChanged" Grid.Column="1"/>
+                                    <DatePicker x:Name="DatePickerSingle" SelectedDateChanged="SingleDateFilterChanged" DisplayDateEnd="{x:Static sys:DateTime.Today}" Grid.Column="1"/>
                                 </Grid>
                                 <Grid x:Name="DateRangePanel">
                                     <Grid.ColumnDefinitions>

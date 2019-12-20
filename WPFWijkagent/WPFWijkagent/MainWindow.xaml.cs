@@ -27,8 +27,10 @@ namespace WijkagentWPF
 
             App.RegisterSession(new SessionMapLocation(wpfMapMain));
             App.RegisterSession(new SessionMapZoom(wpfMapMain));
-            App.RegisterSession(new SessionFilterCategories());
             App.RegisterSession(new SessionFilterSingleDate(DatePickerSingle));
+            App.RegisterSession(new SessionFilterDateRange(DatePickerFrom, DatePickerTo));
+            App.RegisterSession(new SessionActiveDateFilter(SingleDate, DateRange));
+            App.RegisterSession(new SessionFilterCategories());
             App.LoadSession();
 
             wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
@@ -253,6 +255,11 @@ namespace WijkagentWPF
             FillOffenceList();
         }
 
+        /// <summary>
+        /// Toggles which date filter menu is visible.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
         private void ToggleDateFilter(object sender, RoutedEventArgs e)
         {
             if (sender is RadioButton radioButton)
@@ -264,7 +271,6 @@ namespace WijkagentWPF
                     singleDateVisibility = Visibility.Visible;
                     dateRangeVisiblity = Visibility.Collapsed;
 
-                    FilterList.RemoveFilter($"{typeof(DateRangeFilter)}");
                     AddSingleDateFilter(DatePickerSingle);
                 }
                 else
@@ -272,7 +278,6 @@ namespace WijkagentWPF
                     singleDateVisibility = Visibility.Collapsed;
                     dateRangeVisiblity = Visibility.Visible;
 
-                    FilterList.RemoveFilter($"{typeof(DateFilter)}");
                     AddDateRangeFilter(DatePickerFrom, DatePickerTo);
                 }
                 if (DateRangePanel != null && SingleDatePanel != null)
@@ -287,6 +292,11 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Updates the filter when a new date is chosen.
+        /// </summary>
+        /// <param name="sender">Sender of the event. One of the datepickers.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
         private void DateRangeFilterChanged(object sender, RoutedEventArgs e)
         {
             if (sender is DatePicker from)
@@ -308,10 +318,17 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Adds a DateRangeFilter to the filterlist using the dates from two datepickers.
+        /// </summary>
+        /// <param name="DatePickerFrom">Datepicker containing the lower bound of the date range.</param>
+        /// <param name="DatePickerTo">Datepicker containing the upper bound of the date range.</param>
+        /// <returns>Boolean based on whether the filter was added.</returns>
         private bool AddDateRangeFilter(DatePicker DatePickerFrom, DatePicker DatePickerTo)
         {
             if (DatePickerFrom != null && DatePickerFrom.SelectedDate.HasValue && DatePickerTo != null && DatePickerTo.SelectedDate.HasValue)
             {
+                FilterList.RemoveFilter($"{typeof(DateFilter)}");
                 DateTime DateFrom = new DateTime(DatePickerFrom.SelectedDate.Value.Year, DatePickerFrom.SelectedDate.Value.Month, DatePickerFrom.SelectedDate.Value.Day);
                 DateTime DateTo = new DateTime(DatePickerTo.SelectedDate.Value.Year, DatePickerTo.SelectedDate.Value.Month, DatePickerTo.SelectedDate.Value.Day);
                 DateRangeFilter filter = new DateRangeFilter(DateFrom, DateTo);
@@ -321,6 +338,11 @@ namespace WijkagentWPF
             return false;
         }
 
+        /// <summary>
+        /// Adds single date filter when the date is changed in the datepicker.
+        /// </summary>
+        /// <param name="sender">Sender of the event. The datepicker.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
         private void SingleDateFilterChanged(object sender, RoutedEventArgs e)
         {
             if (sender is DatePicker datePicker)
@@ -332,10 +354,16 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Adds single date filter to the filterlist using the date from the datepicker.
+        /// </summary>
+        /// <param name="datePicker">Datepicker containing the date.</param>
+        /// <returns>Boolean based on whether the filter was added.</returns>
         private bool AddSingleDateFilter(DatePicker datePicker)
         {
             if (datePicker != null && datePicker.SelectedDate.HasValue)
             {
+                FilterList.RemoveFilter($"{typeof(DateRangeFilter)}");
                 DateTime date = new DateTime(datePicker.SelectedDate.Value.Year, datePicker.SelectedDate.Value.Month, datePicker.SelectedDate.Value.Day);
                 DateFilter filter = new DateFilter(date);
                 FilterList.AddFilter(filter);
