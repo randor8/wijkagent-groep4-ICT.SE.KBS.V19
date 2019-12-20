@@ -23,7 +23,7 @@ namespace WijkagentWPF
                 {
                     logger = new Logger();
                 }
-                return logger;
+                return _logger;
             }
         }
 
