@@ -84,7 +84,9 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            new DelictDialog((sender as Pushpin).GetOffence()).Show();
+            Offence offence = (sender as Pushpin).GetOffence();
+            new Scraper(offence).UpdateSocialMediaMessages();
+            new DelictDialog(offence).Show();
         }
 
         /// <summary>

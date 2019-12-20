@@ -4,7 +4,7 @@ using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
 using System.Configuration;
-
+using System.Windows;
 
 namespace WijkagentModels
 {
@@ -35,11 +35,11 @@ namespace WijkagentModels
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(
                     offence.DateTime.Year,
-                    offence.DateTime.Month, 
+                    offence.DateTime.Month,
                     offence.DateTime.Day + 1),
                 Since = new DateTime(
                     offence.DateTime.Year,
-                    offence.DateTime.Month, 
+                    offence.DateTime.Month,
                     offence.DateTime.Day,
                     offence.DateTime.Hour - 1,
                     offence.DateTime.Minute,
@@ -50,7 +50,7 @@ namespace WijkagentModels
         /// <summary>
         /// This function authenticates the user for the Twitter API
         /// </summary>
-        private  void Connect()
+        private void Connect()
         {
             Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
         }
@@ -69,6 +69,7 @@ namespace WijkagentModels
                 SetSocialMediaMessage(tweet);
             }
         }
+
         /// <summary>
         /// Checks and sets a specific value to the DB and adds a Social Media Message
         /// </summary>
@@ -83,14 +84,24 @@ namespace WijkagentModels
             {
                 locationId = locationController.SetLocation(new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
             }
-            socialMediaMessageController.SetSocialMediaMessage(
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(
                 tweet.CreatedAt,
                 tweet.Text,
                 tweet.CreatedBy.Name,
                 tweet.CreatedBy.ScreenName,
                 locationId,
                 Offence.ID,
-                tweet.Id);
+                tweet.Id
+            );
+
+            SocialMediaImageController imageController = new SocialMediaImageController();
+            foreach (var media in tweet.Media)
+            {
+                imageController.SetSocialMediaImage(
+                    messageID,
+                    media.MediaURLHttps
+                );
+            }
         }
 
         /// <summary>
@@ -111,6 +122,5 @@ namespace WijkagentModels
                 }
             }
         }
-
     }
 }

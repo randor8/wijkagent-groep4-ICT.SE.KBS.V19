@@ -34,8 +34,7 @@ namespace WijkagentWPF
             Offence offence = new Offence(dateTime, description, location, category);
             offence.ID = offenceController.SetOffence(offence);
 
-            Scraper scraper = new Scraper(offence);
-            scraper.SetSocialMediaMessages();
+            new Scraper(offence).SetSocialMediaMessages();
 
             _offences.Add(offence);
         }
@@ -115,7 +114,7 @@ namespace WijkagentWPF
                 where OffenceItem.Location.Latitude == latitude
                 && OffenceItem.Location.Longitude == longitude
                 select OffenceItem;
-            offence = offenceQuerry.First(); 
+            offence = offenceQuerry.First();
             return offence;
         }
 
