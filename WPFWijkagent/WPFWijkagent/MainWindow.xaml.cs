@@ -269,7 +269,7 @@ namespace WijkagentWPF
         public void ErrorEventHandler(object sender, string message)
         {
             //check wich object then set the appropriate message.
-            MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.OK);
+            MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
         }
     }
 }

@@ -60,10 +60,9 @@ namespace WijkagentWPF
                 //throws error when not authenticated correctly
                 User.GetAuthenticatedUser();
             }
-            catch (TwitterException)
+            catch (Exception)
             {
-                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
-                Logger.Log.ErrorEventHandler(this);
+                return;
             }
         }
 
@@ -74,11 +73,18 @@ namespace WijkagentWPF
         /// <returns>list of social media messages </returns>
         public void SetSocialMediaMessages()
         {
-            Connect();
-            var tweets = Search.SearchTweets(_searchParameters);
-            foreach (var tweet in tweets)
+            try {
+                Connect();
+                var tweets = Search.SearchTweets(_searchParameters);
+                foreach (var tweet in tweets)
+                {
+                    SetSocialMediaMessage(tweet);
+                }
+            }
+            catch (Exception)
             {
-                SetSocialMediaMessage(tweet);
+                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                Logger.Log.ErrorEventHandler(this);
             }
         }
         /// <summary>
@@ -110,18 +116,25 @@ namespace WijkagentWPF
         /// </summary>
         public void UpdateSocialMediaMessages()
         {
-            Connect();
-            var tweets = Search.SearchTweets(_searchParameters);
-            SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
-
-            foreach (var tweet in tweets)
+            try
             {
-                if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                Connect();
+                var tweets = Search.SearchTweets(_searchParameters);
+                SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
+
+                foreach (var tweet in tweets)
                 {
-                    SetSocialMediaMessage(tweet);
+                    if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                    {
+                        SetSocialMediaMessage(tweet);
+                    }
                 }
             }
+            catch (Exception)
+            {
+                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                Logger.Log.ErrorEventHandler(this);
+            }
         }
-
     }
 }
