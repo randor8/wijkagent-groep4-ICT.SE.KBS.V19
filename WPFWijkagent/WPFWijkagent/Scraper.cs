@@ -64,7 +64,8 @@ namespace WijkagentModels
                     offence.DateTime.Day,
                     offence.DateTime.Hour - 1,
                     offence.DateTime.Minute,
-                    offence.DateTime.Second)
+                    offence.DateTime.Second),
+                    Until = DateTime.Now
                 };
             }
         }
@@ -75,6 +76,7 @@ namespace WijkagentModels
         public void Connect()
         {
             Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
+            ExceptionHandler.SwallowWebExceptions = false;
         }
 
         /// <summary>

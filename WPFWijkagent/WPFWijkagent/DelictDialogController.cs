@@ -25,7 +25,7 @@ namespace WijkagentWPF
         public void DisplayMessages(Offence offence, System.Windows.Controls.ListView wpfLVMessages, int type = 0)
         {
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID, type);
+            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence, type);
         }
     }
 }

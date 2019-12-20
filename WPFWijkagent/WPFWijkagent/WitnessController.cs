@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Text;
 using Tweetinvi;
 using WijkagentModels;
@@ -33,12 +34,28 @@ namespace WijkagentWPF
 
         /// <summary>
         /// connect to the twitter bot and publish the custom tweet.
+        /// Insert the created hashtag in the database
         /// </summary>
         public void SendTweet()
         {
+            MainWindow window = new MainWindow();
+            DBContext dBContext = new DBContext();
             Scraper scraper = new Scraper(_Offence);
             scraper.Connect();
             Tweet.PublishTweet(CreateWitnessMessage());
+            SqlCommand query = new SqlCommand("UPDATE Offence SET Hashtag = @Hashtag WHERE ID = @OffenceID");
+
+            //prepare values in statement 
+            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters.Add("@Hashtag", System.Data.SqlDbType.NVarChar);
+
+            query.Parameters["@Hashtag"].Value = $"Delict{_Offence.ID}";
+            query.Parameters["@OffenceID"].Value = _Offence.ID;
+
+            dBContext.ExecuteQuery(query);
+            _Offence.CallHashtag = $"#Delict{_Offence.ID}";
+            Scraper WitnessScraper = new Scraper(_Offence, true, window.Hashtag(_Offence));
+            WitnessScraper.UpdateSocialMediaMessages(1);
         }
     }
 }

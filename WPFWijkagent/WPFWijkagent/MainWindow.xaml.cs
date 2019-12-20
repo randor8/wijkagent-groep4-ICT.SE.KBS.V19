@@ -1,6 +1,7 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -86,24 +87,58 @@ namespace WijkagentWPF
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
             Pushpin pin = (Pushpin)sender;
-            social = new DelictDialog(pin,
-                MainWindowController.RetrieveOffence(
-                    pin.Location.Latitude,
-                    pin.Location.Longitude));
 
             Offence Offence = MainWindowController.RetrieveOffence(
                 pin.Location.Latitude,
                 pin.Location.Longitude);
-            //create a scraper without the hashtag to get all the messages for this offence
+
+            //create a scraper without the hashtag to get all the messages for this offence and update the messages
             Scraper SocialScraper = new Scraper(Offence);
-
-            //create a scraper for the witness messages
-            Scraper WitnessScraper = new Scraper(Offence, true, MainWindowController.Hashtag(Offence));
-
-            //update both massages in the database.
             SocialScraper.UpdateSocialMediaMessages();
-            WitnessScraper.UpdateSocialMediaMessages(1);
+
+            //create a scraper for the witness messages and update the messages
+            if (!String.IsNullOrEmpty(Offence.CallHashtag))
+            {
+                Scraper WitnessScraper = new Scraper(Offence, true, Hashtag(Offence));
+                WitnessScraper.UpdateSocialMediaMessages(1);
+            }
+            
+
+            social = new DelictDialog(pin,
+                MainWindowController.RetrieveOffence(
+                    pin.Location.Latitude,
+                    pin.Location.Longitude));
             social.Show();
+        }
+
+        /// <summary>
+        /// Create a Search hashtag fot the offence
+        /// </summary>
+        /// <param name="offence">the offence for the search hastag</param>
+        /// <returns></returns>
+        public string Hashtag(Offence offence)
+        {
+            DBContext dBContext = new DBContext();
+            SqlCommand query = new SqlCommand("SELECT Hashtag FROM Offence WHERE ID = @OffenceID");
+            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters["@OffenceID"].Value = offence.ID;
+            List<object[]> rows = dBContext.ExecuteSelectQuery(query);
+
+            if (rows.Count == 1 && !String.IsNullOrEmpty(rows[0].ToString()))
+            {
+                string text = rows[0].GetValue(0).ToString();
+                return text;
+            }
+
+            else
+            {
+                return $"#Delict{offence.ID}";
+            }
+        }
+
+        private static string ObjectArrayToSocialMediaMessage(object[] v)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

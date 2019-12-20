@@ -48,16 +48,7 @@ namespace WijkagentWPF
         {
             return FilterList.ApplyFilters(_offences);
         }
-
-        /// <summary>
-        /// Create a Search hashtag fot the offence
-        /// </summary>
-        /// <param name="offence">the offence for the search hastag</param>
-        /// <returns></returns>
-        public static string Hashtag(Offence offence)
-        {
-            return "Delict" + offence.ID.ToString();
-        }
+        
 
         /// <summary>
         /// Gets the pushpin of the offence

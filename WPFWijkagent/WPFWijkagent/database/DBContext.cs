@@ -201,7 +201,6 @@ namespace WijkagentWPF
                 SQLStatement.Dispose();
                 _connection.Close();
             }
-
         }
     }
 }

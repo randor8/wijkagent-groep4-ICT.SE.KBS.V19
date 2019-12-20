@@ -82,8 +82,8 @@ namespace WijkagentWPF.database
                 socialMediaMessageData[2].ToString(),
                 socialMediaMessageData[3].ToString(),
                 new LocationController().GetLocation((int)socialMediaMessageData[4]),
-                (long) socialMediaMessageData[5], 
-                new OffenceController().GetOffence((int)socialMediaMessageData[6]));
+                (long) socialMediaMessageData[6], 
+                new OffenceController().GetOffence((int)socialMediaMessageData[5]));
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace WijkagentWPF.database
         /// <returns>the new SocialMediaMessage object requested</returns>
         public SocialMediaMessage GetSocialMediaMessage(long tweetID)
         {
-            SqlCommand query = new SqlCommand("DateTime, Message, Username, Handle, LocationID, TwitterID, OffenceID" +
+            SqlCommand query = new SqlCommand("SELECT DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
                 "FROM SocialMediaMessage WHERE TwitterID = @TwitterID");
             query.Parameters.Add("@TwitterID", System.Data.SqlDbType.BigInt);
             query.Parameters["@TwitterID"].Value = tweetID;
@@ -111,15 +111,15 @@ namespace WijkagentWPF.database
         /// </summary>
         /// <param name="ID">Offence id you need</param>
         /// <returns>related socialmediamessages in a list</returns>
-        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(int offenceID, int mediaType = 0)
+        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(Offence offence, int mediaType = 0)
         {
-            SqlCommand query = new SqlCommand("SELECT DateTime, Message, username, handle, LocationID, TwitterID, OffenceID" +
-                " FROM SocialMediaMessage  WHERE OffenceID = @OffenceID AND mediaType = @MediaType;");
+            SqlCommand query = new SqlCommand("SELECT DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
+                "FROM SocialMediaMessage WHERE OffenceID = @OffenceID AND MediaType = @MediaType");
 
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@MediaType", System.Data.SqlDbType.Int);
 
-            query.Parameters["@OffenceID"].Value = offenceID;
+            query.Parameters["@OffenceID"].Value = offence.ID;
             query.Parameters["@MediaType"].Value = mediaType;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
             List<SocialMediaMessage> socialMediaMessages = new List<SocialMediaMessage>();
