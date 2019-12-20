@@ -30,9 +30,9 @@ namespace WijkagentWPF
         /// <summary>
         /// error messages
         /// </summary>
-        private readonly string _DBErrorMessage = "Er kan geen verbinding worden gemaakt met de database. Controleer alstublieft of u een werkende internet verbining heeft.";
+        private readonly string _DBErrorMessage = "Er kan geen verbinding worden gemaakt met de database. Controleer alstublieft of u een werkende internet verbing heeft.";
 
-        private readonly string _APIErrorMessage = "Er kan geen verbinding worden gemaakt met Twitter. Controleer alstublieft of u een werkende internet verbining heeft.";
+        private readonly string _APIErrorMessage = "Er kan geen verbinding worden gemaakt met Twitter. Controleer alstublieft of u een werkende internet verbing heeft.";
 
         /// <summary>
         /// sends the apropriate error from the application objects to the main window
@@ -56,11 +56,11 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="sender">object</param>
         /// <param name="message">message to display</param>
-        public delegate void ErrorToSCreenHandler(object sender, string message);
+        public delegate void ErrorToScreenHandler(object sender, string message);
 
         /// <summary>
         /// event to call when error ocurs
         /// </summary>
-        public event ErrorToSCreenHandler ErrorToScreenEvent;
+        public event ErrorToScreenHandler ErrorToScreenEvent;
     }
 }
