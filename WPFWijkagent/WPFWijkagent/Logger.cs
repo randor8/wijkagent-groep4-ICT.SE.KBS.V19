@@ -32,7 +32,7 @@ namespace WijkagentWPF
         /// </summary>
         private readonly string DBErrorMessage = "Er kan geen verbinding worden gemaakt met de database. Controleer alstublieft of u een werkende internet verbining heeft.";
 
-        private readonly string APIErrorMessage = "Er kan geen verbinding worden gemaakt met Twitter. Controleer alstublieft of u een werkende internet verbining heeft.";
+        private readonly string _APIErrorMessage = "Er kan geen verbinding worden gemaakt met Twitter. Controleer alstublieft of u een werkende internet verbining heeft.";
 
         /// <summary>
         /// sends the apropriate error from the application objects to the main window
