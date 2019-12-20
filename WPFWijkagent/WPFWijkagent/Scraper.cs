@@ -9,7 +9,7 @@ using WijkagentModels;
 
 namespace WijkagentWPF
 {
-    /// <summary>W
+    /// <summary>
     /// The class is responsible for fetching twitter messages and converting them to social Media Messages
     /// </summary>
     public class Scraper

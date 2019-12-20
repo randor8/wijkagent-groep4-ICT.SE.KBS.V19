@@ -9,7 +9,7 @@ namespace WijkagentWPF
         /// <summary>
         /// singleton instance
         /// </summary>
-        private static Logger logger = null;
+        private static Logger _logger = null;
         private Logger()
         {
 
@@ -19,20 +19,20 @@ namespace WijkagentWPF
         {
             get
             {
-                if (logger == null)
+                if (_logger == null)
                 {
-                    logger = new Logger();
+                    _logger = new Logger();
                 }
-                return logger;
+                return _logger;
             }
         }
 
         /// <summary>
         /// error messages
         /// </summary>
-        private readonly string DBErrorMessage = "Er kan geen verbinding worden gemaakt met de database. Controleer alstublieft of u een werkende internet verbining heeft.";
+        private readonly string _DBErrorMessage = "Er kan geen verbinding worden gemaakt met de database. Controleer alstublieft of u een werkende internet verbining heeft.";
 
-        private readonly string APIErrorMessage = "Er kan geen verbinding worden gemaakt met Twitter. Controleer alstublieft of u een werkende internet verbining heeft.";
+        private readonly string _APIErrorMessage = "Er kan geen verbinding worden gemaakt met Twitter. Controleer alstublieft of u een werkende internet verbining heeft.";
 
         /// <summary>
         /// sends the apropriate error from the application objects to the main window
@@ -42,11 +42,11 @@ namespace WijkagentWPF
         {
             if (sender is DBContext)
             {
-                ErrorToScreenEvent?.Invoke(sender, DBErrorMessage);
+                ErrorToScreenEvent?.Invoke(sender, _DBErrorMessage);
 
             } else if(sender is Scraper)
             {
-                ErrorToScreenEvent?.Invoke(sender, APIErrorMessage);
+                ErrorToScreenEvent?.Invoke(sender, _APIErrorMessage);
             }
         }
 
