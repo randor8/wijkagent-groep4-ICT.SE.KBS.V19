@@ -19,7 +19,7 @@ namespace WijkagentWPF
         {
             get
             {
-                if (logger == null)
+                if (_logger == null)
                 {
                     _logger = new Logger();
                 }
