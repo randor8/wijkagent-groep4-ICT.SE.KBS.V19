@@ -18,10 +18,9 @@ namespace WijkagentWPF
         public DelictDialog(Pushpin pin, Offence offence)
         {
             InitializeComponent();
-            Location l = new Location(pin.Location.Latitude, pin.Location.Longitude);
             _controller = new DelictDialogController();
             _controller.DisplayMessages(offence, wpfLVMessages);
-            _controller.DisplayWitnessMessages(offence, WitnessMessages);
+            _controller.DisplayMessages(offence, WitnessMessages, 1);
             _offence = offence;
         }
 

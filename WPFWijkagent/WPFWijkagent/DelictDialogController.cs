@@ -22,16 +22,10 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>string</returns>
-        public void DisplayMessages(Offence offence, System.Windows.Controls.ListView wpfLVMessages)
+        public void DisplayMessages(Offence offence, System.Windows.Controls.ListView wpfLVMessages, int type = 0)
         {
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID);
-        }
-
-        public void DisplayWitnessMessages(Offence offence, System.Windows.Controls.ListView WitnessMessages)
-        {
-            SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            WitnessMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID, 1);
+            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence.ID, type);
         }
     }
 }

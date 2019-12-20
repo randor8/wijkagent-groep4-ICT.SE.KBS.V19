@@ -90,6 +90,19 @@ namespace WijkagentWPF
                 MainWindowController.RetrieveOffence(
                     pin.Location.Latitude,
                     pin.Location.Longitude));
+
+            Offence Offence = MainWindowController.RetrieveOffence(
+                pin.Location.Latitude,
+                pin.Location.Longitude);
+            //create a scraper without the hashtag to get all the messages for this offence
+            Scraper SocialScraper = new Scraper(Offence);
+
+            //create a scraper for the witness messages
+            Scraper WitnessScraper = new Scraper(Offence, true, MainWindowController.Hashtag(Offence));
+
+            //update both massages in the database.
+            SocialScraper.UpdateSocialMediaMessages();
+            WitnessScraper.UpdateSocialMediaMessages(1);
             social.Show();
         }
 

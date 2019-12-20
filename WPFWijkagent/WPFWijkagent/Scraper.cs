@@ -17,8 +17,6 @@ namespace WijkagentModels
 
         private SearchTweetsParameters _searchParameters;
 
-        private SearchTweetsParameters _witnessSearch;
-
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
@@ -27,32 +25,48 @@ namespace WijkagentModels
         private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
-        public Scraper(Offence offence)
+        /// <summary>
+        /// Creates a scraper, can use a search on a text with or without additionel parameters.
+        /// </summary>
+        /// <param name="offence">the offence needed for parameter information</param>
+        /// <param name="OnlyHastag">true or false to toggle additionel parameters.</param>
+        /// <param name="text">the text for searching.</param>
+        public Scraper(Offence offence, bool OnlyHastag = false, string text = " ")
         {
             Offence = offence;
-            _searchParameters = new SearchTweetsParameters(" ")
+            if(OnlyHastag == false)
             {
-                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
-                Lang = LanguageFilter.Dutch,
-                MaximumNumberOfResults = 10,
-                Until = new DateTime(
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
+                    Lang = LanguageFilter.Dutch,
+                    MaximumNumberOfResults = 10,
+                    Until = new DateTime(
                     offence.DateTime.Year,
-                    offence.DateTime.Month, 
+                    offence.DateTime.Month,
                     offence.DateTime.Day + 1),
-                Since = new DateTime(
+                    Since = new DateTime(
                     offence.DateTime.Year,
-                    offence.DateTime.Month, 
+                    offence.DateTime.Month,
                     offence.DateTime.Day,
                     offence.DateTime.Hour - 1,
                     offence.DateTime.Minute,
                     offence.DateTime.Second)
-            };
-        }
-
-        public void WitnessScraper(Offence offence)
-        {
-            string hashtag = "Delict" + offence.ID.ToString();
-            _witnessSearch = new SearchTweetsParameters(hashtag);
+                };
+            }
+            else
+            {
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    Since = new DateTime(
+                    offence.DateTime.Year,
+                    offence.DateTime.Month,
+                    offence.DateTime.Day,
+                    offence.DateTime.Hour - 1,
+                    offence.DateTime.Minute,
+                    offence.DateTime.Second)
+                };
+            }
         }
 
         /// <summary>
@@ -72,16 +86,21 @@ namespace WijkagentModels
         {
             Connect();
             var tweets = Search.SearchTweets(_searchParameters);
-            foreach (var tweet in tweets)
+            if(tweets != null)
             {
-                SetSocialMediaMessage(tweet);
+                foreach (var tweet in tweets)
+                {
+                    SetSocialMediaMessage(tweet);
+                }
             }
         }
+
         /// <summary>
         /// Checks and sets a specific value to the DB and adds a Social Media Message
         /// </summary>
         /// <param name="tweet">tweetenvi tweet object</param>
-        private void SetSocialMediaMessage(ITweet tweet)
+        /// <param name="Type">MediaType</param>
+        private void SetSocialMediaMessage(ITweet tweet, int Type = 0)
         {
             Location location;
             LocationController locationController = new LocationController();
@@ -103,7 +122,8 @@ namespace WijkagentModels
                 tweet.CreatedBy.ScreenName,
                 location,
                 tweet.Id,
-                Offence
+                Offence,
+                Type
                 )
             );
         }
@@ -111,21 +131,23 @@ namespace WijkagentModels
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
-        public void UpdateSocialMediaMessages()
+        public void UpdateSocialMediaMessages(int Type = 0)
         {
             Connect();
 
             var tweets = Search.SearchTweets(_searchParameters);
             SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
 
-            foreach (var tweet in tweets)
+            if (tweets != null)
             {
-                if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                foreach (var tweet in tweets)
                 {
-                    SetSocialMediaMessage(tweet);
+                    if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                    {
+                        SetSocialMediaMessage(tweet, Type);
+                    }
                 }
             }
         }
-
     }
 }
