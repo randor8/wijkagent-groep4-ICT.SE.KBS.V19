@@ -9,11 +9,13 @@ namespace WijkagentWPF
     public partial class AskForWitnessWindow : Window
     {
         private WitnessController _witnessController { get; set; }
-        public AskForWitnessWindow(WitnessController witnessController)
+        private MainWindow _window { get; set; }
+        public AskForWitnessWindow(WitnessController witnessController, MainWindow window)
         {
             InitializeComponent();
             _witnessController = witnessController;
             lbl_errorbeschrijving.Visibility = Visibility.Hidden;
+            _window = window;
         }
 
         /// <summary>
@@ -27,7 +29,7 @@ namespace WijkagentWPF
             if (!String.IsNullOrEmpty(txtb_omschrijving.Text))
             {
                 lbl_errorbeschrijving.Visibility = Visibility.Hidden;
-                _witnessController.SendTweet();
+                _witnessController.SendTweet(_window);
                 Close();
             }
 

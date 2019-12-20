@@ -99,7 +99,7 @@ namespace WijkagentWPF.database
             query.Parameters["@TwitterID"].Value = tweetID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
 
-            if (rows.Count == 1)
+            if (rows.Count > 0)
             {
                 return ObjectArrayToSocialMediaMessage(rows[0]);
             }

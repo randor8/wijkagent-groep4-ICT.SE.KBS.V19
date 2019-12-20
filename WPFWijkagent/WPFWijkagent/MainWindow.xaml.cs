@@ -100,17 +100,15 @@ namespace WijkagentWPF
             SocialScraper.UpdateSocialMediaMessages();
 
             //create a scraper for the witness messages and update the messages
-            if (!String.IsNullOrEmpty(Offence.CallHashtag))
-            {
-                Scraper WitnessScraper = new Scraper(Offence, true, Hashtag(Offence));
-                WitnessScraper.UpdateSocialMediaMessages(1);
-            }
+            Scraper WitnessScraper = new Scraper(Offence, true, Hashtag(Offence));
+            WitnessScraper.UpdateSocialMediaMessages(1);
+
             
 
             social = new DelictDialog(pin,
                 MainWindowController.RetrieveOffence(
                     pin.Location.Latitude,
-                    pin.Location.Longitude));
+                    pin.Location.Longitude), this);
             social.Show();
         }
 
@@ -127,9 +125,10 @@ namespace WijkagentWPF
             query.Parameters["@OffenceID"].Value = offence.ID;
             List<object[]> rows = dBContext.ExecuteSelectQuery(query);
 
-            if (rows.Count == 1 && !String.IsNullOrEmpty(rows[0].ToString()))
+            if (rows.Count == 1 && rows[0].GetValue(0).ToString().Length > 0)
             {
                 string text = rows[0].GetValue(0).ToString();
+                offence.CallHashtag = text;
                 return text;
             }
 
@@ -137,11 +136,6 @@ namespace WijkagentWPF
             {
                 return $"#Delict{offence.ID}";
             }
-        }
-
-        private static string ObjectArrayToSocialMediaMessage(object[] v)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

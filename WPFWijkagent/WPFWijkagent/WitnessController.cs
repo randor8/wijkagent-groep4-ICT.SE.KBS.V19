@@ -12,9 +12,9 @@ namespace WijkagentWPF
         private Offence _Offence { get; set; }
         private AskForWitnessWindow witnessWindow;
 
-        public WitnessController(Offence offence)
+        public WitnessController(Offence offence, MainWindow window)
         {
-            witnessWindow = new AskForWitnessWindow(this);
+            witnessWindow = new AskForWitnessWindow(this, window);
             _Offence = offence;
             witnessWindow.txtb_omschrijving.Text = _Offence.Description;
             witnessWindow.ShowDialog();
@@ -36,9 +36,8 @@ namespace WijkagentWPF
         /// connect to the twitter bot and publish the custom tweet.
         /// Insert the created hashtag in the database
         /// </summary>
-        public void SendTweet()
+        public void SendTweet(MainWindow window)
         {
-            MainWindow window = new MainWindow();
             DBContext dBContext = new DBContext();
             Scraper scraper = new Scraper(_Offence);
             scraper.Connect();
@@ -54,7 +53,7 @@ namespace WijkagentWPF
 
             dBContext.ExecuteQuery(query);
             _Offence.CallHashtag = $"#Delict{_Offence.ID}";
-            Scraper WitnessScraper = new Scraper(_Offence, true, window.Hashtag(_Offence));
+            Scraper WitnessScraper = new Scraper(_Offence, true, window.Hashtag(_Offence)); ;
             WitnessScraper.UpdateSocialMediaMessages(1);
         }
     }
