@@ -9,7 +9,7 @@ namespace WijkagentWPF
 {
     public class WitnessController
     {
-        private Offence _Offence { get; set; }
+        public Offence _Offence { get; set; }
         private AskForWitnessWindow witnessWindow;
 
         public WitnessController(Offence offence, MainWindow window)
@@ -32,15 +32,35 @@ namespace WijkagentWPF
                 $"\nTweet of retweet met de hashtag #Delict{_Offence.ID} als u meer weet.");
         }
 
+        public bool MessageExists()
+        {
+            DBContext dBContext = new DBContext();
+            SqlCommand query = new SqlCommand("SELECT TOP(1) OffenceID FROM SendMessage WHERE Message = @Message");
+            query.Parameters.Add("@Message", System.Data.SqlDbType.NVarChar);
+            query.Parameters["@Message"].Value = CreateWitnessMessage();
+            List<object[]> rows = dBContext.ExecuteSelectQuery(query);
+
+            if(rows.Count > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         /// <summary>
         /// connect to the twitter bot and publish the custom tweet.
-        /// Insert the created hashtag in the database
+        /// Insert the created hashtag in the database.
+        /// save the created message to avoid duplicates
         /// </summary>
         public void SendTweet(MainWindow window)
         {
             DBContext dBContext = new DBContext();
             Scraper scraper = new Scraper(_Offence);
             scraper.Connect();
+
             Tweet.PublishTweet(CreateWitnessMessage());
             SqlCommand query = new SqlCommand("UPDATE Offence SET Hashtag = @Hashtag WHERE ID = @OffenceID");
 
@@ -51,7 +71,16 @@ namespace WijkagentWPF
             query.Parameters["@Hashtag"].Value = $"Delict{_Offence.ID}";
             query.Parameters["@OffenceID"].Value = _Offence.ID;
 
+            SqlCommand insertMessage = new SqlCommand("INSERT INTO SendMessage (OffenceID, Message) OUTPUT INSERTED.ID" +
+                " VALUES (@OffenceID, @Message)");
+            insertMessage.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            insertMessage.Parameters.Add("@Message", System.Data.SqlDbType.NVarChar);
+
+            insertMessage.Parameters["@OffenceID"].Value = _Offence.ID;
+            insertMessage.Parameters["@Message"].Value = CreateWitnessMessage();
+
             dBContext.ExecuteQuery(query);
+            dBContext.ExecuteInsertQuery(insertMessage);
             _Offence.CallHashtag = $"#Delict{_Offence.ID}";
             Scraper WitnessScraper = new Scraper(_Offence, true, window.Hashtag(_Offence)); ;
             WitnessScraper.UpdateSocialMediaMessages(1);

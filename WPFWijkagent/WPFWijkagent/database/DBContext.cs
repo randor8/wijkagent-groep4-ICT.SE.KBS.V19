@@ -160,6 +160,7 @@ namespace WijkagentWPF
 
                 return id;
             }
+
             catch (SqlException sqlEX)
             {
                 //save the error and give useles result

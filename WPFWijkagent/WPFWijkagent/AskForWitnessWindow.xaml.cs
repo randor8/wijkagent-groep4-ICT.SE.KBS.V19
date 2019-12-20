@@ -14,7 +14,6 @@ namespace WijkagentWPF
         {
             InitializeComponent();
             _witnessController = witnessController;
-            lbl_errorbeschrijving.Visibility = Visibility.Hidden;
             _window = window;
         }
 
@@ -28,9 +27,18 @@ namespace WijkagentWPF
         {
             if (!String.IsNullOrEmpty(txtb_omschrijving.Text))
             {
-                lbl_errorbeschrijving.Visibility = Visibility.Hidden;
-                _witnessController.SendTweet(_window);
-                Close();
+                if (!_witnessController.MessageExists())
+                {
+                    lbl_errorbeschrijving.Visibility = Visibility.Hidden;
+                    lbl_DubbeleMelding.Visibility = Visibility.Hidden;
+                    _witnessController.SendTweet(_window);
+                    Close();
+                }
+
+                else
+                {
+                    lbl_DubbeleMelding.Visibility = Visibility.Visible;
+                }
             }
 
             else
