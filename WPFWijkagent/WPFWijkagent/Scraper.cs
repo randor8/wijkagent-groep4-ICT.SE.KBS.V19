@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
+using System.Configuration;
 
 
 namespace WijkagentModels
@@ -19,10 +19,10 @@ namespace WijkagentModels
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
         #region Keys&Tokens
-        private static readonly string customerKey = "qwR0YaAerXPeXtrT99scdSnU1";
-        private static readonly string customerKeySecret = "5LeIYLIUh8s0G8oPRSXGnyuIyGLGM6yaISz8kmoFZT0siQFXI9";
-        private static readonly string accesToken = "1194224344144269312-cchFiH1xJGQVDsLryEhSWZVp17iTKx";
-        private static readonly string accesTokenSecret = "YTiE5MZyYhD1tYchjFPT47QF3QqkO36UGL9tq9Yd3ivby";
+        private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
+        private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
+        private readonly string _accessToken = ConfigurationManager.AppSettings.Get("accesToken");
+        private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
         public Scraper(Offence offence)
@@ -30,73 +30,87 @@ namespace WijkagentModels
             Offence = offence;
             _searchParameters = new SearchTweetsParameters(" ")
             {
-                GeoCode = new GeoCode(offence.LocationID.Latitude, offence.LocationID.Longitude, 1, DistanceMeasure.Kilometers),
+                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day),
-                Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day - 1)
+                Until = new DateTime(
+                    offence.DateTime.Year,
+                    offence.DateTime.Month, 
+                    offence.DateTime.Day + 1),
+                Since = new DateTime(
+                    offence.DateTime.Year,
+                    offence.DateTime.Month, 
+                    offence.DateTime.Day,
+                    offence.DateTime.Hour - 1,
+                    offence.DateTime.Minute,
+                    offence.DateTime.Second)
             };
         }
 
-        // containing Test Methods to test network Connectivity
-        #region Test
-        public static string GetUsername()
+        /// <summary>
+        /// This function authenticates the user for the Twitter API
+        /// </summary>
+        private  void Connect()
         {
-            Console.WriteLine($"{DateTime.Now} Bot started");
-            Connect();
-            string data = User.GetAuthenticatedUser().ToString();
-            return data;
-        }
-
-        public static object GetUser()
-        {
-            Console.WriteLine($"{DateTime.Now} Bot started");
-            var exp = Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
-            return exp;
-        }
-        #endregion
-
-        // bassfunctie om de connectie te maken tussen de API en het autorizeren
-        public static void Connect()
-        {
-            Auth.SetUserCredentials(customerKey, customerKeySecret, accesToken, accesTokenSecret);
+            Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
         }
 
         /// <summary>
-        /// This function uses the search parameters attribute to find tweets that 
+        /// This function uses the search parameters attribute to find tweets that fit the parameters
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>list of social media messages </returns>
-        public void GetSocialMediaMessages()
+        public void SetSocialMediaMessages()
         {
             Connect();
-            Location location;
             var tweets = Search.SearchTweets(_searchParameters);
             foreach (var tweet in tweets)
             {
-                if (tweet.Coordinates != null)
+                SetSocialMediaMessage(tweet);
+            }
+        }
+        /// <summary>
+        /// Checks and sets a specific value to the DB and adds a Social Media Message
+        /// </summary>
+        /// <param name="tweet">tweetenvi tweet object</param>
+        private void SetSocialMediaMessage(ITweet tweet)
+        {
+            int locationId = Offence.Location.ID;
+            LocationController locationController = new LocationController();
+            SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+
+            if (tweet.Coordinates != null)
+            {
+                locationId = locationController.SetLocation(new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
+            }
+            socialMediaMessageController.SetSocialMediaMessage(
+                tweet.CreatedAt,
+                tweet.Text,
+                tweet.CreatedBy.Name,
+                tweet.CreatedBy.ScreenName,
+                locationId,
+                Offence.ID,
+                tweet.Id);
+        }
+
+        /// <summary>
+        /// Function checks if new social Media Messages have been posted and adds them to the DB
+        /// </summary>
+        public void UpdateSocialMediaMessages()
+        {
+            Connect();
+
+            var tweets = Search.SearchTweets(_searchParameters);
+            SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
+
+            foreach (var tweet in tweets)
+            {
+                if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
                 {
-                    location = new Location(0, tweet.Coordinates.Latitude, tweet.Coordinates.Longitude); 
-                } else
-                {
-                    location = Offence.LocationID;
+                    SetSocialMediaMessage(tweet);
                 }
-                SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-                socialMediaMessageController.SetSocialMediaMessage(
-                    tweet.CreatedAt, 
-                    tweet.Text, 
-                    tweet.CreatedBy.Name, 
-                    tweet.CreatedBy.ScreenName, 
-                    location, 
-                    Offence.ID);
             }
         }
 
-        public static bool SendDirectMessage(long id)
-        {
-            Connect();
-            IMessage message = Message.PublishMessage("Test message", id);
-            return message != null; 
-        }
     }
 }
