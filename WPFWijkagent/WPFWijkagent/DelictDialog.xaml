@@ -110,7 +110,7 @@
                                     <TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
 
                                     <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}"/>
-                                    <Button x:Name="handleText" Grid.Row="1" Grid.Column="2" Cursor="Hand" Content="{Binding Handle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" HorizontalContentAlignment="Left" Foreground="Black" Background="{x:Null}" BorderBrush="{x:Null}">
+                                    <Button x:Name="handleText" Grid.Row="1" Grid.Column="2" Cursor="Hand" Content="{Binding Handle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" HorizontalContentAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}">
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}">
                                                 <Style.Triggers>
