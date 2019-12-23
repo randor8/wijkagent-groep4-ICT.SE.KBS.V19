@@ -26,12 +26,24 @@ namespace WijkagentWPF
         /// <returns>A custom message ready for twitter.</returns>
         public string CreateWitnessMessage()
         {
-            return new string($"Delict {_Offence.ID},\n{witnessWindow.txtb_omschrijving.Text}" +
+            if (!_Offence.ID.Equals(null) || !_Offence.ID.Equals(0))
+            {
+                return new string($"Delict {_Offence.ID},\n{witnessWindow.txtb_omschrijving.Text}" +
                 $" op {_Offence.DateTime} in de buurt van " +
                 $"https://bing.com/maps/default.aspx?cp={_Offence.Location.Latitude}~{_Offence.Location.Longitude}&lvl=20&style=h&sp=point.{_Offence.Location.Latitude}_{_Offence.Location.Longitude}_Delict{_Offence.ID}" +
                 $"\nTweet of retweet met de hashtag #Delict{_Offence.ID} als u meer weet.");
+            }
+            
+            else
+            {
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Checks if Message already existst in the database
+        /// </summary>
+        /// <returns>true is the message exists, false if message does not exist</returns>
         public bool MessageExists()
         {
             DBContext dBContext = new DBContext();
