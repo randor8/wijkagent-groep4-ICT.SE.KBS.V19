@@ -6,7 +6,6 @@ using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.database;
 using Location = WijkagentModels.Location;
-using System.Linq;
 
 namespace WijkagentWPF
 {
@@ -49,6 +48,7 @@ namespace WijkagentWPF
         {
             return FilterList.ApplyFilters(_offences);
         }
+        
 
         /// <summary>
         /// Gets the pushpin of the offence
@@ -100,10 +100,9 @@ namespace WijkagentWPF
                 where OffenceItem.Location.Latitude == latitude
                 && OffenceItem.Location.Longitude == longitude
                 select OffenceItem;
-            offence = offenceQuerry.First(); 
+            offence = offenceQuerry.First();
             return offence;
         }
-
         /// <summary>
         /// Clears the list offences in this controller.
         /// </summary>

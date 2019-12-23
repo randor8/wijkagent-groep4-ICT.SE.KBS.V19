@@ -14,6 +14,8 @@ namespace WijkagentModels
 
         public OffenceCategories Category { get; set; }
 
+        public string CallHashtag { get; set; }
+
         public Offence(DateTime dateTime, string description, Location location, OffenceCategories offenceCategories, int id = 0)
         {
             ID = id;

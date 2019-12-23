@@ -13,6 +13,9 @@
         <local:DefaultEndDateConverter x:Key="DateConverter"/>
     </Window.Resources>
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="23"/>
 			<RowDefinition Height="1*"/>
