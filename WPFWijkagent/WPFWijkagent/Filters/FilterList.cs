@@ -40,10 +40,9 @@ namespace WijkagentWPF
         /// <param name="filter">The filter that needs to be added to the FilterList.</param>
         public static void AddFilter(IFilter filter)
         {
-            if (!_filterSet.ContainsKey($"{filter.GetType()}"))
-            {
-                _filterSet.Add($"{filter.GetType()}", filter);
-            }
+            string filterType = $"{filter.GetType()}";
+            _filterSet.Remove(filterType);
+            _filterSet.Add(filterType, filter);
 
             UpdateStack();
         }
@@ -52,9 +51,9 @@ namespace WijkagentWPF
         /// Removes a filter from the FilterList.
         /// </summary>
         /// <param name="filter">The filter that needs to be removed from the FilterList.</param>
-        public static void RemoveFilter(IFilter filter)
+        public static void RemoveFilter(string filterType)
         {
-            _filterSet.Remove($"{filter.GetType()}");
+            _filterSet.Remove(filterType);
 
             UpdateStack();
         }

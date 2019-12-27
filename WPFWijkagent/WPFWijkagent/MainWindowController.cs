@@ -98,7 +98,6 @@ namespace WijkagentWPF
         public static List<Offence> GetOffences()
         {
             _offences = new OffenceController().GetOffences();
-
             return _offences;
         }
 

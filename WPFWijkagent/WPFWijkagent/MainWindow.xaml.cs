@@ -21,11 +21,17 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+
+            //add  showmessage method to logger
+            Logger.Log.ErrorToScreenEvent += ErrorEventHandler;
             FilterList.AddFilter(CategoryFilterCollection.Instance);
             InitializeComponent();
 
             App.RegisterSession(new SessionMapLocation(wpfMapMain));
             App.RegisterSession(new SessionMapZoom(wpfMapMain));
+            App.RegisterSession(new SessionFilterSingleDate(DatePickerSingle));
+            App.RegisterSession(new SessionFilterDateRange(DatePickerFrom, DatePickerTo));
+            App.RegisterSession(new SessionActiveDateFilter(SingleDate, DateRange));
             App.RegisterSession(new SessionFilterCategories());
             App.LoadSession();
 
@@ -117,6 +123,7 @@ namespace WijkagentWPF
                     Name = offenceCategories[i].ToString(),
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(2.5, 0, 0, 0),
                     IsChecked = SessionFilterCategories.IsFilterActive(offenceCategories[i].ToString())
                 };
                 checkBox.Checked += CategoryCheckboxToggle;
@@ -130,8 +137,10 @@ namespace WijkagentWPF
                     Padding = new Thickness(0, 0, 0, 0),
                     Content = offenceCategories[i],
                     HorizontalAlignment = HorizontalAlignment.Left,
-                    VerticalAlignment = VerticalAlignment.Center
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0)
                 };
+                label.MouseUp += (sender, e) => checkBox.IsChecked = !checkBox.IsChecked;
                 FilterGrid.Children.Add(label);
                 Grid.SetColumn(label, 1);
                 Grid.SetRow(label, i);
@@ -239,8 +248,128 @@ namespace WijkagentWPF
         private void wpfBTNResetFilters_Click(object sender, RoutedEventArgs e)
         {
             ResetCategoryCheckbox();
+            DatePickerSingle.SelectedDate = null;
+            DatePickerFrom.SelectedDate = null;
+            DatePickerTo.SelectedDate = null;
             FilterList.ClearFilters();
             FillOffenceList();
+        }
+
+        /// <summary>
+        /// Toggles which date filter menu is visible.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
+        private void ToggleDateFilter(object sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton radioButton)
+            {
+                Visibility singleDateVisibility;
+                Visibility dateRangeVisiblity;
+                if (radioButton.Name.Equals("SingleDate"))
+                {
+                    singleDateVisibility = Visibility.Visible;
+                    dateRangeVisiblity = Visibility.Collapsed;
+
+                    AddSingleDateFilter(DatePickerSingle);
+                }
+                else
+                {
+                    singleDateVisibility = Visibility.Collapsed;
+                    dateRangeVisiblity = Visibility.Visible;
+
+                    AddDateRangeFilter(DatePickerFrom, DatePickerTo);
+                }
+                if (DateRangePanel != null && SingleDatePanel != null)
+                {
+                    SingleDatePanel.Visibility = singleDateVisibility;
+                    DateRangePanel.Visibility = dateRangeVisiblity;
+                }
+                if (wpfLBSelection != null)
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the filter when a new date is chosen.
+        /// </summary>
+        /// <param name="sender">Sender of the event. One of the datepickers.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
+        private void DateRangeFilterChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is DatePicker from)
+            {
+                DatePicker to;
+                if (from.Name.Equals("DatePickerFrom"))
+                {
+                    to = DatePickerTo;
+                }
+                else
+                {
+                    to = from;
+                    from = DatePickerFrom;
+                }
+                if (AddDateRangeFilter(from, to))
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds a DateRangeFilter to the filterlist using the dates from two datepickers.
+        /// </summary>
+        /// <param name="DatePickerFrom">Datepicker containing the lower bound of the date range.</param>
+        /// <param name="DatePickerTo">Datepicker containing the upper bound of the date range.</param>
+        /// <returns>Boolean based on whether the filter was added.</returns>
+        private bool AddDateRangeFilter(DatePicker DatePickerFrom, DatePicker DatePickerTo)
+        {
+            if (DatePickerFrom != null && DatePickerFrom.SelectedDate.HasValue && DatePickerTo != null && DatePickerTo.SelectedDate.HasValue)
+            {
+                FilterList.RemoveFilter($"{typeof(DateFilter)}");
+                DateTime DateFrom = new DateTime(DatePickerFrom.SelectedDate.Value.Year, DatePickerFrom.SelectedDate.Value.Month, DatePickerFrom.SelectedDate.Value.Day);
+                DateTime DateTo = new DateTime(DatePickerTo.SelectedDate.Value.Year, DatePickerTo.SelectedDate.Value.Month, DatePickerTo.SelectedDate.Value.Day);
+                DateRangeFilter filter = new DateRangeFilter(DateFrom, DateTo);
+                FilterList.AddFilter(filter);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Adds single date filter when the date is changed in the datepicker.
+        /// </summary>
+        /// <param name="sender">Sender of the event. The datepicker.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
+        private void SingleDateFilterChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is DatePicker datePicker)
+            {
+                if (AddSingleDateFilter(datePicker))
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds single date filter to the filterlist using the date from the datepicker.
+        /// </summary>
+        /// <param name="datePicker">Datepicker containing the date.</param>
+        /// <returns>Boolean based on whether the filter was added.</returns>
+        private bool AddSingleDateFilter(DatePicker datePicker)
+        {
+            if (datePicker != null && datePicker.SelectedDate.HasValue)
+            {
+                FilterList.RemoveFilter($"{typeof(DateRangeFilter)}");
+                DateTime date = new DateTime(datePicker.SelectedDate.Value.Year, datePicker.SelectedDate.Value.Month, datePicker.SelectedDate.Value.Day);
+                DateFilter filter = new DateFilter(date);
+                FilterList.AddFilter(filter);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -252,6 +381,17 @@ namespace WijkagentWPF
         {
             App.SaveSession();
             Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// displays errors from the logger
+        /// </summary>
+        /// <param name="sender">the object that send the error</param>
+        /// <param name="message">messgae to display</param>
+        public void ErrorEventHandler(object sender, string message)
+        {
+            //check wich object then set the appropriate message.
+            MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
         }
     }
 }

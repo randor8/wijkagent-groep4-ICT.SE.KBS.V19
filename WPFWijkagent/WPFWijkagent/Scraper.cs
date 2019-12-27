@@ -4,8 +4,9 @@ using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
 using System.Configuration;
+using WijkagentModels;
 
-namespace WijkagentModels
+namespace WijkagentWPF
 {
     /// <summary>
     /// The class is responsible for fetching twitter messages and converting them to social Media Messages
@@ -47,11 +48,21 @@ namespace WijkagentModels
         }
 
         /// <summary>
-        /// This function authenticates the user for the Twitter API
+        /// connects to twitter api and catches auth errors
         /// </summary>
-        private void Connect()
+        public void Connect()
         {
-            Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
+            ExceptionHandler.SwallowWebExceptions = false;
+            try
+            {
+                Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
+                //throws error when not authenticated correctly
+                User.GetAuthenticatedUser();
+            }
+            catch (Exception)
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -61,11 +72,18 @@ namespace WijkagentModels
         /// <returns>list of social media messages </returns>
         public void SetSocialMediaMessages()
         {
-            Connect();
-            var tweets = Search.SearchTweets(_searchParameters);
-            foreach (var tweet in tweets)
+            try {
+                Connect();
+                var tweets = Search.SearchTweets(_searchParameters);
+                foreach (var tweet in tweets)
+                {
+                    SetSocialMediaMessage(tweet);
+                }
+            }
+            catch (Exception)
             {
-                SetSocialMediaMessage(tweet);
+                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                Logger.Log.ErrorEventHandler(this);
             }
         }
 
@@ -81,7 +99,7 @@ namespace WijkagentModels
 
             if (tweet.Coordinates != null)
             {
-                locationId = locationController.SetLocation(new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
+                locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
             }
             int messageID = socialMediaMessageController.SetSocialMediaMessage(
                 tweet.CreatedAt,
@@ -108,17 +126,24 @@ namespace WijkagentModels
         /// </summary>
         public void UpdateSocialMediaMessages()
         {
-            Connect();
-
-            var tweets = Search.SearchTweets(_searchParameters);
-            SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
-
-            foreach (var tweet in tweets)
+            try
             {
-                if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                Connect();
+                var tweets = Search.SearchTweets(_searchParameters);
+                SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
+
+                foreach (var tweet in tweets)
                 {
-                    SetSocialMediaMessage(tweet);
+                    if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                    {
+                        SetSocialMediaMessage(tweet);
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                Logger.Log.ErrorEventHandler(this);
             }
         }
     }
