@@ -4,7 +4,6 @@ using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
 using System.Configuration;
-using System.Windows;
 
 namespace WijkagentModels
 {

@@ -54,13 +54,37 @@
 				<ListView x:Name="wpfLVMessages" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 					<ListView.ItemTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Vertical">
-								<TextBlock Text="{Binding Path=User, StringFormat='Gebruiker: {0}'}"/>
-								<TextBlock Text="{Binding Path=Handle, StringFormat='Twitter naam: {0}'}"/>
-								<TextBlock Text="{Binding Path=Message, StringFormat='Omschrijving: {0}'}"/>
-								<TextBlock Text="{Binding Path=DateTime, StringFormat='Datum en tijd: {0:d-M-y hh:mm}'}"/>
-								<TextBlock/>
-							</StackPanel>
+							<Grid Margin="5">
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="auto"/>
+									<ColumnDefinition Width="auto"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="auto"/>
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="auto"/>
+									<RowDefinition Height="auto"/>
+									<RowDefinition Height="auto"/>
+									<RowDefinition Height="auto"/>
+								</Grid.RowDefinitions>
+
+								<TextBlock Grid.Row="0" Grid.Column="0" Text="Gebruiker"/>
+								<TextBlock Grid.Row="1" Grid.Column="0" Text="Twitter naam"/>
+								<TextBlock Grid.Row="2" Grid.Column="0" Text="Omschrijving"/>
+								<TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
+
+								<TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
+								<TextBlock Grid.Row="1" Grid.Column="1" Text=" : "/>
+								<TextBlock Grid.Row="2" Grid.Column="1" Text=" : "/>
+								<TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
+
+								<TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Handle}" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap"/>
+								<TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DateTime}" TextWrapping="Wrap"/>
+
+								<Image Grid.Column="3" Grid.RowSpan="4" HorizontalAlignment="Right" Source="{Binding Media[0].URL}" MaxHeight="90" MouseDown="Image_MouseDown"/>
+							</Grid>
 						</DataTemplate>
 					</ListView.ItemTemplate>
 					<ListBox.ItemContainerStyle>

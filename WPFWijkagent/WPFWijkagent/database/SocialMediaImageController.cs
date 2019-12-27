@@ -46,13 +46,13 @@ namespace WijkagentWPF.database
                 $"FROM {Table} WHERE {ColMessageID} = @{ColMessageID}");
 
             // prepare values in statement
-            query.Parameters.Add($"@{ColURL}", System.Data.SqlDbType.Int);
-            query.Parameters[$"@{ColURL}"].Value = messageID;
+            query.Parameters.Add($"@{ColMessageID}", System.Data.SqlDbType.Int);
+            query.Parameters[$"@{ColMessageID}"].Value = messageID;
 
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
             List<SocialMediaImage> socialMediaImages = new List<SocialMediaImage>();
 
-            if (rows.Count > 0) rows.ForEach(smi => socialMediaImages.Add(ObjectArrayToSocialMediaImage(smi)));
+            rows.ForEach(smi => socialMediaImages.Add(ObjectArrayToSocialMediaImage(smi)));
             return socialMediaImages;
         }
     }

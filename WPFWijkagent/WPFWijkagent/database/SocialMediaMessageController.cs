@@ -93,7 +93,7 @@ namespace WijkagentWPF.database
                 socialMediaMessageData[3].ToString(),
                 socialMediaMessageData[4].ToString(),
                 new LocationController().GetLocation((int)socialMediaMessageData[5]),
-                (long) socialMediaMessageData[7], 
+                (long)socialMediaMessageData[7],
                 new OffenceController().GetOffence((int)socialMediaMessageData[6]));
         }
 
@@ -133,7 +133,13 @@ namespace WijkagentWPF.database
 
             if (rows.Count > 0)
             {
-                rows.ForEach(smm => socialMediaMessages.Add(ObjectArrayToSocialMediaMessage(smm)));
+                SocialMediaImageController imageController = new SocialMediaImageController();
+                rows.ForEach(smm =>
+                {
+                    SocialMediaMessage message = ObjectArrayToSocialMediaMessage(smm);
+                    message.Media = imageController.GetSocialMediaImages(message.ID);
+                    socialMediaMessages.Add(message);
+                });
             }
             return socialMediaMessages;
         }

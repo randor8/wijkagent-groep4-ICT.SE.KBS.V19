@@ -21,6 +21,8 @@ namespace WijkagentModels
 
         public long TwitterID { get; set; }
 
+        public List<SocialMediaImage> Media { get; set; } = new List<SocialMediaImage>();
+
         public SocialMediaMessage(int id, DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null)
         {
             ID = id;
