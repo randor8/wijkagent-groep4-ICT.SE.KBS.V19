@@ -11,6 +11,10 @@ namespace WijkagentWPF
     {
         private readonly DelictDialogController _controller;
 
+        /// <summary>
+        /// instantiates the window
+        /// </summary>
+        /// <param name="offence">data to be shown</param>
         public DelictDialog(Offence offence)
         {
             InitializeComponent();
