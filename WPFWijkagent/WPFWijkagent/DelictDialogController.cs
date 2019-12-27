@@ -8,24 +8,21 @@ namespace WijkagentWPF
     public class DelictDialogController
     {
 
-        /// <summary>
-        /// Window for display of socialMediaMessages in the radius of the given offence
-        /// </summary>
-        /// <param name="offenceListItems"></param>
         public DelictDialogController()
         {
             
         }
 
         /// <summary>
-        /// This method creates a single string from all elements within the list of found SocialMediaItems 
+        /// This method changes the itemsource of the given listview to the found socialmedia items
         /// </summary>
-        /// <param name="offence"></param>
-        /// <returns>string</returns>
-        public void DisplayMessages(Offence offence, System.Windows.Controls.ListView wpfLVMessages, int type = 0)
+        /// <param name="offence">the offence</param>
+        /// <param name="wpfLVMessages">the listview that has to be updated/changed</param>
+        /// <param name="Mediatype">the mediatype of the requested messages (default is 0)</param>
+        public void DisplayMessages(Offence offence, System.Windows.Controls.ListView wpfLVMessages, int Mediatype = 0)
         {
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
-            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence, type);
+            wpfLVMessages.ItemsSource = socialMediaMessageController.GetOffenceSocialMediaMessages(offence, Mediatype);
         }
     }
 }

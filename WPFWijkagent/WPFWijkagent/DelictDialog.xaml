@@ -43,7 +43,7 @@
 			<TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Category}"/>
 			<TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Description}"/>
 
-			<Button Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Height="20" VerticalAlignment="Top" Content="Print" Click="wpfBPrint_Click"/>
+			<Button Grid.Row="0" Grid.Column="3" Grid.RowSpan="4" Height="20" VerticalAlignment="Top" Content="Print"/>
 		</Grid>
 
 		<GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center" Background="LightGray" ShowsPreview="True" Height="5"/>

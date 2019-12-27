@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using WijkagentWPF.database;
 using WijkagentWPF.Filters;
 using WijkagentWPF.Session;
 
@@ -19,7 +20,8 @@ namespace WijkagentWPF
     public partial class MainWindow : Window
     {
         private bool _addModeActivated = false;
-        DelictDialog social;
+        private DelictDialog DelictDialog;
+        private SocialMediaMessageController SocialMediaMessageController;
 
         public MainWindow()
         {
@@ -43,6 +45,8 @@ namespace WijkagentWPF
 
             FillCategoryFiltermenu();
             FillOffenceList();
+
+            SocialMediaMessageController = new SocialMediaMessageController();
         }
 
         /// <summary>
@@ -102,40 +106,14 @@ namespace WijkagentWPF
             SocialScraper.UpdateSocialMediaMessages();
 
             //create a scraper for the witness messages and update the messages
-            Scraper WitnessScraper = new Scraper(Offence, true, Hashtag(Offence));
+            Scraper WitnessScraper = new Scraper(Offence, true, SocialMediaMessageController.Hashtag(Offence));
             WitnessScraper.UpdateSocialMediaMessages(1);
 
-            social = new DelictDialog(pin,
+            DelictDialog = new DelictDialog(pin,
                 MainWindowController.RetrieveOffence(
                     pin.Location.Latitude,
-                    pin.Location.Longitude), this);
-            social.Show();
-        }
-
-        /// <summary>
-        /// Create a Search hashtag fot the offence
-        /// </summary>
-        /// <param name="offence">the offence for the search hastag</param>
-        /// <returns></returns>
-        public string Hashtag(Offence offence)
-        {
-            DBContext dBContext = new DBContext();
-            SqlCommand query = new SqlCommand("SELECT Hashtag FROM Offence WHERE ID = @OffenceID");
-            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
-            query.Parameters["@OffenceID"].Value = offence.ID;
-            List<object[]> rows = dBContext.ExecuteSelectQuery(query);
-
-            if (rows.Count == 1 && rows[0].GetValue(0).ToString().Length > 0)
-            {
-                string text = rows[0].GetValue(0).ToString();
-                offence.CallHashtag = text;
-                return text;
-            }
-
-            else
-            {
-                return $"#Delict{offence.ID}";
-            }
+                    pin.Location.Longitude));
+            DelictDialog.Show();
         }
 
         /// <summary>
@@ -214,8 +192,7 @@ namespace WijkagentWPF
             {
                 wpfBTNAddOffence.Content = "delict toevoegen";
                 Mouse.OverrideCursor = Cursors.Arrow;
-            }
-            else
+            }else
             {
                 wpfBTNAddOffence.Content = "Annuleer";
                 Mouse.OverrideCursor = Cursors.Cross;

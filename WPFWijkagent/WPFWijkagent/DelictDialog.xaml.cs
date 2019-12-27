@@ -14,21 +14,14 @@ namespace WijkagentWPF
         private DelictDialogController _controller;
 
         private Offence _offence;
-        private MainWindow _MainWindow { get; set; }
 
-        public DelictDialog(Pushpin pin, Offence offence, MainWindow window)
+        public DelictDialog(Pushpin pin, Offence offence)
         {
             InitializeComponent();
             _controller = new DelictDialogController();
             _controller.DisplayMessages(offence, wpfLVMessages);
             _controller.DisplayMessages(offence, WitnessMessages, 1);
             _offence = offence;
-            _MainWindow = window;
-        }
-
-        private void wpfBPrint_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         /// <summary>
@@ -38,7 +31,7 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         private void btn_oproep_Click(object sender, RoutedEventArgs e)
         {
-            WitnessController witnessController = new WitnessController(_offence, _MainWindow);
+            AskForWitnessWindow witnessWindow = new AskForWitnessWindow(_offence);
         }
     }
 }

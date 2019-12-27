@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using WijkagentModels;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
@@ -10,11 +12,14 @@ namespace WijkagentWPF
     {
         private WitnessController _witnessController { get; set; }
         private MainWindow _window { get; set; }
-        public AskForWitnessWindow(WitnessController witnessController, MainWindow window)
+        private SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+
+        public AskForWitnessWindow(Offence  offence)
         {
             InitializeComponent();
-            _witnessController = witnessController;
-            _window = window;
+            _witnessController = new WitnessController(offence, this);
+            txtb_omschrijving.Text = offence.Description;
+            ShowDialog();
         }
 
         /// <summary>
@@ -27,22 +32,19 @@ namespace WijkagentWPF
         {
             if (!String.IsNullOrEmpty(txtb_omschrijving.Text))
             {
-                if (!_witnessController.MessageExists())
+                if (!socialMediaMessageController.MessageExists(_witnessController.CreateWitnessMessage()))
                 {
                     lbl_errorbeschrijving.Visibility = Visibility.Hidden;
                     lbl_DubbeleMelding.Visibility = Visibility.Hidden;
-                    _witnessController.SendTweet(_window);
+                    _witnessController.SendTweet();
                     Close();
                 }
 
-                else
-                {
+                else{
                     lbl_DubbeleMelding.Visibility = Visibility.Visible;
                 }
             }
-
-            else
-            {
+            else {
                 lbl_errorbeschrijving.Visibility = Visibility.Visible;
             }
         }

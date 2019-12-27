@@ -11,10 +11,10 @@ namespace WijkagentModels
         public string Handle { get; set; }
         public virtual Location Location { get; set; }
         public Offence Offence { get; set; }
-        public int Type { get; set; }
+        public int MediaType { get; set; }
         public long TwitterID { get; set; }
 
-        public SocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null, int type = 0, int id = 0)
+        public SocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null, int Mediatype = 0, int id = 0)
         {
             ID = id;
             DateTime = dateTime;
@@ -22,7 +22,7 @@ namespace WijkagentModels
             User = user;
             Handle = handle;
             Location = location;
-            Type = type;
+            MediaType = Mediatype;
             Offence = offence;
             TwitterID = twitterID;
         }
