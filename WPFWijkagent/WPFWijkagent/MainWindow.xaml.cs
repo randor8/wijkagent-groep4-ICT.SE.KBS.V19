@@ -20,8 +20,9 @@ namespace WijkagentWPF
     public partial class MainWindow : Window
     {
         private bool _addModeActivated = false;
-        private DelictDialog DelictDialog;
-        private SocialMediaMessageController SocialMediaMessageController;
+        private DelictDialog _DelictDialog;
+        private SocialMediaMessageController _SocialMediaMessageController;
+        private OffenceController _OffenceController;
 
         public MainWindow()
         {
@@ -46,7 +47,8 @@ namespace WijkagentWPF
             FillCategoryFiltermenu();
             FillOffenceList();
 
-            SocialMediaMessageController = new SocialMediaMessageController();
+            _SocialMediaMessageController = new SocialMediaMessageController();
+            _OffenceController = new OffenceController();
         }
 
         /// <summary>
@@ -106,14 +108,14 @@ namespace WijkagentWPF
             SocialScraper.UpdateSocialMediaMessages();
 
             //create a scraper for the witness messages and update the messages
-            Scraper WitnessScraper = new Scraper(Offence, true, SocialMediaMessageController.Hashtag(Offence));
+            Scraper WitnessScraper = new Scraper(Offence, true, _OffenceController.Hashtag(Offence));
             WitnessScraper.UpdateSocialMediaMessages(1);
 
-            DelictDialog = new DelictDialog(pin,
+            _DelictDialog = new DelictDialog(pin,
                 MainWindowController.RetrieveOffence(
                     pin.Location.Latitude,
                     pin.Location.Longitude));
-            DelictDialog.Show();
+            _DelictDialog.Show();
         }
 
         /// <summary>

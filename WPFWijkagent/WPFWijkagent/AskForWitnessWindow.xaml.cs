@@ -11,13 +11,13 @@ namespace WijkagentWPF
     public partial class AskForWitnessWindow : Window
     {
         private WitnessController _witnessController { get; set; }
-        private MainWindow _window { get; set; }
-        private SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
+        private SendMessageController _SendMessageController { get; set; }
 
         public AskForWitnessWindow(Offence  offence)
         {
             InitializeComponent();
             _witnessController = new WitnessController(offence, this);
+            _SendMessageController = new SendMessageController();
             txtb_omschrijving.Text = offence.Description;
             ShowDialog();
         }
@@ -32,7 +32,7 @@ namespace WijkagentWPF
         {
             if (!String.IsNullOrEmpty(txtb_omschrijving.Text))
             {
-                if (!socialMediaMessageController.MessageExists(_witnessController.CreateWitnessMessage()))
+                if (!_SendMessageController.MessageExists(_witnessController.CreateWitnessMessage()))
                 {
                     lbl_errorbeschrijving.Visibility = Visibility.Hidden;
                     lbl_DubbeleMelding.Visibility = Visibility.Hidden;

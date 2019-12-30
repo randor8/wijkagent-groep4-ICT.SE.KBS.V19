@@ -12,8 +12,9 @@ namespace WijkagentWPF
     {
         public Offence _Offence { get; set; }
         private AskForWitnessWindow _WitnessWindow;
-        private SocialMediaMessageController SocialMediaMessageController = new SocialMediaMessageController();
-        private SendMessageController SendMessageController = new SendMessageController();
+        private SocialMediaMessageController _SocialMediaMessageController = new SocialMediaMessageController();
+        private SendMessageController _SendMessageController = new SendMessageController();
+        private OffenceController _OffenceController = new OffenceController();
 
         public WitnessController(Offence offence, AskForWitnessWindow witnessWindow)
         {
@@ -53,12 +54,12 @@ namespace WijkagentWPF
             scraper.Connect();
 
             Tweet.PublishTweet(CreateWitnessMessage());
-            SocialMediaMessageController.UpdateHashtag(_Offence);
-            SendMessageController.UpdateSendMessages(_Offence, this.CreateWitnessMessage());
+            _OffenceController.UpdateHashtag(_Offence);
+            _SendMessageController.SetSendMessage(_Offence, this.CreateWitnessMessage());
 
             _Offence.CallHashtag = $"#Delict{_Offence.ID}";
 
-            Scraper WitnessScraper = new Scraper(_Offence, true, SocialMediaMessageController.Hashtag(_Offence)); ;
+            Scraper WitnessScraper = new Scraper(_Offence, true, _OffenceController.Hashtag(_Offence)); ;
             WitnessScraper.UpdateSocialMediaMessages(1);
         }
     }
