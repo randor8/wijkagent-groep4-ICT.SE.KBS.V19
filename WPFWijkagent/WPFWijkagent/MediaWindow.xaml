@@ -3,14 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WijkagentWPF"
-        mc:Ignorable="d"
+		mc:Ignorable="d"
         Title="MediaWindow" Height="450" Width="800">
-	<ListView x:Name="wpfLVImages">
-		<ListView.ItemTemplate>
-			<DataTemplate>
-				<Image Source="{Binding URL}"/>
-			</DataTemplate>
-		</ListView.ItemTemplate>
-	</ListView>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+		<ListView x:Name="wpfLVImages" ScrollViewer.CanContentScroll="False">
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<Image Source="{Binding URL}"/>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+		</ListView>
+	</Grid>
 </Window>
