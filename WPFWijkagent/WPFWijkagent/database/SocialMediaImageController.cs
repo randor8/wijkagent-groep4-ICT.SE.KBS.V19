@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data.SqlClient;
 using WijkagentModels;
 
@@ -13,10 +13,10 @@ namespace WijkagentWPF.database
         private const string ColURL = "URL";
 
         /// <summary>
-        /// 
+        /// sets image information in the databse
         /// </summary>
-        /// <param name="messageID"></param>
-        /// <param name="url"></param>
+        /// <param name="messageID">message wich the image belongs to</param>
+        /// <param name="url">url to the image</param>
         /// <returns>inserted image</returns>
         public SocialMediaImage SetSocialMediaImage(int messageID, string url)
         {
@@ -39,12 +39,22 @@ namespace WijkagentWPF.database
             };
         }
 
+        /// <summary>
+        /// creates a SocialMediaImage from information from the database
+        /// </summary>
+        /// <param name="socialMediaImageData">data to be used</param>
+        /// <returns>created image</returns>
         private SocialMediaImage ObjectArrayToSocialMediaImage(object[] socialMediaImageData) => new SocialMediaImage
         {
             SocialMediaMessageID = (int)socialMediaImageData[0],
             URL = socialMediaImageData[1].ToString()
         };
 
+        /// <summary>
+        /// searches the database for images from a certain message
+        /// </summary>
+        /// <param name="messageID">id of the message of wich to obtain the images</param>
+        /// <returns>a list of images</returns>
         public List<SocialMediaImage> GetSocialMediaImages(int messageID)
         {
             SqlCommand query = new SqlCommand($"SELECT {ColMessageID}, {ColURL} " +
