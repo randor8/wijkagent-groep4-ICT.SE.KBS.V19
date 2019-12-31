@@ -15,10 +15,9 @@ namespace WijkagentWPF.database
         /// <summary>
         /// sets image information in the databse
         /// </summary>
-        /// <param name="messageID">message wich the image belongs to</param>
-        /// <param name="url">url to the image</param>
-        /// <returns>inserted image</returns>
-        public SocialMediaImage SetSocialMediaImage(int messageID, string url)
+        /// <param name="image">data to put into the database</param>
+        /// <returns>number of changed rows</returns>
+        public int SetSocialMediaImage(SocialMediaImage image)
         {
             SqlCommand query = new SqlCommand("" +
                 $"INSERT INTO {Table} ({ColMessageID}, {ColURL}) " +
@@ -27,16 +26,10 @@ namespace WijkagentWPF.database
             // prepare values in statement
             query.Parameters.Add($"@{ColMessageID}", System.Data.SqlDbType.Int);
             query.Parameters.Add($"@{ColURL}", System.Data.SqlDbType.VarChar);
-            query.Parameters[$"@{ColMessageID}"].Value = messageID;
-            query.Parameters[$"@{ColURL}"].Value = url;
+            query.Parameters[$"@{ColMessageID}"].Value = image.SocialMediaMessageID;
+            query.Parameters[$"@{ColURL}"].Value = image.URL;
 
-            _dbContext.ExecuteQuery(query);
-
-            return new SocialMediaImage
-            {
-                SocialMediaMessageID = messageID,
-                URL = url
-            };
+            return _dbContext.ExecuteQuery(query);
         }
 
         /// <summary>

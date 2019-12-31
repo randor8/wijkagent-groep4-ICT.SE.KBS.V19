@@ -72,7 +72,8 @@ namespace WijkagentWPF
         /// <returns>list of social media messages </returns>
         public void SetSocialMediaMessages()
         {
-            try {
+            try
+            {
                 Connect();
                 var tweets = Search.SearchTweets(_searchParameters);
                 foreach (var tweet in tweets)
@@ -114,10 +115,11 @@ namespace WijkagentWPF
             SocialMediaImageController imageController = new SocialMediaImageController();
             foreach (var media in tweet.Media)
             {
-                imageController.SetSocialMediaImage(
-                    messageID,
-                    media.MediaURLHttps
-                );
+                imageController.SetSocialMediaImage(new SocialMediaImage
+                {
+                    SocialMediaMessageID = messageID,
+                    URL = media.MediaURLHttps
+                });
             }
         }
 
