@@ -24,9 +24,6 @@ namespace WijkagentWPF
             _controller.DisplayMessages(offence, wpfLVMessages);
         }
 
-        private void wpfBPrint_Click(object sender, RoutedEventArgs e)
-        { }
-
         /// <summary>
         /// Opens a new window showing all images
         /// </summary>
