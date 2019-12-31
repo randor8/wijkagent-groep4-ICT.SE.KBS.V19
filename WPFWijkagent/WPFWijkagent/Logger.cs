@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace WijkagentWPF
+﻿namespace WijkagentWPF
 {
     public class Logger
     {
@@ -11,9 +7,7 @@ namespace WijkagentWPF
         /// </summary>
         private static Logger _logger = null;
         private Logger()
-        {
-
-        }
+        { }
 
         public static Logger Log
         {
@@ -43,8 +37,8 @@ namespace WijkagentWPF
             if (sender is DBContext)
             {
                 ErrorToScreenEvent?.Invoke(sender, _DBErrorMessage);
-
-            } else if(sender is Scraper)
+            }
+            else if (sender is Scraper)
             {
                 ErrorToScreenEvent?.Invoke(sender, _APIErrorMessage);
             }

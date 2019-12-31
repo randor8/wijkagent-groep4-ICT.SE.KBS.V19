@@ -3,7 +3,6 @@ using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
-using Tweetinvi.Exceptions;
 using System.Configuration;
 using WijkagentModels;
 
@@ -36,11 +35,11 @@ namespace WijkagentWPF
                 MaximumNumberOfResults = 10,
                 Until = new DateTime(
                     offence.DateTime.Year,
-                    offence.DateTime.Month, 
+                    offence.DateTime.Month,
                     offence.DateTime.Day + 1),
                 Since = new DateTime(
                     offence.DateTime.Year,
-                    offence.DateTime.Month, 
+                    offence.DateTime.Month,
                     offence.DateTime.Day,
                     offence.DateTime.Hour - 1,
                     offence.DateTime.Minute,
@@ -73,7 +72,8 @@ namespace WijkagentWPF
         /// <returns>list of social media messages </returns>
         public void SetSocialMediaMessages()
         {
-            try {
+            try
+            {
                 Connect();
                 var tweets = Search.SearchTweets(_searchParameters);
                 foreach (var tweet in tweets)
@@ -87,6 +87,7 @@ namespace WijkagentWPF
                 Logger.Log.ErrorEventHandler(this);
             }
         }
+
         /// <summary>
         /// Checks and sets a specific value to the DB and adds a Social Media Message
         /// </summary>
@@ -101,14 +102,25 @@ namespace WijkagentWPF
             {
                 locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
             }
-            socialMediaMessageController.SetSocialMediaMessage(
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(
                 tweet.CreatedAt,
                 tweet.Text,
                 tweet.CreatedBy.Name,
                 tweet.CreatedBy.ScreenName,
                 locationId,
                 Offence.ID,
-                tweet.Id);
+                tweet.Id
+            );
+
+            SocialMediaImageController imageController = new SocialMediaImageController();
+            foreach (var media in tweet.Media)
+            {
+                imageController.SetSocialMediaImage(new SocialMediaImage
+                {
+                    SocialMediaMessageID = messageID,
+                    URL = media.MediaURLHttps
+                });
+            }
         }
 
         /// <summary>

@@ -18,7 +18,6 @@ namespace WijkagentWPF
     public partial class MainWindow : Window
     {
         private bool _addModeActivated = false;
-        SocialMediaDialogue social;
 
         public MainWindow()
         {
@@ -53,6 +52,7 @@ namespace WijkagentWPF
         {
             double maxZoom = 3;
             double minZoom = 20;
+
             if (wpfMapMain.ZoomLevel < maxZoom)
             {
                 wpfMapMain.ZoomLevel = maxZoom;
@@ -90,13 +90,9 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Pushpin pin = (Pushpin)sender;
-
-            social = new SocialMediaDialogue( 
-                MainWindowController.RetrieveOffence(
-                    pin.Location.Latitude, 
-                    pin.Location.Longitude));
-            social.Show();
+            Offence offence = (sender as Pushpin).GetOffence();
+            new Scraper(offence).UpdateSocialMediaMessages();
+            new DelictDialog(offence).Show();
         }
 
         /// <summary>
