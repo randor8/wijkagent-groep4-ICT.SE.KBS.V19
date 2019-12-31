@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Windows;
 using WijkagentModels;
 
 namespace WijkagentWPF.database
@@ -18,8 +17,8 @@ namespace WijkagentWPF.database
         /// </summary>
         /// <param name="messageID"></param>
         /// <param name="url"></param>
-        /// <returns>number of changed rows</returns>
-        public int SetSocialMediaImage(int messageID, string url)
+        /// <returns>inserted image</returns>
+        public SocialMediaImage SetSocialMediaImage(int messageID, string url)
         {
             SqlCommand query = new SqlCommand("" +
                 $"INSERT INTO {Table} ({ColMessageID}, {ColURL}) " +
@@ -31,7 +30,13 @@ namespace WijkagentWPF.database
             query.Parameters[$"@{ColMessageID}"].Value = messageID;
             query.Parameters[$"@{ColURL}"].Value = url;
 
-            return _dbContext.ExecuteQuery(query);
+            _dbContext.ExecuteQuery(query);
+
+            return new SocialMediaImage
+            {
+                SocialMediaMessageID = messageID,
+                URL = url
+            };
         }
 
         private SocialMediaImage ObjectArrayToSocialMediaImage(object[] socialMediaImageData) => new SocialMediaImage
