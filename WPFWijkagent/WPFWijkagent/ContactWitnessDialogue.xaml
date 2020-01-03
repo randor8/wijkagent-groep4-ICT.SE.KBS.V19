@@ -12,7 +12,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <ScrollViewer>
-            <TextBox x:Name="ChatTextBox" Background="Azure" Grid.Row="0"/>
+            <Canvas x:Name="ChatCanvas" Background="Azure" Grid.Row="0"/>
         </ScrollViewer>
         <Label x:Name="InputLabel" Grid.Row="1" Width="685" Height="50" Margin="10,11,0,11" 
                HorizontalAlignment="Left" Background="Beige" BorderBrush="Black"/>

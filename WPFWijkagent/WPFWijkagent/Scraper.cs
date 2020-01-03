@@ -5,6 +5,7 @@ using Tweetinvi.Parameters;
 using WijkagentWPF.database;
 using System.Configuration;
 using WijkagentModels;
+using System.Collections.Generic;
 
 namespace WijkagentWPF
 {
@@ -122,6 +123,13 @@ namespace WijkagentWPF
                 });
             }
         }
+
+        public static IEnumerable<IMessage> GetLatestMessages()
+        {
+            IEnumerable<IMessage> LatestMessages = Message.GetLatestMessages();
+            return LatestMessages;
+        }
+
 
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB

@@ -7,8 +7,6 @@ namespace WijkagentWPF
 {
     class ContactWitnessDialogueController
     {
-        public Scraper _scraper { get; set; }
-
         public void SentMessage(long id)
         {
 
