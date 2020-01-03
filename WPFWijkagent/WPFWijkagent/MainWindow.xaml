@@ -4,10 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:m="clr-namespace:Microsoft.Maps.MapControl.WPF;assembly=Microsoft.Maps.MapControl.WPF"
+		xmlns:local="clr-namespace:WijkagentWPF"
+        xmlns:sys="clr-namespace:System;assembly=System.Runtime"
 		mc:Ignorable="d"
 		Closed="Window_Closed"
         Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:DefaultEndDateConverter x:Key="DateConverter"/>
+    </Window.Resources>
 	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="23"/>
 			<RowDefinition Height="1*"/>
@@ -39,8 +47,9 @@
             <DockPanel Grid.Column="2">
                 <Expander DockPanel.Dock="Top">
                     <Expander.Header>
-                        <DockPanel Width="175">
-                            <TextBlock FontSize="15" VerticalAlignment="Center">Filters</TextBlock>
+                        <DockPanel Width="{Binding ActualWidth, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Expander}}}">
+                            <TextBlock FontSize="15" DockPanel.Dock="Left">Filters</TextBlock>
+                            <Button x:Name="wpfBTNResetFilters" DockPanel.Dock="Right" Margin="0,2,30,0" HorizontalAlignment="Right" Content="Reset" Click="wpfBTNResetFilters_Click"/>
                         </DockPanel>
                     </Expander.Header>
                     <StackPanel>
@@ -52,12 +61,46 @@
                             </Expander.Header>
                             <Grid x:Name="FilterGrid">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="7*"/>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                             </Grid>
                         </Expander>
-                        <Button x:Name="wpfBTNResetFilters" Margin="0,5,5,5" HorizontalAlignment="Right" Content="Reset" Click="wpfBTNResetFilters_Click"/>
+                        <Expander Margin="3,0,0,0">
+                            <Expander.Header>
+                                <DockPanel Width="175">
+                                    <TextBlock FontSize="13" VerticalAlignment="Center">Datum</TextBlock>
+                                </DockPanel>
+                            </Expander.Header>
+                            <DockPanel>
+                                <StackPanel Orientation="Horizontal" DockPanel.Dock="Top">
+                                    <RadioButton x:Name="SingleDate" Checked="ToggleDateFilter" GroupName="DateRadioButtons" Margin="3, 5, 0, 0">Enkel</RadioButton>
+                                    <RadioButton x:Name="DateRange"  Checked="ToggleDateFilter" GroupName="DateRadioButtons" IsChecked="True" Margin="3, 5, 0, 0">Bereik</RadioButton>
+                                </StackPanel>
+                                <Grid x:Name="SingleDatePanel" Visibility="Collapsed">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label Grid.Column="0">Datum</Label>
+                                    <DatePicker x:Name="DatePickerSingle" SelectedDateChanged="SingleDateFilterChanged" DisplayDateEnd="{x:Static sys:DateTime.Today}" Grid.Column="1"/>
+                                </Grid>
+                                <Grid x:Name="DateRangePanel">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Column="0" Grid.Row="0">Begindatum</Label>
+                                    <DatePicker x:Name="DatePickerFrom" SelectedDateChanged="DateRangeFilterChanged" DisplayDateEnd="{Binding SelectedDate, ElementName=DatePickerTo, Converter={StaticResource DateConverter}}" Grid.Column="1" Grid.Row="0"/>
+                                    <Label Grid.Column="0" Grid.Row="1">Einddatum</Label>
+                                    <DatePicker x:Name="DatePickerTo" SelectedDateChanged="DateRangeFilterChanged" DisplayDateStart="{Binding SelectedDate, ElementName=DatePickerFrom}" DisplayDateEnd="{x:Static sys:DateTime.Today}" Grid.Column="1" Grid.Row="1"/>
+                                </Grid>
+                            </DockPanel>
+                        </Expander>
                     </StackPanel>
                 </Expander>
                 <Expander IsExpanded="True">
