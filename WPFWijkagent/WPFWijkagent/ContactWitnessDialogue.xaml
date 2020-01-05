@@ -11,12 +11,13 @@
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ScrollViewer>
-            <Canvas x:Name="ChatCanvas" Background="Azure" Grid.Row="0"/>
+        <TextBox x:Name="InputLabel" Grid.Row="1" Width="685" Height="50" Margin="10,11,0,11"  
+               HorizontalAlignment="Left" Background="Beige" BorderBrush="Black" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <Canvas x:Name="ChatCanvas" Background="Azure" Grid.Row="0" Height="400"/>
         </ScrollViewer>
-        <Label x:Name="InputLabel" Grid.Row="1" Width="685" Height="50" Margin="10,11,0,11" 
-               HorizontalAlignment="Left" Background="Beige" BorderBrush="Black"/>
+        
         <Button x:Name="SendButton" Content="Versturen" HorizontalAlignment="Right" Margin="8"
-                Grid.Row="1" Width="80" Height="50"/>
+                Grid.Row="1" Width="80" Height="50" Click="SendButton_Click"/>
     </Grid>
 </Window>

@@ -19,11 +19,12 @@ namespace WijkagentWPF
         private SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
+        //TODO: Fix config
         #region Keys&Tokens
-        private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
-        private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
-        private readonly string _accessToken = ConfigurationManager.AppSettings.Get("accesToken");
-        private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
+        private readonly string _customerKey = "rc8AUsuxx6kNSDWWIaQ3woCWS";//ConfigurationManager.AppSettings.Get("customerKey");
+        private readonly string _customerKeySecret = "1vIHNDb8qVTtfd5xEp51TrLtxyD4JIzalG3MYFZgTLJvJ5tatY"; //ConfigurationManager.AppSettings.Get("customerKeySecret");
+        private readonly string _accessToken = "1194224344144269312-aqavesiQRRDWdqCMXNMfHgO6pYqvSp";//ConfigurationManager.AppSettings.Get("accesToken");
+        private readonly string _accessTokenSecret = "ry28ZPjOPVy8bnuQrsaD2zwr0KLfVyBkPZIysy98493Hn";//ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
         public Scraper(Offence offence)
@@ -124,12 +125,33 @@ namespace WijkagentWPF
             }
         }
 
-        public static IEnumerable<IMessage> GetLatestMessages()
+        public IEnumerable<IMessage> GetLatestDirectMessages()
         {
+            Connect();
             IEnumerable<IMessage> LatestMessages = Message.GetLatestMessages();
+            if (LatestMessages.ToString().Length == 0)
+            {
+                Console.WriteLine("request failed");
+            }
             return LatestMessages;
         }
 
+        public void SentDirectMessage(string input, long id)
+        {
+            Connect();
+            Message.PublishMessage(input, id);
+        }
+        
+        public void DeletePrivateConversation(List<DirectMessage> messages)
+        {
+            foreach (DirectMessage message in messages)
+            {
+                Message.DestroyMessage(message._messageID);
+            }
+        }
+
+
+        
 
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
