@@ -81,7 +81,11 @@ namespace WijkagentWPF
             });
         }
 
-
+        /// <summary>
+        /// Activates when button on dialogue is pressed, adds a message to the dialogue and sends the message to Twitter
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string input = wpfTBinput.Text;

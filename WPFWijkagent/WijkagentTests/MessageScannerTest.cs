@@ -15,6 +15,9 @@ namespace WijkagentTests
         MessageScanner scanner;
         ContactWitnessDialogueController controller;
 
+        /// <summary>
+        /// Checks, whether the Message has correctly been sent to a observer of the scanners
+        /// </summary>
         [Test]
         public void CompareConversation_DifferentListsGIven_ControllerMessagesUpdates()
         {
