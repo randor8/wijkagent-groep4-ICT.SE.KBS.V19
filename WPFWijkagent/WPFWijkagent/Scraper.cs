@@ -136,7 +136,7 @@ namespace WijkagentWPF
 
                 foreach (var tweet in tweets)
                 {
-                    if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
+                    if (mediaMessageController.GetTweetSocialMediaMessage(tweet.Id) == null)
                     {
                         SetSocialMediaMessage(tweet);
                     }

@@ -8,10 +8,12 @@ namespace WijkagentWPF.database
     public class SocialMediaMessageController
     {
         private DBContext _dbContext { get; set; }
+        private SocialMediaImageController _imageController;
 
         public SocialMediaMessageController()
         {
             _dbContext = new DBContext();
+            _imageController = new SocialMediaImageController();
         }
 
         /// <summary>
@@ -100,9 +102,9 @@ namespace WijkagentWPF.database
         /// <summary>
         /// gets the specified SocialMediaMessage from the db
         /// </summary>
-        /// <param name="ID">SocialMediaMessage id you need</param>
+        /// <param name="tweetID">Twitter id you need</param>
         /// <returns>the new SocialMediaMessage object requested</returns>
-        public SocialMediaMessage GetSocialMediaMessage(long tweetID)
+        public SocialMediaMessage GetTweetSocialMediaMessage(long tweetID)
         {
             SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
                 "FROM SocialMediaMessage WHERE TwitterID = @TwitterID");
@@ -112,7 +114,9 @@ namespace WijkagentWPF.database
 
             if (rows.Count == 1)
             {
-                return ObjectArrayToSocialMediaMessage(rows[0]);
+                SocialMediaMessage message = ObjectArrayToSocialMediaMessage(rows[0]);
+                message.Media = _imageController.GetSocialMediaImages(message.ID);
+                return message;
             }
             return null;
         }
@@ -131,16 +135,12 @@ namespace WijkagentWPF.database
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
             List<SocialMediaMessage> socialMediaMessages = new List<SocialMediaMessage>();
 
-            if (rows.Count > 0)
+            if (rows.Count > 0) rows.ForEach(smm =>
             {
-                SocialMediaImageController imageController = new SocialMediaImageController();
-                rows.ForEach(smm =>
-                {
-                    SocialMediaMessage message = ObjectArrayToSocialMediaMessage(smm);
-                    message.Media = imageController.GetSocialMediaImages(message.ID);
-                    socialMediaMessages.Add(message);
-                });
-            }
+                SocialMediaMessage message = ObjectArrayToSocialMediaMessage(smm);
+                message.Media = _imageController.GetSocialMediaImages(message.ID);
+                socialMediaMessages.Add(message);
+            });
             return socialMediaMessages;
         }
     }
