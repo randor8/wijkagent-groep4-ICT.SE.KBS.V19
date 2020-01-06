@@ -27,6 +27,15 @@ namespace WijkagentWPF
         {
             wpfLVMessages.ItemsSource = _controller.GetOffenceSocialMediaMessages(offence.ID);
         }
+
+        /// <summary>
+        /// Retrieves the rest of the images from the social media message.
+        /// </summary>
+        /// <param name="image">image to use to find the social media message</param>
+        public void ShowImages(SocialMediaImage image)
+        {
+            new MediaWindow(new SocialMediaImageController().GetSocialMediaImages(image.SocialMediaMessageID)).Show();
+        }
     }
 }
 

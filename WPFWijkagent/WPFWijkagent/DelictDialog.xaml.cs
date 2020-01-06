@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -29,10 +30,9 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="sender">item that was clicked on</param>
         /// <param name="e">event arguments</param>
-        private void Image_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            SocialMediaMessage msg = (sender as Image).DataContext as SocialMediaMessage;
-            new MediaWindow(msg.Media).Show();
+            _controller.ShowImages((sender as Image).DataContext as SocialMediaImage);
         }
     }
 }

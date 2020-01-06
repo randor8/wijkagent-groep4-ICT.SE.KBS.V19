@@ -48,7 +48,7 @@
 		<TabControl Grid.Row="2">
 			<TabItem Header="Alle berichten">
 				<!-- Boukje -->
-				<ListView x:Name="wpfLVMessages" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+				<ListView x:Name="wpfLVMessages" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False">
 					<ListView.ItemTemplate>
 						<DataTemplate>
 							<Grid Margin="5">
@@ -80,7 +80,27 @@
 								<TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap"/>
 								<TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DateTime}" TextWrapping="Wrap"/>
 
-								<Image Grid.Column="3" Grid.RowSpan="4" HorizontalAlignment="Right" Source="{Binding Media[0].URL}" MaxHeight="90" MouseDown="Image_MouseDown"/>
+								<ListBox Grid.Column="3" Grid.RowSpan="4" MaxWidth="200" ItemsSource="{Binding Media}" ScrollViewer.CanContentScroll="False">
+									<ListBox.ItemsPanel>
+										<ItemsPanelTemplate>
+											<VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+										</ItemsPanelTemplate>
+									</ListBox.ItemsPanel>
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<Image Source="{Binding URL}" Height="90" MouseDown="Image_MouseDown"/>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+									<ListBox.Style>
+										<Style TargetType="ListBox">
+											<Style.Triggers>
+												<DataTrigger Binding="{Binding Media.Count}" Value="0">
+													<Setter Property="Visibility" Value="Hidden"/>
+												</DataTrigger>
+											</Style.Triggers>
+										</Style>
+									</ListBox.Style>
+								</ListBox>
 							</Grid>
 						</DataTemplate>
 					</ListView.ItemTemplate>
