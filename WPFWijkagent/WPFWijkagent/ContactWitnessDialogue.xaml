@@ -1,4 +1,4 @@
-﻿<Window x:Class="WijkagentWPF.ContactWitnessDialogue"
+<Window x:Class="WijkagentWPF.ContactWitnessDialogue"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -20,7 +20,7 @@
             </ListBox.ItemContainerStyle>
         </ListView>
         <TextBox x:Name="wpfTBinput" Grid.Row="2" Width="685" Margin="10,10,0,10"  
-               HorizontalAlignment="Left" Background="Beige" BorderBrush="Black" TextChanged="wpfTBinput_TextChanged" />
+               HorizontalAlignment="Left" Background="Beige" BorderBrush="Black" />
         <!-- canvas verwijderen  
         <ScrollViewer VerticalScrollBarVisibility="Auto">
         </ScrollViewer>
