@@ -146,7 +146,7 @@ namespace WijkagentWPF
         {
             foreach (DirectMessage message in messages)
             {
-                Message.DestroyMessage(message._messageID);
+                Message.DestroyMessage(message.MessageID);
             }
         }
 

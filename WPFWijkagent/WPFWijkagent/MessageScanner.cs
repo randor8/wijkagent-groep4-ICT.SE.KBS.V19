@@ -38,6 +38,7 @@ namespace WijkagentWPF
             {
                 messages.Add(new DirectMessage(item.SenderId,item.Id, item.Text, item.CreatedAt));
             }
+            messages.Reverse();
             return messages;
         }
 
@@ -49,7 +50,7 @@ namespace WijkagentWPF
         {
             int currentCount = _messages.Count;
             int newCount = UpdatedConversation.Count;
-            if(_messages.Count == 0 || (newCount > currentCount && UpdatedConversation[newCount-1]._content != _messages[currentCount-1]._content))
+            if(_messages.Count == 0 || (newCount > currentCount && UpdatedConversation[newCount-1].Content != _messages[currentCount-1].Content))
             {
                 Console.WriteLine("Compare activated");
                 _messages = UpdatedConversation;

@@ -37,36 +37,7 @@ namespace WijkagentWPF
             scanner.Attach(this);
             scanner.StartScanning(60000);
         }
-        
-        /// <summary>
-        /// Adds a Textblock to the Dialogue
-        /// </summary>
-        /// <param name="message"> the message of the textblock</param>
-        /// <param name="side">the side of the text in the textblock 0 = left & 1 = right </param>
-        /// <param name="distance"> distance from the left side of the canvas where the textblock is placed </param>
-        public void DrawMessageBlock(DirectMessage message, int side, int distance)
-        {
-            TextBlock block = new TextBlock();
-            block.Text = $"{message._content}\n{message._createdAt}";
-            block.Width = 100;
-            block.Height = 50;
-            block.Background = Brushes.Aqua;
-            block.Padding = new Thickness(5);
-            block.TextWrapping = TextWrapping.Wrap;
-            if (side == 0)
-            {
-                block.TextAlignment = TextAlignment.Left;
-            }
-            else
-            {
-                block.TextAlignment = TextAlignment.Right;
-            }
-            Canvas.SetLeft(block,distance);
-            Canvas.SetTop(block, topdistance);
-            ChatCanvas.Children.Add(block);
-            ChatCanvas.Height += 70;
-            topdistance += 70;
-        }
+               
 
         /// <summary>
         /// prints all messages in the list on the dialogue screen
@@ -74,19 +45,27 @@ namespace WijkagentWPF
         /// <param name="directMessages"></param>
         public void PrintMessages(List<DirectMessage> directMessages)
         {
-            ChatCanvas.Children.Clear();
-            topdistance = 20;
-            directMessages.Reverse();
-            foreach (DirectMessage message in directMessages)
+            foreach (DirectMessage item in directMessages)
             {
-                if (message._senderID == UserID)
+                ListViewItem viewItem = new ListViewItem()
                 {
-                    DrawMessageBlock(message, 0, 600);
-                }
-                else 
+                    ContentTemplate = (DataTemplate)Resources["wpfDTlistbox"],
+                    Content = item,
+                    Padding = new Thickness(5),
+                    Margin = new Thickness(5),
+                    BorderBrush = Brushes.Black,
+                };
+                if (item.SenderID == UserID)
                 {
-                    DrawMessageBlock(message, 1, 20);
+                    viewItem.HorizontalAlignment = HorizontalAlignment.Right;
+                    viewItem.HorizontalContentAlignment = HorizontalAlignment.Right;
                 }
+                else
+                {
+                    viewItem.HorizontalAlignment = HorizontalAlignment.Left;
+                    viewItem.HorizontalContentAlignment = HorizontalAlignment.Left;
+                }
+                WPFLBMessageBox.Items.Add(viewItem);
             }
         }
 
@@ -105,14 +84,19 @@ namespace WijkagentWPF
 
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
-            string input = InputLabel.Text;
+            string input = wpfTBinput.Text;
             if (input.Length > 0) 
             { 
                 controller.directMessages.Add(new DirectMessage(UserID, 1, input, DateTime.Now));
                 scanner.scraper.SentDirectMessage(input, _witnessID);
                 PrintMessages(controller.directMessages);
             }
-            InputLabel.Text = "";
+            wpfTBinput.Text = "";
+        }
+
+        private void wpfTBinput_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

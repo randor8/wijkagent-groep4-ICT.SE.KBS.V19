@@ -8,16 +8,44 @@
         Title="ContactWitnessDialogue" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBox x:Name="InputLabel" Grid.Row="1" Width="685" Height="50" Margin="10,11,0,11"  
-               HorizontalAlignment="Left" Background="Beige" BorderBrush="Black" />
+        <ListView x:Name="WPFLBMessageBox" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Grid.Row="1">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListView>
+        <TextBox x:Name="wpfTBinput" Grid.Row="2" Width="685" Margin="10,10,0,10"  
+               HorizontalAlignment="Left" Background="Beige" BorderBrush="Black" TextChanged="wpfTBinput_TextChanged" />
+        <!-- canvas verwijderen  
         <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <Canvas x:Name="ChatCanvas" Background="Azure" Grid.Row="0" Height="400"/>
         </ScrollViewer>
-        
-        <Button x:Name="SendButton" Content="Versturen" HorizontalAlignment="Right" Margin="8"
-                Grid.Row="1" Width="80" Height="50" Click="SendButton_Click"/>
+            <Canvas x:Name="ChatCanvas" Background="Azure" Grid.Row="0" Height="400"/>-->
+        <Button x:Name="wpfBTsendButton" Content="Versturen" HorizontalAlignment="Right" Margin="8"
+                Grid.Row="2" Width="80" Height="50" Click="SendButton_Click"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="10,0,0,0"  Width="150"
+                   VerticalAlignment="Center"  Text="Getuige" TextAlignment="Center"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="626,0,0,0"  Width="150"
+            VerticalAlignment="Center" Text="Wijkagent" TextAlignment="Center"/>
     </Grid>
+    <Window.Resources>
+        <DataTemplate x:Key="wpfDTlistbox" DataType="DirectMessage">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Text="{Binding Content}" TextWrapping="Wrap"/>
+                <TextBlock Grid.Row="1" Text="{Binding CreatedAt}" TextWrapping="Wrap" FontSize="10"/>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
 </Window>

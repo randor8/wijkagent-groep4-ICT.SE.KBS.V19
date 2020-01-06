@@ -56,8 +56,8 @@ namespace WijkagentTests
             System.Threading.Thread.Sleep(6000);
             scanner.StopScanning();
             //assert
-            Assert.AreEqual("test message",scanner._messages[0]._content);
-            Assert.AreEqual("test message", controller.directMessages[0]._content);
+            Assert.AreEqual("test message",scanner._messages[0].Content);
+            Assert.AreEqual("test message", controller.directMessages[0].Content);
 
 
         }
