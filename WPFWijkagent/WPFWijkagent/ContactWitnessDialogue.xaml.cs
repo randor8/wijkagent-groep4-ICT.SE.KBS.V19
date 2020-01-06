@@ -93,10 +93,5 @@ namespace WijkagentWPF
             }
             wpfTBinput.Text = "";
         }
-
-        private void wpfTBinput_TextChanged(object sender, TextChangedEventArgs e)
-        {
-
-        }
     }
 }
