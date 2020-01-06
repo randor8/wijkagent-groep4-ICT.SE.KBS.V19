@@ -27,6 +27,12 @@ namespace WijkagentWPF
         {
             wpfLVMessages.ItemsSource = _controller.GetOffenceSocialMediaMessages(offence.ID);
         }
+
+        public void ShowImages(SocialMediaImage image)
+        {
+            SocialMediaMessage message = _controller.GetSocialMediaMessage(image.SocialMediaMessageID);
+            new MediaWindow(message.Media).Show();
+        }
     }
 }
 
