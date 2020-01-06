@@ -102,28 +102,6 @@ namespace WijkagentWPF.database
         /// <summary>
         /// gets the specified SocialMediaMessage from the db
         /// </summary>
-        /// <param name="ID">SocialMediaMessage id you need</param>
-        /// <returns>the new SocialMediaMessage object requested</returns>
-        public SocialMediaMessage GetSocialMediaMessage(long id)
-        {
-            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
-                "FROM SocialMediaMessage WHERE ID = @ID");
-            query.Parameters.Add("@ID", System.Data.SqlDbType.BigInt);
-            query.Parameters["@ID"].Value = id;
-            List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
-
-            if (rows.Count == 1)
-            {
-                SocialMediaMessage message = ObjectArrayToSocialMediaMessage(rows[0]);
-                message.Media = _imageController.GetSocialMediaImages(message.ID);
-                return message;
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// gets the specified SocialMediaMessage from the db
-        /// </summary>
         /// <param name="tweetID">Twitter id you need</param>
         /// <returns>the new SocialMediaMessage object requested</returns>
         public SocialMediaMessage GetTweetSocialMediaMessage(long tweetID)

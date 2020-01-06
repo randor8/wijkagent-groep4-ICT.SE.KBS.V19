@@ -34,8 +34,7 @@ namespace WijkagentWPF
         /// <param name="image">image to use to find the social media message</param>
         public void ShowImages(SocialMediaImage image)
         {
-            SocialMediaMessage message = _controller.GetSocialMediaMessage(image.SocialMediaMessageID);
-            new MediaWindow(message.Media).Show();
+            new MediaWindow(new SocialMediaImageController().GetSocialMediaImages(image.SocialMediaMessageID)).Show();
         }
     }
 }
