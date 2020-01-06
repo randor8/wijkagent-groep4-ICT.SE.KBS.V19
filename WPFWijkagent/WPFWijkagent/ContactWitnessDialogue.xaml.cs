@@ -102,6 +102,7 @@ namespace WijkagentWPF
             });
         }
 
+
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string input = InputLabel.Text;
