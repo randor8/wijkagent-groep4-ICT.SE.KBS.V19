@@ -6,7 +6,6 @@ using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.database;
 using Location = WijkagentModels.Location;
-using System.Linq;
 
 namespace WijkagentWPF
 {
@@ -35,8 +34,7 @@ namespace WijkagentWPF
             Offence offence = new Offence(dateTime, description, location, category);
             offence.ID = offenceController.SetOffence(offence);
 
-            Scraper scraper = new Scraper(offence);
-            scraper.SetSocialMediaMessages();
+            new Scraper(offence).SetSocialMediaMessages();
 
             _offences.Add(offence);
         }
@@ -77,13 +75,29 @@ namespace WijkagentWPF
         };
 
         /// <summary>
+        /// This function returns the Offence associated with the given pushpin.
+        /// </summary>
+        /// <param name="pushpin">the pushpin to search</param>
+        /// <returns>the offence</returns>
+        public static Offence GetOffence(this Pushpin pushpin)
+        {
+            foreach (Offence offence in _pushpins.Keys)
+            {
+                if (_pushpins[offence].Equals(pushpin))
+                {
+                    return offence;
+                }
+            }
+            return null; // This should not be able to happen.
+        }
+
+        /// <summary>
         /// gets all the offences from the db
         /// </summary>
         /// <returns>List of offences ordered by date descending</returns>
         public static List<Offence> GetOffences()
         {
             _offences = new OffenceController().GetOffences();
-
             return _offences;
         }
 
@@ -91,7 +105,6 @@ namespace WijkagentWPF
         /// The method executes a LINQ search on the List items and finds the offencelistItem with the same pin. 
         /// </summary>
         /// <returns>The method returns the offence that has the same pin</returns>
-
         public static Offence RetrieveOffence(double latitude, double longitude)
         {
             Offence offence = null;
@@ -100,7 +113,7 @@ namespace WijkagentWPF
                 where OffenceItem.Location.Latitude == latitude
                 && OffenceItem.Location.Longitude == longitude
                 select OffenceItem;
-            offence = offenceQuerry.First(); 
+            offence = offenceQuerry.First();
             return offence;
         }
 

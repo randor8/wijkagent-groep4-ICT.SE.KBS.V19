@@ -117,6 +117,5 @@ namespace WijkagentWPF.database
 
             return offences;
         }
-
     }
 }
