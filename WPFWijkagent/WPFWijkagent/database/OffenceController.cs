@@ -134,7 +134,6 @@ namespace WijkagentWPF.database
             if (rows.Count == 1 && rows[0].GetValue(0).ToString().Length > 0)
             {
                 string text = rows[0].GetValue(0).ToString();
-                offence.CallHashtag = text;
                 return text;
             }
 

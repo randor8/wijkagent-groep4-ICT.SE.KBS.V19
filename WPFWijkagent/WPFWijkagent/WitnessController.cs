@@ -57,8 +57,6 @@ namespace WijkagentWPF
             _OffenceController.UpdateHashtag(_Offence);
             _SendMessageController.SetSendMessage(_Offence, this.CreateWitnessMessage());
 
-            _Offence.CallHashtag = $"#Delict{_Offence.ID}";
-
             Scraper WitnessScraper = new Scraper(_Offence, true, _OffenceController.Hashtag(_Offence)); ;
             WitnessScraper.UpdateSocialMediaMessages(1);
         }

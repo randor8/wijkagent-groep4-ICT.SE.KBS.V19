@@ -39,7 +39,6 @@ namespace WijkagentWPF
                     _witnessController.SendTweet();
                     Close();
                 }
-
                 else{
                     lbl_DubbeleMelding.Visibility = Visibility.Visible;
                 }
