@@ -38,6 +38,12 @@ namespace WijkagentWPF
             scanner.StartScanning(60000);
         }
         
+        /// <summary>
+        /// Adds a Textblock to the Dialogue
+        /// </summary>
+        /// <param name="message"> the message of the textblock</param>
+        /// <param name="side">the side of the text in the textblock 0 = left & 1 = right </param>
+        /// <param name="distance"> distance from the left side of the canvas where the textblock is placed </param>
         public void DrawMessageBlock(DirectMessage message, int side, int distance)
         {
             TextBlock block = new TextBlock();
@@ -62,6 +68,10 @@ namespace WijkagentWPF
             topdistance += 70;
         }
 
+        /// <summary>
+        /// prints all messages in the list on the dialogue screen
+        /// </summary>
+        /// <param name="directMessages"></param>
         public void PrintMessages(List<DirectMessage> directMessages)
         {
             ChatCanvas.Children.Clear();
@@ -80,11 +90,14 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Updates the dialogue when a new message is received
+        /// </summary>
+        /// <param name="observable"></param>
         public void Update(IObservable observable)
         {
             this.Dispatcher.Invoke(() =>
             {
-                Console.WriteLine("activated");
                 PrintMessages(controller.directMessages);
             });
         }

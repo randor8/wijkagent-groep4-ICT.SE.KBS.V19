@@ -42,7 +42,7 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Compares direct Message Lists to 
+        /// Compares direct Message Lists to the current list in the MessageScanner, to Inform Observers of Changes
         /// </summary>
         /// <param name="UpdatedConversation"></param>
         public void CompareConversation(List<DirectMessage> UpdatedConversation )
@@ -58,7 +58,10 @@ namespace WijkagentWPF
                 Notify();
             }
         }
-        //TODO: Add Logic for scanning and updating
+        /// <summary>
+        /// Starts a Timer Tos start scanning Twitter
+        /// </summary>
+        /// <param name="interval"> the amount of microseconds per before the timer starts scanning</param>
         public void StartScanning(int interval)
         {
             timer = new Timer(interval);
@@ -67,12 +70,20 @@ namespace WijkagentWPF
             timer.Start();
         }
 
+        /// <summary>
+        /// Stops the Twitter Scanning Timer
+        /// </summary>
         public void StopScanning()
         {
             timer.Stop();
             timer.Dispose();
         }
 
+        /// <summary>
+        /// Event connected to the Timer which gets and compares Twitter conversations.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ScanConversation(object sender, ElapsedEventArgs e)
         {
             List<DirectMessage> messages = new List<DirectMessage>();
@@ -81,6 +92,9 @@ namespace WijkagentWPF
             CompareConversation(messages);
         }
 
+        /// <summary>
+        /// Notifies all attached observers of a Update 
+        /// </summary>
         public void Notify()
         {
             foreach (var observer in _observers)
@@ -89,6 +103,10 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Attaches a observer to the scanner, so it can be notified
+        /// </summary>
+        /// <param name="observer"></param>
         public void Attach(IObserver observer)
         {
             _observers.Add(observer);
