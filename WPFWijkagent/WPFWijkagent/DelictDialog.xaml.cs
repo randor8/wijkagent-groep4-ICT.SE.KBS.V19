@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Tweetinvi;
+using Tweetinvi.Models;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -33,6 +35,16 @@ namespace WijkagentWPF
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
             _controller.ShowImages((sender as Image).DataContext as SocialMediaImage);
+        }
+
+        private void wpfBTchatbutton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+            SocialMediaMessage message = (SocialMediaMessage)button.DataContext;
+
+            IUser user =User.GetUserFromScreenName(message.Handle);
+            ContactWitnessDialogue witnessDialogue = new ContactWitnessDialogue(user.Id);
+            witnessDialogue.Show();
         }
     }
 }
