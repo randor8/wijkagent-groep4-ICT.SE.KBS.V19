@@ -41,6 +41,7 @@ namespace WijkagentWPF
 
             FillCategoryFiltermenu();
             FillOffenceList();
+            StartChatting();
         }
 
         /// <summary>
@@ -392,6 +393,12 @@ namespace WijkagentWPF
         {
             //check wich object then set the appropriate message.
             MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
+        }
+
+        public void StartChatting()
+        {
+            ContactWitnessDialogue witnessDialogue = new ContactWitnessDialogue(1206933407655243778);
+            witnessDialogue.Show();
         }
     }
 }
