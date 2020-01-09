@@ -7,22 +7,18 @@ namespace WijkagentWPF
 {
     public class ContactWitnessDialogueController :IObserver
     {
-        public List<DirectMessage> directMessages;
-
-        public long _witnessID { get; set; }
-        //TODO: Add Dialogue
-        public ContactWitnessDialogueController(long id)
+        public List<DirectMessage> DirectMessages;
+        public ContactWitnessDialogueController()
         {
-            directMessages = new List<DirectMessage>();
-            _witnessID = id;
+            DirectMessages = new List<DirectMessage>();
         }
 
         public void Update(IObservable observable)
         {
             MessageScanner scanner = observable as MessageScanner;
-            if (scanner.CurrentState == State.Outdated || directMessages.Count == 0)
+            if (scanner.CurrentState == State.Outdated || DirectMessages.Count == 0 || scanner.Messages.Count > DirectMessages.Count)
             {
-                directMessages = scanner._messages;
+                DirectMessages = scanner.Messages;
                 scanner.CurrentState = State.Updated;
             }
         }

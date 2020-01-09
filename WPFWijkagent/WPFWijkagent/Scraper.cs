@@ -125,34 +125,36 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Returns all the direct messages, that are known on the Twitter account
+        /// </summary>
+        /// <returns> Ienumerable containg all Dirext Messages</returns>
         public IEnumerable<IMessage> GetLatestDirectMessages()
         {
-            Connect();
-            IEnumerable<IMessage> LatestMessages = Message.GetLatestMessages();
-            if (LatestMessages.ToString().Length == 0)
+            try
             {
-                Console.WriteLine("request failed");
+                Connect();
+                IEnumerable<IMessage> LatestMessages = Message.GetLatestMessages();
+                return LatestMessages;
             }
-            return LatestMessages;
+            catch (Exception)
+            {
+                Logger.Log.ErrorEventHandler(this);
+                return null;
+            }
         }
 
+        /// <summary>
+        /// Sents a direct message to a user via de twitter API
+        /// </summary>
+        /// <param name="input"> The content of the message</param>
+        /// <param name="id">The id of the person who recieves the message</param>
         public void SentDirectMessage(string input, long id)
         {
             Connect();
             Message.PublishMessage(input, id);
         }
         
-        public void DeletePrivateConversation(List<DirectMessage> messages)
-        {
-            foreach (DirectMessage message in messages)
-            {
-                Message.DestroyMessage(message.MessageID);
-            }
-        }
-
-
-        
-
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>

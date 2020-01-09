@@ -19,23 +19,22 @@ namespace WijkagentWPF
     /// </summary>
     public partial class ContactWitnessDialogue : Window, IObserver
     {
-        MessageScanner scanner;
-        ContactWitnessDialogueController controller;
-        private double topdistance = 20;
-        long UserID = 1194224344144269312;
-        public long _witnessID { get; set; }
+        private MessageScanner _scanner;
+        private ContactWitnessDialogueController _controller;
+        private long _userID = 1194224344144269312;
+        public long WitnessID { get; set; }
 
         public ContactWitnessDialogue(long id)
         {
             InitializeComponent();
-            _witnessID = id;
+            WitnessID = id;
             ResizeMode = ResizeMode.NoResize;
-            scanner = new MessageScanner(_witnessID);
-            controller = new ContactWitnessDialogueController(_witnessID);
-            PrintMessages(scanner.GetConversation());
-            scanner.Attach(controller);
-            scanner.Attach(this);
-            scanner.StartScanning(60000);
+            _scanner = new MessageScanner(WitnessID);
+            _controller = new ContactWitnessDialogueController();
+            PrintMessages(_scanner.GetConversation());
+            _scanner.Attach(_controller);
+            _scanner.Attach(this);
+            _scanner.StartScanning(30000);
         }
                
 
@@ -55,7 +54,7 @@ namespace WijkagentWPF
                     Margin = new Thickness(5),
                     BorderBrush = Brushes.Black,
                 };
-                if (item.SenderID == UserID)
+                if (item.SenderID == _userID)
                 {
                     viewItem.HorizontalAlignment = HorizontalAlignment.Right;
                     viewItem.HorizontalContentAlignment = HorizontalAlignment.Right;
@@ -72,12 +71,13 @@ namespace WijkagentWPF
         /// <summary>
         /// Updates the dialogue when a new message is received
         /// </summary>
-        /// <param name="observable"></param>
+        /// <param name="observable"> the subject that is being observed for updates</param>
         public void Update(IObservable observable)
         {
             this.Dispatcher.Invoke(() =>
             {
-                PrintMessages(controller.directMessages);
+                WPFLBMessageBox.Items.Clear();
+                PrintMessages(_controller.DirectMessages);
             });
         }
 
@@ -91,11 +91,16 @@ namespace WijkagentWPF
             string input = wpfTBinput.Text;
             if (input.Length > 0) 
             { 
-                controller.directMessages.Add(new DirectMessage(UserID, 1, input, DateTime.Now));
-                scanner.scraper.SentDirectMessage(input, _witnessID);
-                PrintMessages(controller.directMessages);
+                _controller.DirectMessages.Add(new DirectMessage(_userID, 1, input, DateTime.Now));
+                PrintMessages(_controller.DirectMessages);
+                _scanner.Scraper.SentDirectMessage(input, WitnessID);
             }
             wpfTBinput.Text = "";
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _scanner.StopScanning();
         }
     }
 }

@@ -30,10 +30,10 @@ namespace WijkagentTests
             scanner.StartScanning(2000);
             
             scanner.StopScanning();
-            int results = controller.directMessages.Count;
+            int results = controller.DirectMessages.Count;
 
             //assert
-            Assert.AreEqual(scanner._messages, controller.directMessages);
+            Assert.AreEqual(scanner.Messages, controller.DirectMessages);
             Assert.Greater(results, 0);
             Console.WriteLine(results);
         }
@@ -55,12 +55,12 @@ namespace WijkagentTests
             //act
             scanner.Attach(controller);
             scanner.StartScanning(2000);
-            scanner.scraper.SentDirectMessage("test message", id);
+            scanner.Scraper.SentDirectMessage("test message", id);
             System.Threading.Thread.Sleep(6000);
             scanner.StopScanning();
             //assert
-            Assert.AreEqual("test message",scanner._messages[0].Content);
-            Assert.AreEqual("test message", controller.directMessages[0].Content);
+            Assert.AreEqual("test message",scanner.Messages[0].Content);
+            Assert.AreEqual("test message", controller.DirectMessages[0].Content);
 
 
         }

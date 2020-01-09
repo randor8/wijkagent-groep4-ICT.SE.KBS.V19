@@ -10,18 +10,18 @@ namespace WijkagentWPF
     public enum State { Updated, Outdated }
     public class MessageScanner : IObservable
     {
-        Timer timer;
-        public Scraper scraper = new Scraper(new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1, 1), OffenceCategories.Null, 1));
+        private Timer _timer;
+        public Scraper Scraper = new Scraper(new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1, 1), OffenceCategories.Null, 1));
          
         public State CurrentState { get; set; } = State.Updated;
-        public long _Id { get; set; }
+        public long Id { get; set; }
 
-        public List<DirectMessage> _messages = new List<DirectMessage>();
-        List<IObserver> _observers = new List<IObserver>();
+        public List<DirectMessage> Messages = new List<DirectMessage>();
+        private List<IObserver> _observers = new List<IObserver>();
 
         public MessageScanner(long id)
         {
-            _Id = id;
+            Id = id;
         }
 
         /// <summary>
@@ -31,8 +31,8 @@ namespace WijkagentWPF
         public List<DirectMessage> GetConversation() // correct
         {
             List<DirectMessage> messages = new List<DirectMessage>();
-            var results = scraper.GetLatestDirectMessages()
-                .Where(x => x.SenderId == _Id || x.RecipientId == _Id)
+            var results = Scraper.GetLatestDirectMessages()
+                .Where(x => x.SenderId == Id || x.RecipientId == Id)
                 .Select(x => new { x.SenderId, x.Id, x.Text, x.CreatedAt });
             foreach (var item in results)
             {
@@ -48,13 +48,11 @@ namespace WijkagentWPF
         /// <param name="UpdatedConversation"></param>
         public void CompareConversation(List<DirectMessage> UpdatedConversation )
         {
-            int currentCount = _messages.Count;
+            int currentCount = Messages.Count;
             int newCount = UpdatedConversation.Count;
-            if(_messages.Count == 0 || (newCount > currentCount && UpdatedConversation[newCount-1].Content != _messages[currentCount-1].Content))
+            if(Messages.Count == 0 || (newCount > currentCount && UpdatedConversation[newCount-1].Content != Messages[currentCount-1].Content))
             {
-                Console.WriteLine("Compare activated");
-                _messages = UpdatedConversation;
-                Console.WriteLine($"scanner messages count {_messages.Count}");
+                Messages = UpdatedConversation;
                 CurrentState = State.Outdated;
                 Notify();
             }
@@ -65,10 +63,10 @@ namespace WijkagentWPF
         /// <param name="interval"> the amount of microseconds per before the timer starts scanning</param>
         public void StartScanning(int interval)
         {
-            timer = new Timer(interval);
-            timer.AutoReset = true;
-            timer.Elapsed += ScanConversation;
-            timer.Start();
+            _timer = new Timer(interval);
+            _timer.AutoReset = true;
+            _timer.Elapsed += ScanConversation;
+            _timer.Start();
         }
 
         /// <summary>
@@ -76,8 +74,8 @@ namespace WijkagentWPF
         /// </summary>
         public void StopScanning()
         {
-            timer.Stop();
-            timer.Dispose();
+            _timer.Stop();
+            _timer.Dispose();
         }
 
         /// <summary>
