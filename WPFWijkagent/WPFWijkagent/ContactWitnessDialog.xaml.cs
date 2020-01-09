@@ -102,6 +102,7 @@ namespace WijkagentWPF
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             _scanner.StopScanning();
+            this.Close();
         }
     }
 }
