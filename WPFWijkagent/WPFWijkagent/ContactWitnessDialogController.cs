@@ -5,10 +5,10 @@ using WijkagentModels;
 
 namespace WijkagentWPF
 {
-    public class ContactWitnessDialogueController :IObserver
+    public class ContactWitnessDialogController :IObserver
     {
         public List<DirectMessage> DirectMessages;
-        public ContactWitnessDialogueController()
+        public ContactWitnessDialogController()
         {
             DirectMessages = new List<DirectMessage>();
         }

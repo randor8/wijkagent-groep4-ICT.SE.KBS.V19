@@ -43,7 +43,7 @@ namespace WijkagentWPF
             SocialMediaMessage message = (SocialMediaMessage)button.DataContext;
 
             IUser user =User.GetUserFromScreenName(message.Handle);
-            ContactWitnessDialogue witnessDialogue = new ContactWitnessDialogue(user.Id);
+            ContactWitnessDialog witnessDialogue = new ContactWitnessDialog(user.Id);
             witnessDialogue.Show();
         }
     }

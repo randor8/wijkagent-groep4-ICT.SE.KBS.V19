@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.ComponentModel;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -17,20 +18,20 @@ namespace WijkagentWPF
     /// <summary>
     /// Interaction logic for ContactWitnessDialogue.xaml
     /// </summary>
-    public partial class ContactWitnessDialogue : Window, IObserver
+    public partial class ContactWitnessDialog : Window, IObserver
     {
         private MessageScanner _scanner;
-        private ContactWitnessDialogueController _controller;
+        private ContactWitnessDialogController _controller;
         private long _userID = 1194224344144269312;
         public long WitnessID { get; set; }
 
-        public ContactWitnessDialogue(long id)
+        public ContactWitnessDialog(long id)
         {
             InitializeComponent();
             WitnessID = id;
             ResizeMode = ResizeMode.NoResize;
             _scanner = new MessageScanner(WitnessID);
-            _controller = new ContactWitnessDialogueController();
+            _controller = new ContactWitnessDialogController();
             PrintMessages(_scanner.GetConversation());
             _scanner.Attach(_controller);
             _scanner.Attach(this);
@@ -98,7 +99,7 @@ namespace WijkagentWPF
             wpfTBinput.Text = "";
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             _scanner.StopScanning();
         }
