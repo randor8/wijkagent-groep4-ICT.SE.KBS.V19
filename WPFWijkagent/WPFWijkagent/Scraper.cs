@@ -5,6 +5,7 @@ using Tweetinvi.Parameters;
 using WijkagentWPF.database;
 using System.Configuration;
 using WijkagentModels;
+using System.Collections.Generic;
 
 namespace WijkagentWPF
 {
@@ -18,6 +19,7 @@ namespace WijkagentWPF
         private SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
+        //TODO: Fix config
         #region Keys&Tokens
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
         private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
@@ -123,6 +125,36 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Returns all the direct messages, that are known on the Twitter account
+        /// </summary>
+        /// <returns> Ienumerable containg all Dirext Messages</returns>
+        public IEnumerable<IMessage> GetLatestDirectMessages()
+        {
+            try
+            {
+                Connect();
+                IEnumerable<IMessage> LatestMessages = Message.GetLatestMessages();
+                return LatestMessages;
+            }
+            catch (Exception)
+            {
+                Logger.Log.ErrorEventHandler(this);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Sents a direct message to a user via de twitter API
+        /// </summary>
+        /// <param name="input"> The content of the message</param>
+        /// <param name="id">The id of the person who recieves the message</param>
+        public void SentDirectMessage(string input, long id)
+        {
+            Connect();
+            Message.PublishMessage(input, id);
+        }
+        
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
