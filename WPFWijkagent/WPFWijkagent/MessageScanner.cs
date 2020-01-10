@@ -87,7 +87,6 @@ namespace WijkagentWPF
         {
             List<DirectMessage> messages = new List<DirectMessage>();
             messages = GetConversation();
-            Console.WriteLine(messages.Count);
             CompareConversation(messages);
         }
 

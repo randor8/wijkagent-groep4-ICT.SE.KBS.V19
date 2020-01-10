@@ -91,8 +91,7 @@ namespace WijkagentWPF
         {
             string input = wpfTBinput.Text;
             if (input.Length > 0) 
-            { 
-                _controller.DirectMessages.Add(new DirectMessage(_userID, 1, input, DateTime.Now));
+            {                _controller.DirectMessages.Add(new DirectMessage(_userID, 1, input, DateTime.Now));
                 PrintMessages(_controller.DirectMessages);
                 _scanner.Scraper.SentDirectMessage(input, WitnessID);
             }
@@ -102,7 +101,6 @@ namespace WijkagentWPF
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             _scanner.StopScanning();
-            this.Close();
         }
     }
 }

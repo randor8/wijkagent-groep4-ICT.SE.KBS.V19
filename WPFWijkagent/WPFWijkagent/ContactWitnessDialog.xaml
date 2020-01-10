@@ -27,7 +27,7 @@
         </ScrollViewer>
             <Canvas x:Name="ChatCanvas" Background="Azure" Grid.Row="0" Height="400"/>-->
         <Button x:Name="wpfBTsendButton" Content="Versturen" HorizontalAlignment="Right" Margin="8"
-                Grid.Row="2" Width="80" Height="50" Click="SendButton_Click"/>
+                Grid.Row="2" Width="80" Height="45" Click="SendButton_Click"/>
         <TextBlock HorizontalAlignment="Left" Height="20" Margin="10,0,0,0"  Width="150"
                    VerticalAlignment="Center"  Text="Getuige" TextAlignment="Center"/>
         <TextBlock HorizontalAlignment="Left" Height="20" Margin="626,0,0,0"  Width="150"
