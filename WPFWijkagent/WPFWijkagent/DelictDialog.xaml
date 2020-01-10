@@ -63,24 +63,26 @@
 									<RowDefinition Height="auto"/>
 									<RowDefinition Height="auto"/>
 									<RowDefinition Height="auto"/>
-								</Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
 
 								<TextBlock Grid.Row="0" Grid.Column="0" Text="Gebruiker"/>
 								<TextBlock Grid.Row="1" Grid.Column="0" Text="Twitter naam"/>
 								<TextBlock Grid.Row="2" Grid.Column="0" Text="Omschrijving"/>
 								<TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
+                                <Button x:Name="wpfBTchatbutton" Grid.Row="4" Grid.Column="0" Content="Chat Starten" Click="wpfBTchatbutton_Click"/>
 
-								<TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
 								<TextBlock Grid.Row="1" Grid.Column="1" Text=" : "/>
 								<TextBlock Grid.Row="2" Grid.Column="1" Text=" : "/>
-								<TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
 
-								<TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}" TextWrapping="Wrap"/>
+                                <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}" TextWrapping="Wrap"/>
 								<TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Handle}" TextWrapping="Wrap"/>
 								<TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap"/>
 								<TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DateTime}" TextWrapping="Wrap"/>
 
-								<ListBox Grid.Column="3" Grid.RowSpan="4" MaxWidth="200" ItemsSource="{Binding Media}" ScrollViewer.CanContentScroll="False">
+								<ListBox Grid.Column="3" Grid.RowSpan="5" MaxWidth="200" ItemsSource="{Binding Media}" ScrollViewer.CanContentScroll="False">
 									<ListBox.ItemsPanel>
 										<ItemsPanelTemplate>
 											<VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
@@ -88,7 +90,7 @@
 									</ListBox.ItemsPanel>
 									<ListBox.ItemTemplate>
 										<DataTemplate>
-											<Image Source="{Binding URL}" Height="90" MouseDown="Image_MouseDown"/>
+											<Image Source="{Binding URL}" Height="110" MouseDown="Image_MouseDown"/>
 										</DataTemplate>
 									</ListBox.ItemTemplate>
 									<ListBox.Style>
