@@ -37,7 +37,7 @@ namespace WijkagentWPF
         public Scraper(Offence offence, bool OnlyHastag = false, string text = " ")
         {
             Offence = offence;
-            if(!OnlyHastag)
+            if (!OnlyHastag)
             {
                 _searchParameters = new SearchTweetsParameters(text)
                 {
@@ -188,7 +188,7 @@ namespace WijkagentWPF
             Connect();
             Message.PublishMessage(input, id);
         }
-        
+
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
@@ -197,18 +197,14 @@ namespace WijkagentWPF
             try
             {
                 Connect();
-
                 var tweets = Search.SearchTweets(_searchParameters);
                 SocialMediaMessageController mediaMessageController = new SocialMediaMessageController();
 
-                if (tweets != null)
+                foreach (var tweet in tweets)
                 {
                     if (mediaMessageController.GetTweetSocialMediaMessage(tweet.Id) == null)
                     {
-                        if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
-                        {
-                            SetSocialMediaMessage(tweet, MediaType);
-                        }
+                        SetSocialMediaMessage(tweet, MediaType);
                     }
                 }
             }

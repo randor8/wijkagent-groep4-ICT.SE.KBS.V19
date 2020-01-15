@@ -12,37 +12,49 @@ namespace WijkagentWPF
     /// </summary>
     public partial class DelictDialog : Window
     {
-<<<<<<<<< Temporary merge branch 1
-        private DelictDialogController _controller;
+        private readonly DelictDialogController _controller;
 
-        private Offence _offence;
-
-        public DelictDialog(Pushpin pin, List<Offence> offences)
+        /// <summary>
+        /// instantiates the window
+        /// </summary>
+        /// <param name="offence">data to be shown</param>
+        public DelictDialog(Offence offence)
         {
             InitializeComponent();
-            Location l = new Location(0, pin.Location.Latitude, pin.Location.Longitude);
-            _controller = new DelictDialogController(l, offences);
-            _offence = _controller.RetrieveOffence();
-            _controller.DisplayMessages(_controller.RetrieveOffence(), wpfLVMessages);
+            _controller = new DelictDialogController();
+
+            wpfDelict.DataContext = offence;
+            _controller.DisplayMessages(offence, wpfLVMessages);
         }
 
-        private void wpfBPrint_Click(object sender, RoutedEventArgs e)
-=========
-        private SocialMediaDialogueController _controller;
-
-        public SocialMediaDialogue(Offence offence)
+        /// <summary>
+        /// Opens a new window showing all images
+        /// </summary>
+        /// <param name="sender">item that was clicked on</param>
+        /// <param name="e">event arguments</param>
+        private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            InitializeComponent();
-            _controller = new SocialMediaDialogueController(offence);
-            string display = _controller.DisplayMessages();
-            SocialMediaLabel.Text = display;
+            _controller.ShowImages((sender as Image).DataContext as SocialMediaImage);
         }
 
-
-        private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
->>>>>>>>> Temporary merge branch 2
+        private void wpfBTchatbutton_Click(object sender, RoutedEventArgs e)
         {
+            Button button = (Button)sender;
+            SocialMediaMessage message = (SocialMediaMessage)button.DataContext;
 
+            IUser user = User.GetUserFromScreenName(message.Handle);
+            ContactWitnessDialog witnessDialogue = new ContactWitnessDialog(user.Id);
+            witnessDialogue.Show();
+        }
+
+        /// <summary>
+        /// create a witnesscontroller when button is clicked. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_oproep_Click(object sender, RoutedEventArgs e)
+        {
+            AskForWitnessWindow witnessWindow = new AskForWitnessWindow((Offence)wpfDelict.DataContext);
         }
     }
 }

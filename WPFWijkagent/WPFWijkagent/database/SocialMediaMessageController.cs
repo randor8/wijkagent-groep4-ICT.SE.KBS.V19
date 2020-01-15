@@ -83,10 +83,9 @@ namespace WijkagentWPF.database
                 socialMediaMessageData[1].ToString(),
                 socialMediaMessageData[2].ToString(),
                 socialMediaMessageData[3].ToString(),
-                socialMediaMessageData[4].ToString(),
-                new LocationController().GetLocation((int)socialMediaMessageData[5]),
-                (long)socialMediaMessageData[7],
-                new OffenceController().GetOffence((int)socialMediaMessageData[6]));
+                new LocationController().GetLocation((int)socialMediaMessageData[4]),
+                (long)socialMediaMessageData[6],
+                new OffenceController().GetOffence((int)socialMediaMessageData[5]));
         }
 
         /// <summary>
