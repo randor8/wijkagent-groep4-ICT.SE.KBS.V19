@@ -8,10 +8,12 @@ namespace WijkagentWPF.database
     public class SocialMediaMessageController
     {
         private DBContext _dbContext { get; set; }
+        private SocialMediaImageController _imageController;
 
         public SocialMediaMessageController()
         {
             _dbContext = new DBContext();
+            _imageController = new SocialMediaImageController();
         }
 
         /// <summary>
@@ -81,17 +83,18 @@ namespace WijkagentWPF.database
                 socialMediaMessageData[1].ToString(),
                 socialMediaMessageData[2].ToString(),
                 socialMediaMessageData[3].ToString(),
-                new LocationController().GetLocation((int)socialMediaMessageData[4]),
-                (long) socialMediaMessageData[6], 
-                new OffenceController().GetOffence((int)socialMediaMessageData[5]));
+                socialMediaMessageData[4].ToString(),
+                new LocationController().GetLocation((int)socialMediaMessageData[5]),
+                (long)socialMediaMessageData[7],
+                new OffenceController().GetOffence((int)socialMediaMessageData[6]));
         }
 
         /// <summary>
         /// gets the specified SocialMediaMessage from the db
         /// </summary>
-        /// <param name="ID">SocialMediaMessage id you need</param>
+        /// <param name="tweetID">Twitter id you need</param>
         /// <returns>the new SocialMediaMessage object requested</returns>
-        public SocialMediaMessage GetSocialMediaMessage(long tweetID)
+        public SocialMediaMessage GetTweetSocialMediaMessage(long tweetID)
         {
             SqlCommand query = new SqlCommand("SELECT DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
                 "FROM SocialMediaMessage WHERE TwitterID = @TwitterID");
@@ -101,7 +104,9 @@ namespace WijkagentWPF.database
 
             if (rows.Count > 0)
             {
-                return ObjectArrayToSocialMediaMessage(rows[0]);
+                SocialMediaMessage message = ObjectArrayToSocialMediaMessage(rows[0]);
+                message.Media = _imageController.GetSocialMediaImages(message.ID);
+                return message;
             }
             return null;
         }
@@ -124,10 +129,12 @@ namespace WijkagentWPF.database
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
             List<SocialMediaMessage> socialMediaMessages = new List<SocialMediaMessage>();
 
-            if (rows.Count > 0)
+            if (rows.Count > 0) rows.ForEach(smm =>
             {
-                 rows.ForEach(smm => socialMediaMessages.Add(ObjectArrayToSocialMediaMessage(smm)));
-            }
+                SocialMediaMessage message = ObjectArrayToSocialMediaMessage(smm);
+                message.Media = _imageController.GetSocialMediaImages(message.ID);
+                socialMediaMessages.Add(message);
+            });
             return socialMediaMessages;
         }
     }

@@ -3,10 +3,10 @@ using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentWPF.database;
-using Tweetinvi.Exceptions;
 using System.Configuration;
 using WijkagentModels;
 using Location = WijkagentModels.Location;
+using System.Collections.Generic;
 
 namespace WijkagentWPF
 {
@@ -20,6 +20,7 @@ namespace WijkagentWPF
         private SearchTweetsParameters _searchParameters;
 
         // region containing the tokens & Keys required for the functionality of the TwitterAPI
+        //TODO: Fix config
         #region Keys&Tokens
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
         private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
@@ -97,7 +98,8 @@ namespace WijkagentWPF
         /// <returns>list of social media messages </returns>
         public void SetSocialMediaMessages()
         {
-            try {
+            try
+            {
                 Connect();
                 var tweets = Search.SearchTweets(_searchParameters);
                 if (tweets != null)
@@ -134,7 +136,7 @@ namespace WijkagentWPF
             {
                 location = Offence.Location;
             }
-            socialMediaMessageController.SetSocialMediaMessage(
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(
                 new SocialMediaMessage(
                 tweet.CreatedAt,
                 tweet.Text,
@@ -146,8 +148,47 @@ namespace WijkagentWPF
                 MediaType
                 )
             );
+            SocialMediaImageController imageController = new SocialMediaImageController();
+            foreach (var media in tweet.Media)
+            {
+                imageController.SetSocialMediaImage(new SocialMediaImage
+                {
+                    SocialMediaMessageID = messageID,
+                    URL = media.MediaURLHttps
+                });
+            }
         }
 
+        /// <summary>
+        /// Returns all the direct messages, that are known on the Twitter account
+        /// </summary>
+        /// <returns> Ienumerable containg all Dirext Messages</returns>
+        public IEnumerable<IMessage> GetLatestDirectMessages()
+        {
+            try
+            {
+                Connect();
+                IEnumerable<IMessage> LatestMessages = Message.GetLatestMessages();
+                return LatestMessages;
+            }
+            catch (Exception)
+            {
+                Logger.Log.ErrorEventHandler(this);
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Sents a direct message to a user via de twitter API
+        /// </summary>
+        /// <param name="input"> The content of the message</param>
+        /// <param name="id">The id of the person who recieves the message</param>
+        public void SentDirectMessage(string input, long id)
+        {
+            Connect();
+            Message.PublishMessage(input, id);
+        }
+        
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
@@ -162,7 +203,7 @@ namespace WijkagentWPF
 
                 if (tweets != null)
                 {
-                    foreach (var tweet in tweets)
+                    if (mediaMessageController.GetTweetSocialMediaMessage(tweet.Id) == null)
                     {
                         if (mediaMessageController.GetSocialMediaMessage(tweet.Id) == null)
                         {

@@ -8,7 +8,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
-using WijkagentWPF.database;
 using WijkagentWPF.Filters;
 using WijkagentWPF.Session;
 
@@ -20,9 +19,6 @@ namespace WijkagentWPF
     public partial class MainWindow : Window
     {
         private bool _addModeActivated = false;
-        private DelictDialog _DelictDialog;
-        private SocialMediaMessageController _SocialMediaMessageController;
-        private OffenceController _OffenceController;
 
         public MainWindow()
         {
@@ -46,9 +42,6 @@ namespace WijkagentWPF
 
             FillCategoryFiltermenu();
             FillOffenceList();
-
-            _SocialMediaMessageController = new SocialMediaMessageController();
-            _OffenceController = new OffenceController();
         }
 
         /// <summary>
@@ -98,24 +91,9 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            Pushpin pin = (Pushpin)sender;
-            Offence Offence = MainWindowController.RetrieveOffence(
-                pin.Location.Latitude,
-                pin.Location.Longitude);
-
-            //create a scraper without the hashtag to get all the messages for this offence and update the messages
-            Scraper SocialScraper = new Scraper(Offence);
-            SocialScraper.UpdateSocialMediaMessages();
-
-            //create a scraper for the witness messages and update the messages
-            Scraper WitnessScraper = new Scraper(Offence, true, _OffenceController.Hashtag(Offence));
-            WitnessScraper.UpdateSocialMediaMessages(1);
-
-            _DelictDialog = new DelictDialog(pin,
-                MainWindowController.RetrieveOffence(
-                    pin.Location.Latitude,
-                    pin.Location.Longitude));
-            _DelictDialog.Show();
+            Offence offence = (sender as Pushpin).GetOffence();
+            new Scraper(offence).UpdateSocialMediaMessages();
+            new DelictDialog(offence).Show();
         }
 
         /// <summary>
