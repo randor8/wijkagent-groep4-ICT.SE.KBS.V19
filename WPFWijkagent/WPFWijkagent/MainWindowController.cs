@@ -1,10 +1,11 @@
 ﻿using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Media;
 using WijkagentModels;
-using Location = WijkagentModels.Location;
 using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -30,58 +31,45 @@ namespace WijkagentWPF
         public static void AddOffence(string description, OffenceCategories category, DateTime dateTime, Location location)
         {
             OffenceController offenceController = new OffenceController();
-            Offence offence = new Offence(0, dateTime, description, location, category);
-            offence.ID = offenceController.SetOffence(
-                dateTime,
-                description,
-                location,
-                category);
+            Offence offence = new Offence(dateTime, description, location, category);
+            offence.ID = offenceController.SetOffence(offence);
 
-            Scraper scraper = new Scraper(offence);
-            scraper.GetSocialMediaMessages();
+            new Scraper(offence).SetSocialMediaMessages();
 
             _offences.Add(offence);
         }
 
         /// <summary>
-        /// Get all offences from a specific category
+        /// Applies all filters contained in the FilterList to the offences.
         /// </summary>
-        /// <param name="categoryFilter"></param>
-        /// <param name="offences"></param>
         /// <returns></returns>
-        public static List<Offence> GetOffencesByCategory(string categoryFilter)
+        public static List<Offence> FilterOffences()
         {
-            List<Offence> filteredOffences = new List<Offence>();
-            if (categoryFilter == "Alles tonen")
-            {
-                return _offences;
-            }
-            else
-            {
-                foreach (Offence offence in _offences)
-                {
-                    if (offence.Category.ToString() == categoryFilter)
-                    {
-                        filteredOffences.Add(offence);
-                    }
-                }
-            }
-
-            return filteredOffences;
+            return FilterList.ApplyFilters(_offences);
         }
 
+        /// <summary>
+        /// Gets the pushpin of the offence
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Pushpin GetPushpin(this Offence value)
         {
             if (!_pushpins.ContainsKey(value)) _pushpins.Add(value, CreatePushpin(value));
             return _pushpins[value];
         }
 
+        /// <summary>
+        /// Creates a pushpin
+        /// </summary>
+        /// <param name="offence"></param>
+        /// <returns></returns>
         private static Pushpin CreatePushpin(Offence offence) => new Pushpin
         {
             Location = new Microsoft.Maps.MapControl.WPF.Location
             {
-                Latitude = offence.LocationID.Latitude,
-                Longitude = offence.LocationID.Longitude
+                Latitude = offence.Location.Latitude,
+                Longitude = offence.Location.Longitude
             },
             Background = ColorDefault
         };
@@ -106,11 +94,27 @@ namespace WijkagentWPF
         /// <summary>
         /// gets all the offences from the db
         /// </summary>
-        /// <returns></returns>
+        /// <returns>List of offences ordered by date descending</returns>
         public static List<Offence> GetOffences()
         {
             _offences = new OffenceController().GetOffences();
             return _offences;
+        }
+
+        /// <summary>
+        /// The method executes a LINQ search on the List items and finds the offencelistItem with the same pin. 
+        /// </summary>
+        /// <returns>The method returns the offence that has the same pin</returns>
+        public static Offence RetrieveOffence(double latitude, double longitude)
+        {
+            Offence offence = null;
+            IEnumerable<Offence> offenceQuerry =
+                from OffenceItem in _offences
+                where OffenceItem.Location.Latitude == latitude
+                && OffenceItem.Location.Longitude == longitude
+                select OffenceItem;
+            offence = offenceQuerry.First();
+            return offence;
         }
 
         /// <summary>

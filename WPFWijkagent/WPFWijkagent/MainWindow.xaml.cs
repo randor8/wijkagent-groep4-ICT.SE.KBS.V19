@@ -1,11 +1,14 @@
 using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using WijkagentModels;
+using WijkagentWPF.Filters;
+using WijkagentWPF.Session;
 
 namespace WijkagentWPF
 {
@@ -18,13 +21,25 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
+            //add  showmessage method to logger
+            Logger.Log.ErrorToScreenEvent += ErrorEventHandler;
+            FilterList.AddFilter(CategoryFilterCollection.Instance);
             InitializeComponent();
-            FillCategoriesCombobox();
-            FillOffenceList();
 
-            wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries; // Sets the zoom boundary check on the map in the main window.
-            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242)); // Sets the background color of the map to the color composed of the given rgb values.
+            App.RegisterSession(new SessionMapLocation(wpfMapMain));
+            App.RegisterSession(new SessionMapZoom(wpfMapMain));
+            App.RegisterSession(new SessionFilterSingleDate(DatePickerSingle));
+            App.RegisterSession(new SessionFilterDateRange(DatePickerFrom, DatePickerTo));
+            App.RegisterSession(new SessionActiveDateFilter(SingleDate, DateRange));
+            App.RegisterSession(new SessionFilterCategories());
+            App.LoadSession();
+
+            wpfMapMain.Background = new SolidColorBrush(Color.FromRgb(172, 199, 242));
+            wpfMapMain.ViewChangeOnFrame += CheckZoomBoundaries;
             wpfMapMain.MouseLeftButtonDown += AddPin;
+
+            FillCategoryFiltermenu();
+            FillOffenceList();
         }
 
         /// <summary>
@@ -55,14 +70,14 @@ namespace WijkagentWPF
             // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
             RemoveMouseDownEvents();
             wpfMapMain.Children.Clear();
-            List<Offence> offences = MainWindowController.GetOffencesByCategory(wpfCBCategoriesFilter.SelectedItem.ToString());
+            List<Offence> offences = MainWindowController.FilterOffences();
 
             offences.ForEach(of =>
             {
                 of.GetPushpin().MouseDown += Pushpin_MouseDown;
                 wpfMapMain.Children.Add(of.GetPushpin());
             });
-
+            offences = offences.OrderByDescending(x => x.DateTime).ToList();
             wpfLBSelection.ItemsSource = offences;
             wpfLBSelection.Items.Refresh();
         }
@@ -74,7 +89,9 @@ namespace WijkagentWPF
         /// <param name="e"></param>
         public void Pushpin_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            new DelictDialog((sender as Pushpin).GetOffence()).Show();
+            Offence offence = (sender as Pushpin).GetOffence();
+            new Scraper(offence).UpdateSocialMediaMessages();
+            new DelictDialog(offence).Show();
         }
 
         /// <summary>
@@ -92,32 +109,55 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// Fills the categories combobox
+        /// Fills the Category Tab in the filtermenu.
         /// </summary>
-        private void FillCategoriesCombobox()
+        private void FillCategoryFiltermenu()
         {
-            wpfCBCategoriesFilter.Items.Add("Alles tonen");
-
-            foreach (OffenceCategories offenceItem in Enum.GetValues(typeof(OffenceCategories)))
+            OffenceCategories[] offenceCategories = (OffenceCategories[])Enum.GetValues(typeof(OffenceCategories));
+            for (int i = 0; i < offenceCategories.Length - 1; i++)
             {
-                if (offenceItem != OffenceCategories.Null)
+                FilterGrid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(20) });
+                CheckBox checkBox = new CheckBox()
                 {
-                    wpfCBCategoriesFilter.Items.Add(offenceItem);
-                }
-            }
+                    Name = offenceCategories[i].ToString(),
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(2.5, 0, 0, 0),
+                    IsChecked = SessionFilterCategories.IsFilterActive(offenceCategories[i].ToString())
+                };
+                checkBox.Checked += CategoryCheckboxToggle;
+                checkBox.Unchecked += CategoryCheckboxToggle;
+                FilterGrid.Children.Add(checkBox);
+                Grid.SetColumn(checkBox, 0);
+                Grid.SetRow(checkBox, i);
 
-            wpfCBCategoriesFilter.SelectedIndex = 0;
+                Label label = new Label()
+                {
+                    Padding = new Thickness(0, 0, 0, 0),
+                    Content = offenceCategories[i],
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0)
+                };
+                label.MouseUp += (sender, e) => checkBox.IsChecked = !checkBox.IsChecked;
+                FilterGrid.Children.Add(label);
+                Grid.SetColumn(label, 1);
+                Grid.SetRow(label, i);
+            }
         }
 
         /// <summary>
-        /// Gets called when the categories combobox selection is changed
-        /// Fills the OffenceListItems with the correct Offences
+        /// Toggles the Category on or off when a checkbox is clicked.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void wpfCBCategoriesFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /// <param name="sender">The sender of the event when a checkbox is clicked.</param>
+        /// <param name="e">Parameters given by the sender of the event.</param>
+        private void CategoryCheckboxToggle(object sender, RoutedEventArgs e)
         {
-            FillOffenceList();
+            if (sender is CheckBox checkBox)
+            {
+                CategoryFilterCollection.Instance.ToggleCategory((OffenceCategories)Enum.Parse(typeof(OffenceCategories), checkBox.Name));
+                FillOffenceList();
+            }
         }
 
         /// <summary>
@@ -130,49 +170,42 @@ namespace WijkagentWPF
             {
                 wpfBTNAddOffence.Content = "delict toevoegen";
                 Mouse.OverrideCursor = Cursors.Arrow;
-                _addModeActivated = false;
             }
             else
             {
                 wpfBTNAddOffence.Content = "Annuleer";
                 Mouse.OverrideCursor = Cursors.Cross;
-                _addModeActivated = true;
             }
+            _addModeActivated = !_addModeActivated;
+        }
+
+        private WijkagentModels.Location GetLocationFromClick(MouseButtonEventArgs e)
+        {
+            // Get the mouse click coordinates
+            Point mousePosition = e.GetPosition(this);
+            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
+            return new WijkagentModels.Location(location.Latitude, location.Longitude);
         }
 
         /// <summary>
-        /// open the dialog when clicked on the map and AddMode is activiated
+        /// shows the dialog (if we are in add mode) and resets the screen
         /// </summary>
         private void AddPin(object sender, MouseButtonEventArgs e)
         {
-            //create nieuw offencedialogue when clicked on map
-            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue();
             if (!_addModeActivated)
             {
                 return;
             }
 
-            Mouse.OverrideCursor = Cursors.Arrow;
-            // Disables the default mouse double-click action.
+            //show dialog and reset screen 
+            AddOffenceDialogue OffenceDialogue = new AddOffenceDialogue(GetLocationFromClick(e));
             e.Handled = true;
-
-            // Determin the location to place the pushpin at on the map.
-
-            // Get the mouse click coordinates
-            Point mousePosition = e.GetPosition(this);
-            // Convert the mouse coordinates to a locatoin on the map
-            Microsoft.Maps.MapControl.WPF.Location location = wpfMapMain.ViewportPointToLocation(mousePosition);
-
-            // create a WijkAgendModels Location and convert the WPF location to that location.
-            WijkagentModels.Location newLocation = new WijkagentModels.Location(0, location.Latitude, location.Longitude);
-
-            // try to show the dialog, catch if the date enterd is in the future                                                   
-            OffenceDialogue.Location = newLocation;
+            Mouse.OverrideCursor = Cursors.Arrow;
+            wpfBTNAddOffence.Content = "delict toevoegen";
+            _addModeActivated = false;
 
             OffenceDialogue.ShowDialog();
             FillOffenceList();
-            wpfBTNAddOffence.Content = "delict toevoegen";
-            _addModeActivated = false;
         }
 
         /// <summary>
@@ -196,9 +229,168 @@ namespace WijkagentWPF
             }
         }
 
+        /// <summary>
+        /// Reset all category checkboxes in the filter expander
+        /// </summary>
+        private void ResetCategoryCheckbox()
+        {
+            foreach (CheckBox item in FilterGrid.Children.OfType<CheckBox>())
+            {
+                item.IsChecked = false;
+            }
+        }
+        /// <summary>
+        /// On click button reset all filters
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void wpfBTNResetFilters_Click(object sender, RoutedEventArgs e)
+        {
+            ResetCategoryCheckbox();
+            DatePickerSingle.SelectedDate = null;
+            DatePickerFrom.SelectedDate = null;
+            DatePickerTo.SelectedDate = null;
+            FilterList.ClearFilters();
+            FillOffenceList();
+        }
+
+        /// <summary>
+        /// Toggles which date filter menu is visible.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
+        private void ToggleDateFilter(object sender, RoutedEventArgs e)
+        {
+            if (sender is RadioButton radioButton)
+            {
+                Visibility singleDateVisibility;
+                Visibility dateRangeVisiblity;
+                if (radioButton.Name.Equals("SingleDate"))
+                {
+                    singleDateVisibility = Visibility.Visible;
+                    dateRangeVisiblity = Visibility.Collapsed;
+
+                    AddSingleDateFilter(DatePickerSingle);
+                }
+                else
+                {
+                    singleDateVisibility = Visibility.Collapsed;
+                    dateRangeVisiblity = Visibility.Visible;
+
+                    AddDateRangeFilter(DatePickerFrom, DatePickerTo);
+                }
+                if (DateRangePanel != null && SingleDatePanel != null)
+                {
+                    SingleDatePanel.Visibility = singleDateVisibility;
+                    DateRangePanel.Visibility = dateRangeVisiblity;
+                }
+                if (wpfLBSelection != null)
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Updates the filter when a new date is chosen.
+        /// </summary>
+        /// <param name="sender">Sender of the event. One of the datepickers.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
+        private void DateRangeFilterChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is DatePicker from)
+            {
+                DatePicker to;
+                if (from.Name.Equals("DatePickerFrom"))
+                {
+                    to = DatePickerTo;
+                }
+                else
+                {
+                    to = from;
+                    from = DatePickerFrom;
+                }
+                if (AddDateRangeFilter(from, to))
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds a DateRangeFilter to the filterlist using the dates from two datepickers.
+        /// </summary>
+        /// <param name="DatePickerFrom">Datepicker containing the lower bound of the date range.</param>
+        /// <param name="DatePickerTo">Datepicker containing the upper bound of the date range.</param>
+        /// <returns>Boolean based on whether the filter was added.</returns>
+        private bool AddDateRangeFilter(DatePicker DatePickerFrom, DatePicker DatePickerTo)
+        {
+            if (DatePickerFrom != null && DatePickerFrom.SelectedDate.HasValue && DatePickerTo != null && DatePickerTo.SelectedDate.HasValue)
+            {
+                FilterList.RemoveFilter($"{typeof(DateFilter)}");
+                DateTime DateFrom = new DateTime(DatePickerFrom.SelectedDate.Value.Year, DatePickerFrom.SelectedDate.Value.Month, DatePickerFrom.SelectedDate.Value.Day);
+                DateTime DateTo = new DateTime(DatePickerTo.SelectedDate.Value.Year, DatePickerTo.SelectedDate.Value.Month, DatePickerTo.SelectedDate.Value.Day);
+                DateRangeFilter filter = new DateRangeFilter(DateFrom, DateTo);
+                FilterList.AddFilter(filter);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Adds single date filter when the date is changed in the datepicker.
+        /// </summary>
+        /// <param name="sender">Sender of the event. The datepicker.</param>
+        /// <param name="e">Arguments provided by the sender.</param>
+        private void SingleDateFilterChanged(object sender, RoutedEventArgs e)
+        {
+            if (sender is DatePicker datePicker)
+            {
+                if (AddSingleDateFilter(datePicker))
+                {
+                    FillOffenceList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds single date filter to the filterlist using the date from the datepicker.
+        /// </summary>
+        /// <param name="datePicker">Datepicker containing the date.</param>
+        /// <returns>Boolean based on whether the filter was added.</returns>
+        private bool AddSingleDateFilter(DatePicker datePicker)
+        {
+            if (datePicker != null && datePicker.SelectedDate.HasValue)
+            {
+                FilterList.RemoveFilter($"{typeof(DateRangeFilter)}");
+                DateTime date = new DateTime(datePicker.SelectedDate.Value.Year, datePicker.SelectedDate.Value.Month, datePicker.SelectedDate.Value.Day);
+                DateFilter filter = new DateFilter(date);
+                FilterList.AddFilter(filter);
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Closes the window.
+        /// </summary>
+        /// <param name="sender">Sender of the event.</param>
+        /// <param name="e">Parameters given by the sender.</param>
         private void Window_Closed(object sender, EventArgs e)
         {
+            App.SaveSession();
             Application.Current.Shutdown();
+        }
+
+        /// <summary>
+        /// displays errors from the logger
+        /// </summary>
+        /// <param name="sender">the object that send the error</param>
+        /// <param name="message">messgae to display</param>
+        public void ErrorEventHandler(object sender, string message)
+        {
+            //check wich object then set the appropriate message.
+            MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
         }
     }
 }

@@ -21,7 +21,6 @@
         }
         "Entry"
         {
-
         "MsmKey" = "8:_7CF5457DB29A4688BE0EB8C9C323E224"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -197,15 +196,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Wijkagent"
-        "ProductCode" = "8:{28A4BA51-FA96-41AD-A33E-0EF30D88E169}"
-        "PackageCode" = "8:{1BD4DBF4-D2B1-42CB-8B48-0E31DB54B897}"
+        "ProductCode" = "8:{D54CC71C-05C0-41C5-A3A3-9E3848B94666}"
+        "PackageCode" = "8:{25DCBF6F-D860-42A2-A63B-774CE363F568}"
         "UpgradeCode" = "8:{DDE71E16-F5F6-4855-BCC3-B0AEA891F44A}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.0.1"
+        "ProductVersion" = "8:1.0.2"
         "Manufacturer" = "8:CodeCoppers"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -318,7 +317,6 @@
         }
         "Shortcut"
         {
-
             "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4C592B32CB9D4B4C9A387EEEEA45B9B9"
             {
             "Name" = "8:Wijkagent"
@@ -748,7 +746,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7CF5457DB29A4688BE0EB8C9C323E224"
             {
-            "SourcePath" = "8:..\\WPFWijkagent\\obj\\Release\\netcoreapp3.0\\WijkagentWPF.exe"
+            "SourcePath" = "8:..\\WPFWijkagent\\obj\\Debug\\netcoreapp3.0\\WijkagentWPF.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_FE954903B4674A4C86C0CBE494708792"

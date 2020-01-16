@@ -6,6 +6,8 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>WijkagentWPF</AssemblyName>
     <RootNamespace>WijkagentWPF</RootNamespace>
+    <ApplicationIcon />
+    <StartupObject>WPFWijkagent.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
