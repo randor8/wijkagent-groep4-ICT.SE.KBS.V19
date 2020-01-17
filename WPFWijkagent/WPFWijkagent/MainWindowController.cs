@@ -43,8 +43,9 @@ namespace WijkagentWPF
         /// Applies all filters contained in the FilterList to the offences.
         /// </summary>
         /// <returns></returns>
-        public static List<Offence> FilterOffences()
+        public static List<Offence> FilterOffences(bool update = false)
         {
+            if (update) GetOffences();
             return FilterList.ApplyFilters(_offences);
         }
 
@@ -97,8 +98,7 @@ namespace WijkagentWPF
         /// <returns>List of offences ordered by date descending</returns>
         public static List<Offence> GetOffences()
         {
-            _offences = new OffenceController().GetOffences();
-            return _offences;
+            return _offences = new OffenceController().GetOffences();
         }
 
         /// <summary>
