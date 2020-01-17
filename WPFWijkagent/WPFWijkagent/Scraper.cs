@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -14,12 +14,9 @@ namespace WijkagentWPF
     /// </summary>
     public class Scraper
     {
-        public Offence Offence { get; set; }
+        public Offence Offence { get; private set; }
 
         private SearchTweetsParameters _searchParameters;
-
-        // region containing the tokens & Keys required for the functionality of the TwitterAPI
-        //TODO: Fix config
         #region Keys&Tokens
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
         private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
@@ -41,7 +38,7 @@ namespace WijkagentWPF
         }
 
         /// <summary>
-        /// connects to twitter api and catches auth errors
+        /// Connects to twitter api and catches auth errors.
         /// </summary>
         public void Connect()
         {
@@ -49,17 +46,13 @@ namespace WijkagentWPF
             try
             {
                 Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
-                //throws error when not authenticated correctly
-                User.GetAuthenticatedUser();
+                User.GetAuthenticatedUser(); //throws error when not authenticated correctly
             }
-            catch (Exception)
-            {
-                return;
-            }
+            catch (Exception) { }
         }
 
         /// <summary>
-        /// This function uses the search parameters attribute to find tweets that fit the parameters
+        /// This function uses the search parameters attribute to find tweets that fit the parameters.
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>list of social media messages </returns>
@@ -76,7 +69,7 @@ namespace WijkagentWPF
             }
             catch (Exception)
             {
-                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                // Twitter API Request has failed; Bad request, network failure or unauthorized request
                 Logger.Log.ErrorEventHandler(this);
             }
         }
@@ -91,19 +84,8 @@ namespace WijkagentWPF
             LocationController locationController = new LocationController();
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
 
-            if (tweet.Coordinates != null)
-            {
-                locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
-            }
-            int messageID = socialMediaMessageController.SetSocialMediaMessage(
-                tweet.CreatedAt,
-                tweet.Text,
-                tweet.CreatedBy.Name,
-                tweet.CreatedBy.ScreenName,
-                locationId,
-                Offence.ID,
-                tweet.Id
-            );
+            if (tweet.Coordinates != null) locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(tweet.CreatedAt, tweet.Text, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, locationId, Offence.ID, tweet.Id);
 
             SocialMediaImageController imageController = new SocialMediaImageController();
             foreach (var media in tweet.Media)
@@ -119,7 +101,7 @@ namespace WijkagentWPF
         /// <summary>
         /// Returns all the direct messages, that are known on the Twitter account
         /// </summary>
-        /// <returns> Ienumerable containg all Dirext Messages</returns>
+        /// <returns>Ienumerable containg all Dirext Messages</returns>
         public IEnumerable<IMessage> GetLatestDirectMessages()
         {
             try
@@ -145,7 +127,7 @@ namespace WijkagentWPF
             Connect();
             Message.PublishMessage(input, id);
         }
-        
+
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
