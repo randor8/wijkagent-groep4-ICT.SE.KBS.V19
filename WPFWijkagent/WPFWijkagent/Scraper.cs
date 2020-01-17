@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
@@ -35,17 +35,8 @@ namespace WijkagentWPF
                 GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
                 Lang = LanguageFilter.Dutch,
                 MaximumNumberOfResults = 10,
-                Until = new DateTime(
-                    offence.DateTime.Year,
-                    offence.DateTime.Month,
-                    offence.DateTime.Day + 1),
-                Since = new DateTime(
-                    offence.DateTime.Year,
-                    offence.DateTime.Month,
-                    offence.DateTime.Day,
-                    offence.DateTime.Hour - 1,
-                    offence.DateTime.Minute,
-                    offence.DateTime.Second)
+                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(1),
+                Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day, offence.DateTime.Hour, offence.DateTime.Minute, offence.DateTime.Second).AddHours(-1)
             };
         }
 
