@@ -3,8 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WijkagentWPF"
 		mc:Ignorable="d"
         Title="Media Berichten" Height="450" Width="800">
+    <Window.Resources>
+        <local:CategoryConverter x:Key="CategoryConverter"/>
+    </Window.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
@@ -39,7 +43,7 @@
 
 			<TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding Path=DateTime, StringFormat=d-M-y hh:mm}"/>
 			<TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding ID}"/>
-			<TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Category}"/>
+			<TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Category, Converter={StaticResource CategoryConverter}}"/>
 			<TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding Description}"/>
 		</Grid>
 

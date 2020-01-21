@@ -1,6 +1,6 @@
-﻿using WijkagentModels;
+﻿using System.Windows.Controls;
+using WijkagentModels;
 using WijkagentWPF.database;
-using System.Windows.Controls;
 
 namespace WijkagentWPF
 {

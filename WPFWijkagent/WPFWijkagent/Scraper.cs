@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
-using WijkagentWPF.database;
-using System.Configuration;
 using WijkagentModels;
-using System.Collections.Generic;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
@@ -154,7 +154,7 @@ namespace WijkagentWPF
             Connect();
             Message.PublishMessage(input, id);
         }
-        
+
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
