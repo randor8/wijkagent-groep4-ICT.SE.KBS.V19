@@ -19,7 +19,7 @@ namespace WijkagentWPF
         {
             if (value is OffenceCategories categories && categories.Equals(OffenceCategories.Null))
             {
-                return new String("Onbekend");
+                return "Onbekend";
             }
             return value;
         }
