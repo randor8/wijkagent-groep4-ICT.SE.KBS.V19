@@ -8,6 +8,7 @@ namespace WijkagentWPF
     {
         private readonly SocialMediaMessageController _controller;
 
+
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
         /// </summary>
