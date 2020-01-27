@@ -14,14 +14,18 @@ namespace WijkagentModels
         public string User { get; set; }
 
         public string Handle { get; set; }
+
         public virtual Location Location { get; set; }
+
         public Offence Offence { get; set; }
+
         public int MediaType { get; set; }
+
         public long TwitterID { get; set; }
 
         public List<SocialMediaImage> Media { get; set; } = new List<SocialMediaImage>();
 
-        public SocialMediaMessage(DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null, int Mediatype = 0, int id = 0)
+        public SocialMediaMessage(int id, DateTime dateTime, string message, string user, string handle, Location location, long twitterID, Offence offence = null, int Mediatype = 0)
         {
             ID = id;
             DateTime = dateTime;

@@ -106,18 +106,7 @@ namespace WijkagentWPF
             {
                 location = Offence.Location;
             }
-            int messageID = socialMediaMessageController.SetSocialMediaMessage(
-                new SocialMediaMessage(
-                tweet.CreatedAt,
-                tweet.Text,
-                tweet.CreatedBy.Name,
-                tweet.CreatedBy.ScreenName,
-                location,
-                tweet.Id,
-                Offence,
-                MediaType
-                )
-            );
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(new SocialMediaMessage(0, tweet.CreatedAt, tweet.Text, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, location, tweet.Id, Offence, MediaType));
 
             SocialMediaImageController imageController = new SocialMediaImageController();
             foreach (var media in tweet.Media)

@@ -235,7 +235,7 @@ namespace WijkagentWPF
         {
             var list = new List<Grid>();
             // Adding all items to the list by creating grid for them.
-            _messageController.GetOffenceSocialMediaMessages(wpfDelict.DataContext as Offence).ForEach(m => list.AddRange(CreateMessagePanel(m, maxWidth)));
+            _messageController.GetOffenceSocialMediaMessages((wpfDelict.DataContext as Offence).ID).ForEach(m => list.AddRange(CreateMessagePanel(m, maxWidth)));
             return list;
         }
 

@@ -59,7 +59,6 @@ namespace WijkagentWPF.database
 
             return _dbContext.ExecuteInsertQuery(query);
         }
-
         /// <summary>
         /// converts database row to an actual SocialMediaMessage object
         /// </summary>
@@ -67,9 +66,8 @@ namespace WijkagentWPF.database
         /// <returns>the SocialMediaMessage object</returns>
         private SocialMediaMessage ObjectArrayToSocialMediaMessage(object[] socialMediaMessageData)
         {
-            object[] array = socialMediaMessageData;
             //get datetime fields
-            string[] dateTimeStrings = socialMediaMessageData[0].ToString().Split(DBContext.DateTimeSeparator);
+            string[] dateTimeStrings = socialMediaMessageData[1].ToString().Split(DBContext.DateTimeSeparator);
 
             //parse datetime fields
             int.TryParse(dateTimeStrings[0], out int dd);
@@ -80,13 +78,14 @@ namespace WijkagentWPF.database
             int.TryParse(dateTimeStrings[5], out int ss);
 
             return new SocialMediaMessage(
+                (int)socialMediaMessageData[0],
                 new DateTime(yyyy, mm, dd, hh, min, ss),
-                socialMediaMessageData[1].ToString(),
                 socialMediaMessageData[2].ToString(),
                 socialMediaMessageData[3].ToString(),
-                new LocationController().GetLocation((int)socialMediaMessageData[4]),
-                (long)socialMediaMessageData[6],
-                new OffenceController().GetOffence((int)socialMediaMessageData[5]));
+                socialMediaMessageData[4].ToString(),
+                new LocationController().GetLocation((int)socialMediaMessageData[5]),
+                (long)socialMediaMessageData[7],
+                new OffenceController().GetOffence((int)socialMediaMessageData[6]));
         }
 
         /// <summary>
@@ -96,13 +95,13 @@ namespace WijkagentWPF.database
         /// <returns>the new SocialMediaMessage object requested</returns>
         public SocialMediaMessage GetTweetSocialMediaMessage(long tweetID)
         {
-            SqlCommand query = new SqlCommand("SELECT DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
                 "FROM SocialMediaMessage WHERE TwitterID = @TwitterID");
             query.Parameters.Add("@TwitterID", System.Data.SqlDbType.BigInt);
             query.Parameters["@TwitterID"].Value = tweetID;
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
 
-            if (rows.Count > 0)
+            if (rows.Count == 1)
             {
                 SocialMediaMessage message = ObjectArrayToSocialMediaMessage(rows[0]);
                 message.Media = _imageController.GetSocialMediaImages(message.ID);
@@ -116,16 +115,17 @@ namespace WijkagentWPF.database
         /// </summary>
         /// <param name="ID">Offence id you need</param>
         /// <returns>related socialmediamessages in a list</returns>
-        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(Offence offence, int mediaType = 0)
+        public List<SocialMediaMessage> GetOffenceSocialMediaMessages(int offenceID, int mediaType = 0)
         {
-            SqlCommand query = new SqlCommand("SELECT DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
+            SqlCommand query = new SqlCommand("SELECT ID, DateTime, Message, Username, Handle, LocationID, OffenceID, TwitterID " +
                 "FROM SocialMediaMessage WHERE OffenceID = @OffenceID AND MediaType = @MediaType");
 
             query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
             query.Parameters.Add("@MediaType", System.Data.SqlDbType.Int);
 
-            query.Parameters["@OffenceID"].Value = offence.ID;
+            query.Parameters["@OffenceID"].Value = offenceID;
             query.Parameters["@MediaType"].Value = mediaType;
+
             List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
             List<SocialMediaMessage> socialMediaMessages = new List<SocialMediaMessage>();
 
