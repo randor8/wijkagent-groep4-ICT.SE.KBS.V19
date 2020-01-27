@@ -1,4 +1,5 @@
 using Microsoft.Maps.MapControl.WPF;
+using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,8 +24,9 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
-            //add  showmessage method to logger
-            Logger.Log.ErrorToScreenEvent += ErrorEventHandler;
+            App.StartSSH();
+
+            Logger.Log.ErrorToScreenEvent += ErrorEventHandler; // add  showmessage method to logger
             FilterList.AddFilter(CategoryFilterCollection.Instance);
             InitializeComponent();
 
