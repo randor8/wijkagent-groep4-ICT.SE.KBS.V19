@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.SqlClient;
 using WijkagentModels;
 
@@ -134,6 +135,7 @@ namespace WijkagentWPF.database
                 message.Media = _imageController.GetSocialMediaImages(message.ID);
                 socialMediaMessages.Add(message);
             });
+            socialMediaMessages.RemoveAll(msg => msg.Handle.Equals(ConfigurationManager.AppSettings.Get("twitterHandle")));
             return socialMediaMessages;
         }
     }
