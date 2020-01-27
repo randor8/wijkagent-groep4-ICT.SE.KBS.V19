@@ -98,8 +98,26 @@ namespace WijkagentWPF
             LocationController locationController = new LocationController();
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
 
-            if (tweet.Coordinates != null) locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
-            int messageID = socialMediaMessageController.SetSocialMediaMessage(tweet.CreatedAt, tweet.Text, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, locationId, Offence.ID, tweet.Id);
+            if (tweet.Coordinates != null)
+            {
+                location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+            }
+            else
+            {
+                location = Offence.Location;
+            }
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(
+                new SocialMediaMessage(
+                tweet.CreatedAt,
+                tweet.Text,
+                tweet.CreatedBy.Name,
+                tweet.CreatedBy.ScreenName,
+                location,
+                tweet.Id,
+                Offence,
+                MediaType
+                )
+            );
 
             SocialMediaImageController imageController = new SocialMediaImageController();
             foreach (var media in tweet.Media)
