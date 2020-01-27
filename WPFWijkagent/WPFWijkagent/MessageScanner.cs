@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Timers;
 using WijkagentModels;
 
@@ -12,7 +11,7 @@ namespace WijkagentWPF
     {
         private Timer _timer;
         public Scraper Scraper = new Scraper(new Offence(new DateTime().ToLocalTime(), "", new Location(1.1, 1.1, 1), OffenceCategories.Null, 1));
-         
+
         public State CurrentState { get; set; } = State.Updated;
         public long Id { get; set; }
 
@@ -36,7 +35,7 @@ namespace WijkagentWPF
                 .Select(x => new { x.SenderId, x.Id, x.Text, x.CreatedAt });
             foreach (var item in results)
             {
-                messages.Add(new DirectMessage(item.SenderId,item.Id, item.Text, item.CreatedAt));
+                messages.Add(new DirectMessage(item.SenderId, item.Id, item.Text, item.CreatedAt));
             }
             messages.Reverse();
             return messages;
@@ -46,11 +45,11 @@ namespace WijkagentWPF
         /// Compares direct Message Lists to the current list in the MessageScanner, to Inform Observers of Changes
         /// </summary>
         /// <param name="UpdatedConversation"></param>
-        public void CompareConversation(List<DirectMessage> UpdatedConversation )
+        public void CompareConversation(List<DirectMessage> UpdatedConversation)
         {
             int currentCount = Messages.Count;
             int newCount = UpdatedConversation.Count;
-            if(Messages.Count == 0 || (newCount > currentCount && UpdatedConversation[newCount-1].Content != Messages[currentCount-1].Content))
+            if (Messages.Count == 0 || (newCount > currentCount && UpdatedConversation[newCount - 1].Content != Messages[currentCount - 1].Content))
             {
                 Messages = UpdatedConversation;
                 CurrentState = State.Outdated;

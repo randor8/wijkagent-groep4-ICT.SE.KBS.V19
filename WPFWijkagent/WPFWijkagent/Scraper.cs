@@ -1,11 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
-using WijkagentWPF.database;
-using System.Configuration;
 using WijkagentModels;
-using System.Collections.Generic;
+using WijkagentWPF.database;
 
 namespace WijkagentWPF
 {
