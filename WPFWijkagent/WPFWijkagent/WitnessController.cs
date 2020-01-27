@@ -34,15 +34,12 @@ namespace WijkagentWPF
                 $" op {_Offence.DateTime} in de buurt van " +
                 $"https://bing.com/maps/default.aspx?cp={_Offence.Location.Latitude}~{_Offence.Location.Longitude}&lvl=20&style=h&sp=point.{_Offence.Location.Latitude}_{_Offence.Location.Longitude}_Delict{_Offence.ID}" +
                 $"\nTweet of retweet met de hashtag #Delict{_Offence.ID} als u meer weet.");
-            }
-            
+            }               
             else
             {
                 return null;
             }
-        }
-
-        
+        }        
 
         /// <summary>
         /// Publish a tweet, Update the database  and update the socialmediamessages

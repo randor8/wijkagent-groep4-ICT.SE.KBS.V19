@@ -64,8 +64,8 @@ namespace WijkagentWPF
                     Since = new DateTime(
                     offence.DateTime.Year,
                     offence.DateTime.Month,
-                    offence.DateTime.Day,
-                    offence.DateTime.Hour - 1,
+                    offence.DateTime.Day - 1,
+                    offence.DateTime.Hour,
                     offence.DateTime.Minute,
                     offence.DateTime.Second),
                     Until = DateTime.Now

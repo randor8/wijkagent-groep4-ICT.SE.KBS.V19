@@ -25,6 +25,8 @@ namespace WijkagentWPF
 
             wpfDelict.DataContext = offence;
             _controller.DisplayMessages(offence, wpfLVMessages);
+            _controller.DisplayMessages(offence, WitnessMessages, 1);
+            _controller.RetrieveWitnessMessages(offence);
         }
 
         /// <summary>

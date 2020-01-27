@@ -69,8 +69,7 @@
 								<TextBlock Grid.Row="0" Grid.Column="0" Text="Gebruiker"/>
 								<TextBlock Grid.Row="1" Grid.Column="0" Text="Twitter naam"/>
 								<TextBlock Grid.Row="2" Grid.Column="0" Text="Omschrijving"/>
-								<TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
-                                <Button x:Name="wpfBTchatbutton" Grid.Row="4" Grid.Column="0" Content="Chat Starten" Click="wpfBTchatbutton_Click"/>
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
 
                                 <TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
 								<TextBlock Grid.Row="1" Grid.Column="1" Text=" : "/>
@@ -121,17 +120,15 @@
                         <RowDefinition Height="22"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="btn_oproep" Content="Roep getuigen op" Width="120" HorizontalAlignment="Right" Click="btn_oproep_Click"/>
-
-                    <ListView x:Name="WitnessMessages" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <Button x:Name="btn_oproep" Grid.Row="0" Content="Roep getuigen op" Width="120" HorizontalAlignment="Right" Click="btn_oproep_Click"/>
+                    <ListView x:Name="WitnessMessages" Grid.Row="1" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False">
                         <ListView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Width="780">
+                                <Grid Margin="5">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="auto"/>
                                         <ColumnDefinition Width="auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
@@ -146,37 +143,42 @@
                                     <TextBlock Grid.Row="1" Grid.Column="0" Text="Twitter naam"/>
                                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Omschrijving"/>
                                     <TextBlock Grid.Row="3" Grid.Column="0" Text="Datum en tijd"/>
+                                    <Button x:Name="wpfBTchatbutton" Grid.Row="4" Grid.Column="0" Content="Chat Starten" Click="wpfBTchatbutton_Click"/>
 
                                     <TextBlock Grid.Row="0" Grid.Column="1" Text=" : "/>
                                     <TextBlock Grid.Row="1" Grid.Column="1" Text=" : "/>
                                     <TextBlock Grid.Row="2" Grid.Column="1" Text=" : "/>
                                     <TextBlock Grid.Row="3" Grid.Column="1" Text=" : "/>
 
-                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}"/>
-                                    <Button x:Name="handleText" Grid.Row="1" Grid.Column="2" Cursor="Hand" Content="{Binding Handle}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="200" HorizontalContentAlignment="Left" Background="{x:Null}" BorderBrush="{x:Null}">
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
+                                    <TextBlock Grid.Row="0" Grid.Column="2" Text="{Binding User}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Handle}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DateTime}" TextWrapping="Wrap"/>
+
+                                    <ListBox Grid.Column="3" Grid.RowSpan="5" MaxWidth="200" ItemsSource="{Binding Media}" ScrollViewer.CanContentScroll="False">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel IsItemsHost="True" Orientation="Horizontal"/>
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding URL}" Height="110" MouseDown="Image_MouseDown"/>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                        <ListBox.Style>
+                                            <Style TargetType="ListBox">
                                                 <Style.Triggers>
-                                                    <Trigger Property="IsMouseOver" Value="True">
-                                                        <Setter Property="TextElement.Foreground" Value="Blue"/>
-                                                    </Trigger>
+                                                    <DataTrigger Binding="{Binding Media.Count}" Value="0">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
-                                        </Button.Style>
-                                    </Button>
-                                    <TextBlock Grid.Row="2" Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap"/>
-                                    <TextBlock Grid.Row="3" Grid.Column="2" Text="{Binding DateTime, StringFormat='d-M-y hh:mm'}"/>
-                                    <Button Grid.Row="4" Grid.Column="0" Content="contact getuige" Width="120" HorizontalAlignment="Right"></Button>
-
-                                    <Image Grid.Column="3"  Grid.RowSpan="4" HorizontalAlignment="Right"  Height="80"/>
+                                        </ListBox.Style>
+                                    </ListBox>
                                 </Grid>
                             </DataTemplate>
                         </ListView.ItemTemplate>
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            </Style>
-                        </ListBox.ItemContainerStyle>
                     </ListView>
                 </Grid>
             </TabItem>
