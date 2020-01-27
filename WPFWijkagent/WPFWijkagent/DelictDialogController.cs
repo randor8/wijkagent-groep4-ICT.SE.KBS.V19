@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Windows.Controls;
 using WijkagentModels;
 using WijkagentWPF.database;
-using System.Windows.Controls;
 
 namespace WijkagentWPF
 {
     public class DelictDialogController
     {
         private readonly SocialMediaMessageController _controller;
+
 
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence

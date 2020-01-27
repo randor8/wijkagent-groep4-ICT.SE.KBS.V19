@@ -65,7 +65,7 @@ namespace WijkagentWPF
         {
             bool descriptionPresent = wpfTBOmschrijving.Text.Length > 0;
             OffenceCategories offenceCategories = OffenceCategories.Null;
-            
+
             ErrorMessagesVisibility();
 
             //is datetime filled in?
@@ -87,10 +87,13 @@ namespace WijkagentWPF
                     MainWindowController.AddOffence(wpfTBOmschrijving.Text, offenceCategories, dateTime, Location);
                     this.Close();
 
-                } else {
+                }
+                else
+                {
                     ErrorMessagesVisibility(descriptionPresent, dateValid, false);
                 }
-            } else
+            }
+            else
             {
                 ErrorMessagesVisibility(descriptionPresent, false, false);
             }

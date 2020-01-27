@@ -29,6 +29,8 @@ namespace WijkagentModels
         /// <returns> the string representation of the object</returns>
         public override string ToString() => $"{Description}, {DateTime}";
 
+
+
         /// <summary>
         /// Compares given object with this object.
         /// </summary>

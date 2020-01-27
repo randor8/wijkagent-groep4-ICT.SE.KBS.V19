@@ -13,7 +13,7 @@ namespace WijkagentWPF
         private WitnessController _witnessController { get; set; }
         private SendMessageController _SendMessageController { get; set; }
 
-        public AskForWitnessWindow(Offence  offence)
+        public AskForWitnessWindow(Offence offence)
         {
             InitializeComponent();
             _witnessController = new WitnessController(offence, this);
@@ -39,11 +39,13 @@ namespace WijkagentWPF
                     _witnessController.SendTweet();
                     Close();
                 }
-                else{
+                else
+                {
                     lbl_DubbeleMelding.Visibility = Visibility.Visible;
                 }
             }
-            else {
+            else
+            {
                 lbl_errorbeschrijving.Visibility = Visibility.Visible;
             }
         }
