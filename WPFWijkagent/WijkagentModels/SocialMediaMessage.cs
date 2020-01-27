@@ -34,10 +34,5 @@ namespace WijkagentModels
             OffenceID = offence;
             TwitterID = twitterID;
         }
-
-        public override string ToString()
-        {
-            return $"\nDatum en tijd: {DateTime.ToShortDateString()}\nGebruiker: {User}\nTwitter Naam: {Handle}\nOmschrijving: {Message}";
-        }
     }
 }

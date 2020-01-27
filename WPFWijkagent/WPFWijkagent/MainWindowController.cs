@@ -121,7 +121,5 @@ namespace WijkagentWPF
         /// Clears the list offences in this controller.
         /// </summary>
         public static void ClearOffences() => _offences = new List<Offence>();
-
-
     }
 }

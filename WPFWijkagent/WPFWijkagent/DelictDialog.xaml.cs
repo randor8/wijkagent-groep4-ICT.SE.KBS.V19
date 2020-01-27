@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -103,6 +100,13 @@ namespace WijkagentWPF
             printer.PrintDocument(doc.DocumentPaginator, "Delict Informatie");
         }
 
+        /// <summary>
+        /// calculates sizes used by the pages for the specific printer
+        /// </summary>
+        /// <param name="printer">used to select printing settings</param>
+        /// <param name="margin">size on the page edges</param>
+        /// <param name="maxWidth">width of the page</param>
+        /// <param name="maxHeight">height of the page</param>
         private void CalculateSizes(PrintDialog printer, out int margin, out double maxWidth, out double maxHeight)
         {
             margin = 30;
@@ -110,6 +114,15 @@ namespace WijkagentWPF
             maxHeight = printer.PrintableAreaHeight - (2 * margin);
         }
 
+        /// <summary>
+        /// Create a new page object and sets up variables for use.
+        /// </summary>
+        /// <param name="document">used for setting page sizes</param>
+        /// <param name="margin">uses for space around the edges</param>
+        /// <param name="grid">wpf grid object to add information to</param>
+        /// <param name="maxWidth">maximum width of objects</param>
+        /// <param name="preMargin">used to add negative margin to account for message top spacing</param>
+        /// <returns></returns>
         private FixedPage NewPage(FixedDocument document, int margin, out Grid grid, double maxWidth, bool preMargin = false)
         {
             grid = new Grid { Width = maxWidth };
@@ -123,6 +136,12 @@ namespace WijkagentWPF
             };
         }
 
+        /// <summary>
+        /// Adds a UI Element to a grid.
+        /// </summary>
+        /// <param name="grid">grid to add item to</param>
+        /// <param name="item">item to add to grid</param>
+        /// <param name="row">row to put the item into</param>
         private void AddItem(Grid grid, UIElement item, int row)
         {
             grid.Children.Add(item);
@@ -130,6 +149,12 @@ namespace WijkagentWPF
             Grid.SetRow(item, row);
         }
 
+        /// <summary>
+        /// Adds all attributes to current page and adds it to the document.
+        /// </summary>
+        /// <param name="document">used to store all pages</param>
+        /// <param name="page">current page</param>
+        /// <param name="grid">current grid</param>
         private void FinishPage(FixedDocument document, FixedPage page, Grid grid)
         {
             page.Children.Add(grid);
@@ -138,6 +163,13 @@ namespace WijkagentWPF
             document.Pages.Add(content);
         }
 
+        /// <summary>
+        /// Adds information to a grid.
+        /// </summary>
+        /// <param name="grid">grid to add to</param>
+        /// <param name="row">row to add items in</param>
+        /// <param name="prefix">information label</param>
+        /// <param name="value">information text</param>
         private void AddTextRow(Grid grid, int row, string prefix, string value)
         {
             var txtPrefix = new TextBlock { Text = prefix };
@@ -157,6 +189,11 @@ namespace WijkagentWPF
             Grid.SetRow(txtValue, row);
         }
 
+        /// <summary>
+        /// Creates a grid containing the information of an offence.
+        /// </summary>
+        /// <param name="maxWidth">maximum item width</param>
+        /// <returns></returns>
         private Grid CreateOffencePanel(double maxWidth)
         {
             Grid grid = new Grid { Width = maxWidth, Margin = new Thickness(0, 0, 0, 8) };
@@ -252,4 +289,3 @@ namespace WijkagentWPF
         }
     }
 }
-
