@@ -23,7 +23,6 @@ namespace WijkagentWPF
 
         public MainWindow()
         {
-
             //add  showmessage method to logger
             Logger.Log.ErrorToScreenEvent += ErrorEventHandler;
             FilterList.AddFilter(CategoryFilterCollection.Instance);
