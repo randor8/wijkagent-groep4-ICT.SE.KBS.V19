@@ -117,5 +117,48 @@ namespace WijkagentWPF.database
 
             return offences;
         }
+
+
+        /// <summary>
+        /// Create a Search hashtag fot the offence
+        /// </summary>
+        /// <param name="offence">the offence for the search hastag</param>
+        /// <returns></returns>
+        public string Hashtag(Offence offence)
+        {
+            SqlCommand query = new SqlCommand("SELECT Hashtag FROM Offence WHERE ID = @OffenceID");
+            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters["@OffenceID"].Value = offence.ID;
+            List<object[]> rows = _dbContext.ExecuteSelectQuery(query);
+
+            if (rows.Count == 1 && rows[0].GetValue(0).ToString().Length > 0)
+            {
+                string text = rows[0].GetValue(0).ToString();
+                return text;
+            }
+
+            else
+            {
+                return $"#Delict{offence.ID}";
+            }
+        }
+
+        /// <summary>
+        /// Change the hastag for the given offence in the database
+        /// </summary>
+        /// <param name="offence">the offence that needs to be changed</param>
+        public void UpdateHashtag(Offence offence)
+        {
+            SqlCommand query = new SqlCommand("UPDATE Offence SET Hashtag = @Hashtag WHERE ID = @OffenceID");
+
+            //prepare values in statement 
+            query.Parameters.Add("@OffenceID", System.Data.SqlDbType.Int);
+            query.Parameters.Add("@Hashtag", System.Data.SqlDbType.NVarChar);
+
+            query.Parameters["@Hashtag"].Value = $"Delict{offence.ID}";
+            query.Parameters["@OffenceID"].Value = offence.ID;
+
+            _dbContext.ExecuteQuery(query);
+        }
     }
 }

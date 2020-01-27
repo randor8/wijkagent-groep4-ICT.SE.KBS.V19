@@ -49,6 +49,7 @@ namespace WijkagentWPF
             return FilterList.ApplyFilters(_offences);
         }
 
+
         /// <summary>
         /// Gets the pushpin of the offence
         /// </summary>
@@ -116,7 +117,6 @@ namespace WijkagentWPF
             offence = offenceQuerry.First();
             return offence;
         }
-
         /// <summary>
         /// Clears the list offences in this controller.
         /// </summary>

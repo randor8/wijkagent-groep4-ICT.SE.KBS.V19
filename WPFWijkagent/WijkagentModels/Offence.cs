@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace WijkagentModels
 {
@@ -29,8 +28,6 @@ namespace WijkagentModels
         /// </summary>
         /// <returns> the string representation of the object</returns>
         public override string ToString() => $"{Description}, {DateTime}";
-
-
 
         /// <summary>
         /// Compares given object with this object.

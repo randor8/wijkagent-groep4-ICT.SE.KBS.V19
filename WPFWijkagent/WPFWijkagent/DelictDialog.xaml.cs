@@ -35,6 +35,8 @@ namespace WijkagentWPF
 
             wpfDelict.DataContext = offence;
             _controller.DisplayMessages(offence, wpfLVMessages);
+            _controller.RetrieveWitnessMessages(offence);
+            _controller.DisplayMessages(offence, WitnessMessages, 1);
 
             foreach (SocialMediaMessage message in wpfLVMessages.ItemsSource)
             {
@@ -63,6 +65,16 @@ namespace WijkagentWPF
             IUser user = User.GetUserFromScreenName(message.Handle);
             ContactWitnessDialog witnessDialogue = new ContactWitnessDialog(user.Id);
             witnessDialogue.Show();
+        }
+
+        /// <summary>
+        /// create a witnesscontroller when button is clicked. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btn_oproep_Click(object sender, RoutedEventArgs e)
+        {
+            AskForWitnessWindow witnessWindow = new AskForWitnessWindow((Offence)wpfDelict.DataContext);
         }
 
         /// <summary>

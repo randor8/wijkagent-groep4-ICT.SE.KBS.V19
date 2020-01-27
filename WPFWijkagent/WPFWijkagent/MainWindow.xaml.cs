@@ -1,5 +1,4 @@
 using Microsoft.Maps.MapControl.WPF;
-using Renci.SshNet;
 using System;
 using System.Collections.Generic;
 using System.Linq;

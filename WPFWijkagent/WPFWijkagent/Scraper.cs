@@ -6,6 +6,7 @@ using Tweetinvi.Models;
 using Tweetinvi.Parameters;
 using WijkagentModels;
 using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -24,17 +25,34 @@ namespace WijkagentWPF
         private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
-        public Scraper(Offence offence)
+        /// <summary>
+        /// Creates a scraper, can use a search on a text with or without additionel parameters.
+        /// </summary>
+        /// <param name="offence">the offence needed for parameter information</param>
+        /// <param name="OnlyHastag">true or false to toggle additionel parameters.</param>
+        /// <param name="text">the text for searching.</param>
+        public Scraper(Offence offence, bool OnlyHastag = false, string text = " ")
         {
             Offence = offence;
-            _searchParameters = new SearchTweetsParameters(" ")
+            if (!OnlyHastag)
             {
-                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
-                Lang = LanguageFilter.Dutch,
-                MaximumNumberOfResults = 10,
-                Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(1),
-                Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day, offence.DateTime.Hour, offence.DateTime.Minute, offence.DateTime.Second).AddHours(-1)
-            };
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
+                    Lang = LanguageFilter.Dutch,
+                    MaximumNumberOfResults = 10,
+                    Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(1),
+                    Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day, offence.DateTime.Hour, offence.DateTime.Minute, offence.DateTime.Second).AddHours(-1)
+                };
+            }
+            else
+            {
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(-1),
+                    Until = DateTime.Now
+                };
+            }
         }
 
         /// <summary>
@@ -62,9 +80,12 @@ namespace WijkagentWPF
             {
                 Connect();
                 var tweets = Search.SearchTweets(_searchParameters);
-                foreach (var tweet in tweets)
+                if (tweets != null)
                 {
-                    SetSocialMediaMessage(tweet);
+                    foreach (var tweet in tweets)
+                    {
+                        SetSocialMediaMessage(tweet);
+                    }
                 }
             }
             catch (Exception)
@@ -78,14 +99,22 @@ namespace WijkagentWPF
         /// Checks and sets a specific value to the DB and adds a Social Media Message
         /// </summary>
         /// <param name="tweet">tweetenvi tweet object</param>
-        private void SetSocialMediaMessage(ITweet tweet)
+        /// <param name="MediaType">MediaType</param>
+        private void SetSocialMediaMessage(ITweet tweet, int MediaType = 0)
         {
-            int locationId = Offence.Location.ID;
+            Location location;
             LocationController locationController = new LocationController();
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
 
-            if (tweet.Coordinates != null) locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
-            int messageID = socialMediaMessageController.SetSocialMediaMessage(tweet.CreatedAt, tweet.Text, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, locationId, Offence.ID, tweet.Id);
+            if (tweet.Coordinates != null)
+            {
+                location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
+            }
+            else
+            {
+                location = Offence.Location;
+            }
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(new SocialMediaMessage(0, tweet.CreatedAt, tweet.Text, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, location, tweet.Id, Offence, MediaType));
 
             SocialMediaImageController imageController = new SocialMediaImageController();
             foreach (var media in tweet.Media)
@@ -131,7 +160,7 @@ namespace WijkagentWPF
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
-        public void UpdateSocialMediaMessages()
+        public void UpdateSocialMediaMessages(int MediaType = 0)
         {
             try
             {
@@ -143,10 +172,11 @@ namespace WijkagentWPF
                 {
                     if (mediaMessageController.GetTweetSocialMediaMessage(tweet.Id) == null)
                     {
-                        SetSocialMediaMessage(tweet);
+                        SetSocialMediaMessage(tweet, MediaType);
                     }
                 }
             }
+
             catch (Exception)
             {
                 // Twitter API Request has been failed; Bad request, network failure or unauthorized request
