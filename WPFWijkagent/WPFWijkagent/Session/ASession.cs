@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="input">string to be parsed</param>
         public abstract void Load(string input);
-        
+
         /// <summary>
         /// Smashes some sort of an object into a string.
         /// </summary>
