@@ -89,6 +89,7 @@ namespace WijkagentWPF
                 return (int)SQLStatement.ExecuteScalar();
 
             }
+
             catch (SqlException sqlEX)
             {
                 //save the error and give useles result
@@ -131,7 +132,6 @@ namespace WijkagentWPF
                 SQLStatement.Dispose();
                 _connection.Close();
             }
-
         }
     }
 }

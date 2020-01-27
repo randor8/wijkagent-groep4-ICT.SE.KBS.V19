@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using WijkagentModels;
 
 namespace WijkagentWPF
 {
-    public class ContactWitnessDialogController :IObserver
+    public class ContactWitnessDialogController : IObserver
     {
         public List<DirectMessage> DirectMessages;
         public ContactWitnessDialogController()

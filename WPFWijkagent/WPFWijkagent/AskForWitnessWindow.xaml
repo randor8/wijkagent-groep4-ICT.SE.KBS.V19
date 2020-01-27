@@ -1,0 +1,15 @@
+﻿<Window x:Class="WijkagentWPF.AskForWitnessWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Getuigen oproepen" Height="213" Width="318">
+    <Grid>
+        <Label x:Name="lbl_beschrijving" Content="Beschrijving:" HorizontalAlignment="Left" Margin="24,22,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtb_omschrijving" HorizontalAlignment="Left" Height="113" Margin="100,28,0,0" Text="Er is een fiets gestolen in Zwolle ter hoogte van hogeschool windesheim" TextWrapping="Wrap" VerticalAlignment="Top" Width="177"/>
+        <Button x:Name="btn_verstuurOproep" Content="verstuur oproep" HorizontalAlignment="Left" Margin="188,146,0,0" VerticalAlignment="Top" Click="btn_verstuurOproep_Click"/>
+        <Label x:Name="lbl_errorbeschrijving" Content="Vul alstublieft een beschrijving in." HorizontalAlignment="Left" Margin="96,10,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Background="{x:Null}" Foreground="Red" Visibility="Hidden"/>
+        <Label x:Name="lbl_DubbeleMelding" Content="Melding bestaat al." HorizontalAlignment="Left" Margin="96,0,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="10" Background="{x:Null}" Foreground="Red" Visibility="Hidden"/>
+    </Grid>
+</Window>

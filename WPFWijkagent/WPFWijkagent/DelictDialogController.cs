@@ -1,12 +1,13 @@
-﻿using WijkagentModels;
+﻿using System.Windows.Controls;
+using WijkagentModels;
 using WijkagentWPF.database;
-using System.Windows.Controls;
 
 namespace WijkagentWPF
 {
     public class DelictDialogController
     {
         private readonly SocialMediaMessageController _controller;
+
 
         /// <summary>
         /// Window for display of socialMediaMessages in the radius of the given offence
@@ -23,9 +24,16 @@ namespace WijkagentWPF
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>string</returns>
-        public void DisplayMessages(Offence offence, ListView wpfLVMessages)
+        public void DisplayMessages(Offence offence, ListView wpfLVMessages, int mediatype = 0)
         {
-            wpfLVMessages.ItemsSource = _controller.GetOffenceSocialMediaMessages(offence.ID);
+            wpfLVMessages.ItemsSource = _controller.GetOffenceSocialMediaMessages(offence.ID, mediatype);
+        }
+
+        public void RetrieveWitnessMessages(Offence offence)
+        {
+            OffenceController offenceController = new OffenceController();
+            Scraper WitnessScraper = new Scraper(offence, true, offenceController.Hashtag(offence));
+            WitnessScraper.UpdateSocialMediaMessages(1);
         }
 
         /// <summary>
