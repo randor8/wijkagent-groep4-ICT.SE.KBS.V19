@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.ComponentModel;
 using WijkagentModels;
 
 namespace WijkagentWPF
@@ -37,7 +30,7 @@ namespace WijkagentWPF
             _scanner.Attach(this);
             _scanner.StartScanning(30000);
         }
-               
+
 
         /// <summary>
         /// prints all messages in the list on the dialogue screen
@@ -90,8 +83,9 @@ namespace WijkagentWPF
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
             string input = wpfTBinput.Text;
-            if (input.Length > 0) 
-            {                _controller.DirectMessages.Add(new DirectMessage(_userID, 1, input, DateTime.Now));
+            if (input.Length > 0)
+            {
+                _controller.DirectMessages.Add(new DirectMessage(_userID, 1, input, DateTime.Now));
                 PrintMessages(_controller.DirectMessages);
                 _scanner.Scraper.SentDirectMessage(input, WitnessID);
             }

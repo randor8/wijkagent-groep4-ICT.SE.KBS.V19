@@ -22,7 +22,8 @@ namespace WijkagentWPF.Session
             if (input.Equals("Single"))
             {
                 _single.IsChecked = true;
-            } else if (input.Equals("Range"))
+            }
+            else if (input.Equals("Range"))
             {
                 _range.IsChecked = true;
             }
@@ -34,7 +35,8 @@ namespace WijkagentWPF.Session
             if (_single.IsChecked.Value && !_range.IsChecked.Value)
             {
                 dateString += "Single";
-            } else if (!_single.IsChecked.Value && _range.IsChecked.Value)
+            }
+            else if (!_single.IsChecked.Value && _range.IsChecked.Value)
             {
                 dateString += "Range";
             }

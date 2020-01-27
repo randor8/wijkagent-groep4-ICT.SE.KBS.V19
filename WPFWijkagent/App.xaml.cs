@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Renci.SshNet;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Windows;
 using WijkagentWPF.Session;
@@ -14,6 +16,19 @@ namespace WijkagentWPF
         private static Dictionary<string, ASession> _sessions = new Dictionary<string, ASession>();
         public static readonly string ApplicationFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Wijkagent");
         public static readonly string SessionFile = "./Session.cfg";
+
+        /// <summary>
+        /// Creates an SSH tunnel for the database connection.
+        /// </summary>
+        public static void StartSSH()
+        {
+            var client = new SshClient(ConfigurationManager.AppSettings.Get("server_ssh_host"), ConfigurationManager.AppSettings.Get("server_ssh_user"), ConfigurationManager.AppSettings.Get("server_ssh_password"));
+            var port = new ForwardedPortLocal("127.0.0.1", 1433, "127.0.0.1", 1433);
+
+            client.Connect();
+            client.AddForwardedPort(port);
+            port.Start();
+        }
 
         /// <summary>
         /// Stores a session object combined with its key.

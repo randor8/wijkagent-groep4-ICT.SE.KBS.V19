@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using Tweetinvi;
 using Tweetinvi.Models;
 using Tweetinvi.Parameters;
-using WijkagentWPF.database;
-using System.Configuration;
 using WijkagentModels;
-using System.Collections.Generic;
+using WijkagentWPF.database;
+using Location = WijkagentModels.Location;
 
 namespace WijkagentWPF
 {
@@ -14,12 +15,9 @@ namespace WijkagentWPF
     /// </summary>
     public class Scraper
     {
-        public Offence Offence { get; set; }
+        public Offence Offence { get; private set; }
 
         private SearchTweetsParameters _searchParameters;
-
-        // region containing the tokens & Keys required for the functionality of the TwitterAPI
-        //TODO: Fix config
         #region Keys&Tokens
         private readonly string _customerKey = ConfigurationManager.AppSettings.Get("customerKey");
         private readonly string _customerKeySecret = ConfigurationManager.AppSettings.Get("customerKeySecret");
@@ -27,30 +25,38 @@ namespace WijkagentWPF
         private readonly string _accessTokenSecret = ConfigurationManager.AppSettings.Get("accesTokenSecret");
         #endregion;
 
-        public Scraper(Offence offence)
+        /// <summary>
+        /// Creates a scraper, can use a search on a text with or without additionel parameters.
+        /// </summary>
+        /// <param name="offence">the offence needed for parameter information</param>
+        /// <param name="OnlyHastag">true or false to toggle additionel parameters.</param>
+        /// <param name="text">the text for searching.</param>
+        public Scraper(Offence offence, bool OnlyHastag = false, string text = " ")
         {
             Offence = offence;
-            _searchParameters = new SearchTweetsParameters(" ")
+            if (!OnlyHastag)
             {
-                GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
-                Lang = LanguageFilter.Dutch,
-                MaximumNumberOfResults = 10,
-                Until = new DateTime(
-                    offence.DateTime.Year,
-                    offence.DateTime.Month,
-                    offence.DateTime.Day + 1),
-                Since = new DateTime(
-                    offence.DateTime.Year,
-                    offence.DateTime.Month,
-                    offence.DateTime.Day,
-                    offence.DateTime.Hour - 1,
-                    offence.DateTime.Minute,
-                    offence.DateTime.Second)
-            };
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    GeoCode = new GeoCode(offence.Location.Latitude, offence.Location.Longitude, 1, DistanceMeasure.Kilometers),
+                    Lang = LanguageFilter.Dutch,
+                    MaximumNumberOfResults = 10,
+                    Until = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(1),
+                    Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day, offence.DateTime.Hour, offence.DateTime.Minute, offence.DateTime.Second).AddHours(-1)
+                };
+            }
+            else
+            {
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(-1),
+                    Until = DateTime.Now
+                };
+            }
         }
 
         /// <summary>
-        /// connects to twitter api and catches auth errors
+        /// Connects to twitter api and catches auth errors.
         /// </summary>
         public void Connect()
         {
@@ -58,17 +64,13 @@ namespace WijkagentWPF
             try
             {
                 Auth.SetUserCredentials(_customerKey, _customerKeySecret, _accessToken, _accessTokenSecret);
-                //throws error when not authenticated correctly
-                User.GetAuthenticatedUser();
+                User.GetAuthenticatedUser(); //throws error when not authenticated correctly
             }
-            catch (Exception)
-            {
-                return;
-            }
+            catch (Exception) { }
         }
 
         /// <summary>
-        /// This function uses the search parameters attribute to find tweets that fit the parameters
+        /// This function uses the search parameters attribute to find tweets that fit the parameters.
         /// </summary>
         /// <param name="offence"></param>
         /// <returns>list of social media messages </returns>
@@ -78,14 +80,17 @@ namespace WijkagentWPF
             {
                 Connect();
                 var tweets = Search.SearchTweets(_searchParameters);
-                foreach (var tweet in tweets)
+                if (tweets != null)
                 {
-                    SetSocialMediaMessage(tweet);
+                    foreach (var tweet in tweets)
+                    {
+                        SetSocialMediaMessage(tweet);
+                    }
                 }
             }
             catch (Exception)
             {
-                // Twitter API Request has been failed; Bad request, network failure or unauthorized request
+                // Twitter API Request has failed; Bad request, network failure or unauthorized request
                 Logger.Log.ErrorEventHandler(this);
             }
         }
@@ -94,25 +99,22 @@ namespace WijkagentWPF
         /// Checks and sets a specific value to the DB and adds a Social Media Message
         /// </summary>
         /// <param name="tweet">tweetenvi tweet object</param>
-        private void SetSocialMediaMessage(ITweet tweet)
+        /// <param name="MediaType">MediaType</param>
+        private void SetSocialMediaMessage(ITweet tweet, int MediaType = 0)
         {
-            int locationId = Offence.Location.ID;
+            Location location;
             LocationController locationController = new LocationController();
             SocialMediaMessageController socialMediaMessageController = new SocialMediaMessageController();
 
             if (tweet.Coordinates != null)
             {
-                locationId = locationController.SetLocation(new WijkagentModels.Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude));
+                location = new Location(tweet.Coordinates.Latitude, tweet.Coordinates.Longitude);
             }
-            int messageID = socialMediaMessageController.SetSocialMediaMessage(
-                tweet.CreatedAt,
-                tweet.Text,
-                tweet.CreatedBy.Name,
-                tweet.CreatedBy.ScreenName,
-                locationId,
-                Offence.ID,
-                tweet.Id
-            );
+            else
+            {
+                location = Offence.Location;
+            }
+            int messageID = socialMediaMessageController.SetSocialMediaMessage(new SocialMediaMessage(0, tweet.CreatedAt, tweet.Text, tweet.CreatedBy.Name, tweet.CreatedBy.ScreenName, location, tweet.Id, Offence, MediaType));
 
             SocialMediaImageController imageController = new SocialMediaImageController();
             foreach (var media in tweet.Media)
@@ -128,7 +130,7 @@ namespace WijkagentWPF
         /// <summary>
         /// Returns all the direct messages, that are known on the Twitter account
         /// </summary>
-        /// <returns> Ienumerable containg all Dirext Messages</returns>
+        /// <returns>Ienumerable containg all Dirext Messages</returns>
         public IEnumerable<IMessage> GetLatestDirectMessages()
         {
             try
@@ -154,11 +156,11 @@ namespace WijkagentWPF
             Connect();
             Message.PublishMessage(input, id);
         }
-        
+
         /// <summary>
         /// Function checks if new social Media Messages have been posted and adds them to the DB
         /// </summary>
-        public void UpdateSocialMediaMessages()
+        public void UpdateSocialMediaMessages(int MediaType = 0)
         {
             try
             {
@@ -170,10 +172,11 @@ namespace WijkagentWPF
                 {
                     if (mediaMessageController.GetTweetSocialMediaMessage(tweet.Id) == null)
                     {
-                        SetSocialMediaMessage(tweet);
+                        SetSocialMediaMessage(tweet, MediaType);
                     }
                 }
             }
+
             catch (Exception)
             {
                 // Twitter API Request has been failed; Bad request, network failure or unauthorized request
