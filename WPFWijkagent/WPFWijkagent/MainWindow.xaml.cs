@@ -2,6 +2,7 @@ using Microsoft.Maps.MapControl.WPF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -9,6 +10,7 @@ using System.Windows.Media;
 using WijkagentModels;
 using WijkagentWPF.Filters;
 using WijkagentWPF.Session;
+using Timer = System.Timers.Timer;
 
 namespace WijkagentWPF
 {
@@ -39,7 +41,12 @@ namespace WijkagentWPF
             wpfMapMain.MouseLeftButtonDown += AddPin;
 
             FillCategoryFiltermenu();
-            FillOffenceList();
+            FillOffenceList(true);
+
+            var aTimer = new Timer(5000);
+            aTimer.Elapsed += (sender, e) => Dispatcher.Invoke(() => CollectNewOffences());
+            aTimer.AutoReset = true;
+            aTimer.Enabled = true;
         }
 
         /// <summary>
@@ -65,21 +72,37 @@ namespace WijkagentWPF
         /// <summary>
         /// fills the listbox with all of the offences 
         /// </summary>
-        private void FillOffenceList()
-        {
-            // convert to offenceListItems (so we can ad our own tostring and retrieve the id in events.)
-            RemoveMouseDownEvents();
-            wpfMapMain.Children.Clear();
-            List<Offence> offences = MainWindowController.FilterOffences();
+        private void FillOffenceList(bool update = false) => UpdateItems(MainWindowController.FilterOffences(update));
 
-            offences.ForEach(of =>
+        /// <summary>
+        /// Starts a new thread that collects all offences from the database and only updates the view if more have been added.
+        /// </summary>
+        private void CollectNewOffences() => new Thread(() =>
+        {
+            List<Offence> offences = MainWindowController.FilterOffences(true);
+            if (offences.Count != wpfLBSelection.Items.Count) Dispatcher.Invoke(() => UpdateItems(offences));
+        }).Start();
+
+        /// <summary>
+        /// Clears all items and creates pushpins and events for all offences and adds them to the list.
+        /// </summary>
+        /// <param name="offences">offences to use</param>
+        private void UpdateItems(List<Offence> offences)
+        {
+            lock (wpfLBSelection)
             {
-                of.GetPushpin().MouseDown += Pushpin_MouseDown;
-                wpfMapMain.Children.Add(of.GetPushpin());
-            });
-            offences = offences.OrderByDescending(x => x.DateTime).ToList();
-            wpfLBSelection.ItemsSource = offences;
-            wpfLBSelection.Items.Refresh();
+                RemoveMouseDownEvents();
+                wpfMapMain.Children.Clear();
+
+                offences.ForEach(of =>
+                {
+                    of.GetPushpin().MouseDown += Pushpin_MouseDown;
+                    wpfMapMain.Children.Add(of.GetPushpin());
+                });
+                offences = offences.OrderByDescending(x => x.DateTime).ToList();
+                wpfLBSelection.ItemsSource = offences;
+                wpfLBSelection.Items.Refresh();
+            }
         }
 
         /// <summary>
@@ -389,7 +412,7 @@ namespace WijkagentWPF
         /// <param name="message">messgae to display</param>
         public void ErrorEventHandler(object sender, string message)
         {
-            //check wich object then set the appropriate message.
+            // Check which object then set the appropriate message.
             MessageBox.Show(message, "Fout bericht:", MessageBoxButton.OK);
         }
     }
