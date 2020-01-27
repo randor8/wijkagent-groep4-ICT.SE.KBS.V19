@@ -210,6 +210,12 @@ namespace WijkagentWPF
             return new WijkagentModels.Location(location.Latitude, location.Longitude);
         }
 
+        public void DoubleClickAdd(object sender, MouseButtonEventArgs e)
+        {
+            _addModeActivated = !_addModeActivated;
+            AddPin(sender, e);
+        }
+
         /// <summary>
         /// shows the dialog (if we are in add mode) and resets the screen
         /// </summary>
@@ -262,6 +268,7 @@ namespace WijkagentWPF
                 item.IsChecked = false;
             }
         }
+
         /// <summary>
         /// On click button reset all filters
         /// </summary>
