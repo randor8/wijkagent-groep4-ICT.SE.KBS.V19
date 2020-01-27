@@ -45,6 +45,14 @@ namespace WijkagentWPF
                     Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day, offence.DateTime.Hour, offence.DateTime.Minute, offence.DateTime.Second).AddHours(-1)
                 };
             }
+            else
+            {
+                _searchParameters = new SearchTweetsParameters(text)
+                {
+                    Since = new DateTime(offence.DateTime.Year, offence.DateTime.Month, offence.DateTime.Day).AddDays(-1),
+                    Until = DateTime.Now
+                };
+            }
         }
 
         /// <summary>
