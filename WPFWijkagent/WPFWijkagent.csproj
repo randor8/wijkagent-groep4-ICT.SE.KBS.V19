@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -22,7 +22,7 @@
   <ItemGroup>
     <PackageReference Include="PdfSharp" Version="1.50.5147" />
     <PackageReference Include="SSH.NET" Version="2016.1.0" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     <PackageReference Include="AWSSDK.Core" Version="3.3.103.64" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.6.0" />
     <PackageReference Include="FubarCoder.RestSharp.Portable.Core" Version="4.0.8" />
